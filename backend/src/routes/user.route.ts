@@ -1,6 +1,6 @@
 import express from 'express'
 import { Request, Response, NextFunction } from 'express'
-import { getAllUsers, getUserByUsername, updateUserByUsername, deleteUserByUsername, getAllAdmins } from '../controllers/user.controller.ts'
+import { getAllUsers, getUserByUsername, updateUserByUsername, deleteUserByUsername } from '../controllers/user.controller.ts'
 import { authenticate, authorizeAdmin, authorize} from '../middlewares/auth.middleware.ts'
 import { ExpressRequest } from '../middlewares/auth.middleware.ts'
 import { validatePagination } from '../validations/validationMiddlewares/pagination.validation.ts'

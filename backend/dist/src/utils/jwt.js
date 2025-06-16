@@ -3,9 +3,6 @@ dotenv.config();
 // import { sign } from 'jsonwebtoken'  
 import jwt from 'jsonwebtoken';
 const { sign, verify } = jwt;
-export const generateJWT = (user) => {
-    return sign({ username: user.username, email: user.email, role: user.role }, process.env.SECRET_KEY, { expiresIn: '1hr' });
-};
 export const generateAccessToken = (user) => {
     return sign({ username: user.username, email: user.email, role: user.role }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1hr' });
 };

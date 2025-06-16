@@ -9,10 +9,10 @@ const __dirname = dirname(__filename);
 dotenv.config({ path: resolve(__dirname, '../../../.env') });
 
 // for checking
-console.log(typeof process.env.DB_TYPE);
-console.log(typeof process.env.DB_PASSWORD);
-console.log(typeof process.env.DB_NAME);
-console.log(typeof process.env.DB_USER);
+// console.log(typeof process.env.DB_TYPE);
+// console.log(typeof process.env.DB_PASSWORD);
+// console.log(typeof process.env.DB_NAME);
+// console.log(typeof process.env.DB_USER);
 
 const config: { [key: string]: Knex.Config } = {
   development: {

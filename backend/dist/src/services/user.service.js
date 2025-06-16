@@ -7,13 +7,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import userDAO from "../repository/dao/user.dao.js";
+import userDAO from "../repositories/dao/user.dao.js";
 import { UserDTO } from "../DTOs/user.dto.js";
 import { AppError } from "../utils/appError.js";
 export function getAllUsers(page, limit) {
     return __awaiter(this, void 0, void 0, function* () {
         const data = yield userDAO.getAllUsers(page, limit);
-        console.log(data);
         return data.map((user) => new UserDTO(user));
     });
 }
@@ -48,11 +47,5 @@ export function deleteUser(username) {
         }
         console.log(result);
         return new UserDTO(result);
-    });
-}
-export function getAllAdmins() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const data = yield userDAO.getAllAdmins();
-        return data.map((user) => new UserDTO(user));
     });
 }

@@ -5,7 +5,7 @@ import { createdUser } from '../../types/auth.type.ts';
 import { Role } from '../../enums/role.ts';
 import { Knex } from 'knex';
 import { dbClient } from '../../db/db.ts';
-const db: Knex = dbClient.getConnection()
+const db: Knex = dbClient.getConnection();
 
 
 class AuthDAO implements IAuth{
@@ -41,5 +41,5 @@ class AuthDAO implements IAuth{
   }
 }
 
-const authDAO = new AuthDAO()
-export default authDAO
+const authDAO = new AuthDAO();
+export default authDAO;

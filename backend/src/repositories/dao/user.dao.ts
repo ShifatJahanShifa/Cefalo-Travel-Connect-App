@@ -7,19 +7,20 @@ import { dbClient } from '../../db/db.ts';
 import { IUser } from '../interfaces/user.interface.ts';
 import { updateUserInfo } from '../../types/user.tpye.ts';
 import { Role } from '../../enums/role.ts';
-const db: Knex = dbClient.getConnection()
+const db: Knex = dbClient.getConnection();
 
 
 class UserDAO implements IUser{
 
     async getAllUsers(page: number, limit: number): Promise<createdUser[]> {
-        const offset=(page-1)*limit
+        const offset=(page-1)*limit;
+
         const result: createdUser[] = await db('users')
             .select('*')
             .orderBy('username', 'asc')
             .limit(limit)
-            .offset(offset)
-        console.log(result)
+            .offset(offset);
+        
         return result;
     }
 
@@ -27,6 +28,7 @@ class UserDAO implements IUser{
         const result: createdUser = await db('users')
             .where({ username: username })
             .first();
+
         return result;
     }
 
@@ -37,7 +39,8 @@ class UserDAO implements IUser{
             ... updateUser,
             updated_at: db.fn.now()
             })
-            .returning('*')
+            .returning('*');
+
         return result;
     }
 
@@ -45,23 +48,12 @@ class UserDAO implements IUser{
         const [result] = await db('users')
             .where({ username: username })
             .del()
-            .returning('*')
-        console.log('hh',result)
-        return result;
-    }
+            .returning('*');
 
-     async getAllAdmins(): Promise<createdUser[]> {
-        const result: createdUser[] = await db('users')
-            .select('*')
-            .where({
-                role: Role.ADMIN
-            })
-            .orderBy('username', 'asc')
-            
         return result;
     }
 }
 
-const userDAO = new UserDAO()
-export default userDAO
+const userDAO = new UserDAO();
+export default userDAO;
 

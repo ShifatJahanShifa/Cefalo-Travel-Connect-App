@@ -15,39 +15,38 @@ export const signup = async (req: Request, res: Response, next: NextFunction): P
         maxAge: 365 * 24 * 60 * 60 * 1000 
       })
       .header('Authorization', `Bearer ${result.accessToken}`)
-      .status(201).json(result)
+      .status(201).json(result);
       
- 
   } catch (error) {
-    next(error)
+    next(error);
   }
-};
+}
 
 export const signin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const result: AuthDTO = await authService.signin(req.body);
       
-          res
+        res
         .cookie('refreshToken', result.refreshToken, {
           httpOnly: true,
           sameSite: 'none',
           maxAge: 365 * 24 * 60 * 60 * 1000 
         })
-      .header('Authorization', `Bearer ${result.accessToken}`)
-      .status(200).json(result)
+        .header('Authorization', `Bearer ${result.accessToken}`)
+        .status(200).json(result);
 
     } catch (error) {
-       next(error)
+       next(error);
     }
-};
+}
 
 
-export const signout = async (req: Request, res: Response, next: NextFunction): Promise<void> =>{
+export const signout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        await authService.signout(req, res)
+        await authService.signout(req, res);
     }
     catch(error) {
-        next(error)
+        next(error);
     }
 }
 
@@ -55,16 +54,17 @@ export const refreshAccessToken = async (req: ExpressRequest, res: Response, nex
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) 
   { 
-    res.status(401).json({ message: 'Missing refresh token' })
-    return
+    res.status(401).json({ message: 'Missing refresh token' });
+    return;
   }
 
   try {
-    const newAccessToken = await authService.refreshAccessToken(refreshToken)
+    const newAccessToken = await authService.refreshAccessToken(refreshToken);
     res.header('Authorization', `Bearer ${newAccessToken}`)
        .status(200)
-       .json({ accessToken: newAccessToken })
+       .json({ accessToken: newAccessToken });
+
   } catch (error) {
-    next(error)
+    next(error);
   }
-};
+}

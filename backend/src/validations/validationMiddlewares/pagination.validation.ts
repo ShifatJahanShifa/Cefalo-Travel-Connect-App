@@ -9,8 +9,10 @@ export const validatePagination = (req: ExpressRequest, res: Response, next: Nex
     req.query.page = result.page?.toString() || '1';
     req.query.limit = result.limit?.toString() || '10';
     next();
-  } catch (err: any) {
+
+   } 
+   catch (err: any) {
     res.status(400).json({ message: err.errors?.[0]?.message || 'Invalid pagination params' });
-    return 
-  }
+    return; 
+   }
 };

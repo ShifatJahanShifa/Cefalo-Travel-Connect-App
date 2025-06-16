@@ -1,15 +1,9 @@
-// import type {Knex} from 'knex';
-// import type { Knex } from 'knex'; // Named type import: interface for typing
 import knex, { Knex } from 'knex'
 import knexfile from '../config/knexfile.js';
-// import knex from 'knex';
-// export const db: Knex= Knex(knexfile.development);
-
-
 import { IDatabaseClient } from '../dbclientsinterface.ts';
 
 export class KnexDatabaseClient implements IDatabaseClient {
-  private knexDB: Knex
+  private knexDB: Knex;
 
   constructor() {
     this.knexDB = knex(knexfile.development);

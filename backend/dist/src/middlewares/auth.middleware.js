@@ -23,7 +23,6 @@ export const authenticate = (req, res, next) => __awaiter(void 0, void 0, void 0
             res.status(401).send("Cannot access this route");
             return;
         }
-        // const decode=verify(accessToken, process.env.SECRET_KEY!) as { username: string, email: string, role: string } 
         const decode = verifyAccessToken(accessToken);
         req.username = decode.username;
         req.email = decode.email;
@@ -39,12 +38,11 @@ export const authorize = (req, res, next) => __awaiter(void 0, void 0, void 0, f
         const loggedInUsername = req.username;
         const isAdmin = req.role === Role.ADMIN;
         const targetUsername = req.params.username;
-        // Check if attempting to update role
         if (req.body.role && req.body.role === Role.ADMIN && !isAdmin) {
             res.status(403).json({ message: "Only admin can set admin role." });
             return;
         }
-        // Check if attempting to update someone else's profile 
+        // Check if attempting to update someone else's profile info except role
         else if (!req.body.role && loggedInUsername !== targetUsername) {
             res.status(403).json({ message: "You can only update your own profile." });
             return;

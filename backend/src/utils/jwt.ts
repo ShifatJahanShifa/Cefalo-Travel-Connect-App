@@ -11,17 +11,13 @@ export interface DecodedUser extends JwtPayload {
   role: string;
 }
 
-export const generateJWT=(user: createdUser): string =>{
-    return sign({username: user.username, email: user.email, role: user.role}, process.env.SECRET_KEY!, { expiresIn: '1hr'})
-}
-
 
 export const generateAccessToken = (user: createdUser): string => {
   return sign(
     { username: user.username, email: user.email, role: user.role },
     process.env.ACCESS_TOKEN_SECRET!,
     { expiresIn: '1hr' }
-  )
+  );
 }
 
 export const generateRefreshToken = (user: createdUser): string => {
@@ -29,7 +25,7 @@ export const generateRefreshToken = (user: createdUser): string => {
     { email: user.email },
     process.env.REFRESH_TOKEN_SECRET!,
     { expiresIn: '365d'}
-  )
+  );
 }
 
 export const verifyAccessToken = (token: string): DecodedUser => {
