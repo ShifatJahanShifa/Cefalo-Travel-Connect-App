@@ -1,19 +1,19 @@
-export type User = {        
-  username: string
-  email: string
-  password: string
-  role: string
-}
+import { createdUser } from "../types/auth.type.ts"
 
-export type createdUser = {
+export class AuthDTO {
+  user_id: number
   username: string
   email: string
   role: string
-}
+  accessToken: string
+  refreshToken: string
 
-export type foundUser = {
-  username: string
-  email: string
-  password: string
-  role: string
+  constructor(user: createdUser, accessToken: string, refreshToken: string) {
+    this.user_id=user.user_id
+    this.username = user.username
+    this.email = user.email
+    this.role=user.role
+    this.accessToken=accessToken
+    this.refreshToken=refreshToken
+  }
 }

@@ -7,41 +7,39 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { v4 as uuidv4 } from 'uuid';
-import { db } from "../../db/dbclients/knexorm.js";
-class UsersDAO {
-    insertPerson(username, email, password, role) {
+import { dbClient } from "../../db/db.js";
+const db = dbClient.getConnection();
+class AuthDAO {
+    insertUser(username, email, password) {
         return __awaiter(this, void 0, void 0, function* () {
             const [createdUser] = yield db('users')
                 .insert({
-                id: uuidv4(),
                 username: username,
                 email: email,
-                password: password,
-                role: role
+                hashed_password: password
             })
-                .returning(['id', 'username', 'email', 'role']);
+                .returning('*');
             return createdUser;
         });
     }
     findUserByEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield db('users')
-                .select('username', 'email', 'password', 'role')
+                .select('*')
                 .where({ email: email })
                 .first();
-            if (!user) {
-                throw new Error('Email is not correct');
-            }
+            return user;
+        });
+    }
+    findUserByUsername(username) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield db('users')
+                .select('*')
+                .where({ username: username })
+                .first();
             return user;
         });
     }
 }
-const userDAO = new UsersDAO();
-export default userDAO;
-// table.uuid('id').primary()
-//     table.string('username').unique()
-//     table.string('email').unique()
-//     table.string('password')
-//     table.string('role')
-//     table.timestamps(true, true)
+const authDAO = new AuthDAO();
+export default authDAO;

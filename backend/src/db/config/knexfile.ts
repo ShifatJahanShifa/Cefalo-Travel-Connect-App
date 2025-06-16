@@ -1,8 +1,14 @@
 import dotenv from 'dotenv';
-import type  Knex  from 'knex';
+import type { Knex }    from 'knex';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
 
-dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
+dotenv.config({ path: resolve(__dirname, '../../../.env') });
+
+// for checking
 console.log(typeof process.env.DB_TYPE);
 console.log(typeof process.env.DB_PASSWORD);
 console.log(typeof process.env.DB_NAME);
@@ -21,8 +27,12 @@ const config: { [key: string]: Knex.Config } = {
       max: 10
     },
     migrations: {
-      directory: '../migrations',
+      extension: 'cjs',
+      directory: '../../migrations',
       tableName: 'knex_migrations'
+    },
+    seeds: {
+      directory: '../../seeds'
     }
   }
 };

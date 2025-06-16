@@ -1,51 +1,70 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import * as authService from '../services/auth.service.ts';
 import { ExpressRequest } from '../middlewares/auth.middleware.ts';
+import { AuthDTO } from '../DTOs/auth.dto.ts';
 
-export const signup = async (req: Request, res: Response): Promise<void> => {
+
+export const signup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    console.log('jsdj')
-    const result = await authService.signup(req.body);
-    res.cookie('token',result.token)
-    res.status(201).json(result);
-    console.log('i got result', result)
+    const result: AuthDTO = await authService.signup(req.body);
+   
+    res
+      .cookie('refreshToken', result.refreshToken, {
+        httpOnly: true,
+        sameSite: 'none',
+        maxAge: 365 * 24 * 60 * 60 * 1000 
+      })
+      .header('Authorization', `Bearer ${result.accessToken}`)
+      .status(201).json(result)
+      
+ 
   } catch (error) {
-    res.status(400).json({ error: 'Email is not unique' });
+    next(error)
   }
 };
 
-export const signin = async (req: Request, res: Response): Promise<void> => {
+export const signin = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const result = await authService.signin(req.body);
-        res.cookie('token',result.token)
-        res.status(200).json(result);
+        const result: AuthDTO = await authService.signin(req.body);
+      
+          res
+        .cookie('refreshToken', result.refreshToken, {
+          httpOnly: true,
+          sameSite: 'none',
+          maxAge: 365 * 24 * 60 * 60 * 1000 
+        })
+      .header('Authorization', `Bearer ${result.accessToken}`)
+      .status(200).json(result)
+
     } catch (error) {
-        res.status(401).json({ error: 'Email or password is wrong' });
+       next(error)
     }
 };
 
 
-export const signout=async (req: Request, res: Response): Promise<void> =>{
+export const signout = async (req: Request, res: Response, next: NextFunction): Promise<void> =>{
     try {
         await authService.signout(req, res)
     }
     catch(error) {
-        res.status(404).json({message: "user was not logged in"})
+        next(error)
     }
 }
 
-export const getUser = async (req: ExpressRequest, res: Response): Promise<void> => {
-    try {
-        if (!req.email) 
-        {
-            res.sendStatus(401);
-            return;
-        }
-        const userData = await authService.getUser(req, res)
-        res.status(200).json(userData)
+export const refreshAccessToken = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) 
+  { 
+    res.status(401).json({ message: 'Missing refresh token' })
+    return
+  }
 
-    } 
-    catch (error) {
-        res.status(404).json({ error: 'User not found' });
-    }
+  try {
+    const newAccessToken = await authService.refreshAccessToken(refreshToken)
+    res.header('Authorization', `Bearer ${newAccessToken}`)
+       .status(200)
+       .json({ accessToken: newAccessToken })
+  } catch (error) {
+    next(error)
+  }
 };

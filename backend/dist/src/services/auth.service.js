@@ -7,47 +7,50 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 import { compare, hash } from 'bcrypt';
-import { generateJWT } from "../utils/jwt.js";
-import userDAO from "../repository/dao/auth.dao.js";
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../utils/jwt.js";
+import AuthDAO from "../repository/dao/auth.dao.js";
+import { AuthDTO } from "../DTOs/auth.dto.js";
+import { AppError } from "../utils/appError.js";
 export const signup = (userData) => __awaiter(void 0, void 0, void 0, function* () {
     const { username, email, password } = userData;
+    const userFoundByEmail = yield AuthDAO.findUserByEmail(email);
+    if (userFoundByEmail) {
+        throw new AppError("email is already taken", 400);
+    }
+    const userFoundByUsername = yield AuthDAO.findUserByUsername(username);
+    if (userFoundByUsername) {
+        throw new AppError("username is already taken", 400);
+    }
     const hashedPassword = yield hash(password, 10);
-    console.log('s-jsdj');
-    const user = yield userDAO.insertPerson(username, email, hashedPassword, 'explorer');
-    console.log('created user ', user);
-    const token = generateJWT(user);
-    console.log(token);
-    return Object.assign(Object.assign({}, user), { token });
+    const user = yield AuthDAO.insertUser(username, email, hashedPassword);
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+    return new AuthDTO(user, accessToken, refreshToken);
 });
 export const signin = (userData) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield userDAO.findUserByEmail(userData.email);
-    const isPasswordCorrect = yield compare(userData.password, user.password);
-    if (!isPasswordCorrect) {
-        throw new Error('Incorrect password');
+    const user = yield AuthDAO.findUserByEmail(userData.email);
+    if (!user) {
+        throw new AppError("invalid credential", 401);
     }
-    const { password: _ } = user, userWithoutPassword = __rest(user, ["password"]);
-    const token = generateJWT(user);
-    return Object.assign(Object.assign({}, userWithoutPassword), { token });
+    const isPasswordCorrect = yield compare(userData.password, user.hashed_password);
+    if (!isPasswordCorrect) {
+        throw new AppError("invalid credential", 401);
+    }
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+    return new AuthDTO(user, accessToken, refreshToken);
 });
 export const signout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.cookies);
-    res.clearCookie('token');
+    res.clearCookie('refreshToken');
     res.status(200).json({ message: "signed out successfully" });
 });
-export const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield userDAO.findUserByEmail(req.email);
-    const { password: _ } = user, userWithoutPassword = __rest(user, ["password"]);
-    return userWithoutPassword;
+export const refreshAccessToken = (refreshToken) => __awaiter(void 0, void 0, void 0, function* () {
+    const decoded = verifyRefreshToken(refreshToken);
+    const user = yield AuthDAO.findUserByEmail(decoded.email);
+    if (!user) {
+        throw new AppError("Invalid refresh token", 401);
+    }
+    const newAccessToken = generateAccessToken(user);
+    return newAccessToken;
 });

@@ -1,26 +1,30 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx ts-node index.ts"
+    "start": "node ./dist/index.js",
+    "migrate:latest": "node --loader ts-node/esm ./node_modules/knex/bin/cli.js migrate:latest --knexfile ./src/db/config/knexfile.ts",
+    "migrate:rollback": "node --loader ts-node/esm ./node_modules/knex/bin/cli.js migrate:rollback --knexfile ./src/db/config/knexfile.ts",
+    "seed:run": "node --loader ts-node/esm ./node_modules/knex/bin/cli.js seed:run --knexfile ./src/db/config/knexfile.ts"
   },
   "type": "module",
-  "keywords": [],
-  "author": "",
+  "author": "Shifat Jahan Shifa",
   "license": "ISC",
-  "description": "",
+  "description": "my backend code for cefalo travel connect app",
   "dependencies": {
+    "@types/cors": "^2.8.19",
     "bcrypt": "^6.0.0",
     "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "pg": "^8.16.0",
     "typescipt": "^1.0.0",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "zod": "^3.25.64"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

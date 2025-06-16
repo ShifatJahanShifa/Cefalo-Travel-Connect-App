@@ -1,50 +1,77 @@
-import { compare, hash } from 'bcrypt';
-import { generateJWT } from '../utils/jwt.ts';
-import { User, createdUser, foundUser } from '../DTOs/auth.dto.ts';
-import userDAO from '../repository/dao/auth.dao.ts';
-import { Request, Response } from 'express';
-import { ExpressRequest } from '../middlewares/auth.middleware.ts';
+import { compare, hash } from 'bcrypt'
+import { generateJWT, generateAccessToken, generateRefreshToken, verifyAccessToken, verifyRefreshToken, DecodedUser } from '../utils/jwt.ts'
+import { createdUser, signupUser, signinUser } from '../types/auth.type.ts'
+import AuthDAO from '../repository/dao/auth.dao.ts'
+import { Request, Response } from 'express'
+import { ExpressRequest } from '../middlewares/auth.middleware.ts'
+import { AuthDTO } from '../DTOs/auth.dto.ts'
+import { Role } from '../enums/role.ts'
+import { AppError } from '../utils/appError.ts'
 
- 
 
-export const signup = async (userData: User) => {
+export const signup = async (userData: signupUser) => {
     const { username, email, password } = userData
+
+    const userFoundByEmail: createdUser = await AuthDAO.findUserByEmail(email)
+
+    if(userFoundByEmail) 
+    {
+      throw new AppError("email is already taken",400)
+    }
+
+    const userFoundByUsername: createdUser = await AuthDAO.findUserByUsername(username)
+
+    if(userFoundByUsername) 
+    {
+      throw new AppError("username is already taken",400)
+    }
+
     const hashedPassword = await hash(password, 10)
-    console.log('s-jsdj')
 
-    const user=await userDAO.insertPerson(username,email,hashedPassword,'explorer')
-    console.log('created user ', user)
+    const user: createdUser=await AuthDAO.insertUser(username,email,hashedPassword)
+    
+    const accessToken: string = generateAccessToken(user)
+    const refreshToken: string = generateRefreshToken(user)
 
-    const token = generateJWT(user)
-    console.log(token)
+    return new AuthDTO(user,accessToken, refreshToken)
+}
 
-    return { ...user, token };
-};
 
-export const signin = async (userData: User) => {
-  const user: foundUser = await userDAO.findUserByEmail(userData.email)
-
-  const isPasswordCorrect = await compare(userData.password, user.password)
-
-  if (!isPasswordCorrect) {
-    throw new Error('Incorrect password');
-  }
-
-  const { password: _, ...userWithoutPassword } = user;
-  const token = generateJWT(user);
+export const signin = async (userData: signinUser) => {
+  const user: createdUser = await AuthDAO.findUserByEmail(userData.email)
   
-  return { ...userWithoutPassword, token };
-};
+  if (!user) 
+  {
+    throw new AppError("invalid credential",401)
+  }
+    
+  const isPasswordCorrect = await compare(userData.password, user.hashed_password)
+
+  if (!isPasswordCorrect) 
+  {
+    throw new AppError("invalid credential",401)
+  }
+  
+  const accessToken: string = generateAccessToken(user);
+  const refreshToken: string = generateRefreshToken(user);
+  
+  return new AuthDTO(user,accessToken, refreshToken);
+}
 
 export const signout = async (req: Request, res: Response) => {
-    console.log(req.cookies);
-
-    res.clearCookie('token')
+    res.clearCookie('refreshToken')
     res.status(200).json({message: "signed out successfully"})
 }
 
-export const getUser = async (req: ExpressRequest, res: Response) => {
-    const user: User = await userDAO.findUserByEmail(req.email!)
-    const { password: _, ...userWithoutPassword } = user;
-    return userWithoutPassword
+export const refreshAccessToken = async (refreshToken: string): Promise<string> => {
+  const decoded: DecodedUser = verifyRefreshToken(refreshToken);
+  const user: createdUser = await AuthDAO.findUserByEmail(decoded.email);
+
+  if (!user) 
+  {
+    throw new AppError("Invalid refresh token",401)
+  }
+  
+  const newAccessToken: string = generateAccessToken(user);
+  return newAccessToken;
 }

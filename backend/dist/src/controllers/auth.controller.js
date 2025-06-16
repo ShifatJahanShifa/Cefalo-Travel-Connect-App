@@ -8,46 +8,59 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import * as authService from "../services/auth.service.js";
-export const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+export const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log('jsdj');
         const result = yield authService.signup(req.body);
-        res.cookie('token', result.token);
-        res.status(201).json(result);
-        console.log('i got result', result);
+        res
+            .cookie('refreshToken', result.refreshToken, {
+            httpOnly: true,
+            sameSite: 'none',
+            maxAge: 365 * 24 * 60 * 60 * 1000
+        })
+            .header('Authorization', `Bearer ${result.accessToken}`)
+            .status(201).json(result);
     }
     catch (error) {
-        res.status(400).json({ error: 'Email is not unique' });
+        next(error);
     }
 });
-export const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+export const signin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield authService.signin(req.body);
-        res.cookie('token', result.token);
-        res.status(200).json(result);
+        res
+            .cookie('refreshToken', result.refreshToken, {
+            httpOnly: true,
+            sameSite: 'none',
+            maxAge: 365 * 24 * 60 * 60 * 1000
+        })
+            .header('Authorization', `Bearer ${result.accessToken}`)
+            .status(200).json(result);
     }
     catch (error) {
-        res.status(401).json({ error: 'Email or password is wrong' });
+        next(error);
     }
 });
-export const signout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+export const signout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield authService.signout(req, res);
     }
     catch (error) {
-        res.status(404).json({ message: "user was not logged in" });
+        next(error);
     }
 });
-export const getUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+export const refreshAccessToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+        res.status(401).json({ message: 'Missing refresh token' });
+        return;
+    }
     try {
-        if (!req.email) {
-            res.sendStatus(401);
-            return;
-        }
-        const userData = yield authService.getUser(req, res);
-        res.status(200).json(userData);
+        const newAccessToken = yield authService.refreshAccessToken(refreshToken);
+        res.header('Authorization', `Bearer ${newAccessToken}`)
+            .status(200)
+            .json({ accessToken: newAccessToken });
     }
     catch (error) {
-        res.status(404).json({ error: 'User not found' });
+        next(error);
     }
 });
