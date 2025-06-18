@@ -34,7 +34,7 @@ export const authenticate = async (req: ExpressRequest, res: Response, next: Nex
         req.username=decode.username;
         req.email=decode.email;
         req.role=decode.role;
- 
+        
         next();
     }
     catch(error) {
@@ -58,6 +58,7 @@ export const authorize = async (req: ExpressRequest, res: Response, next: NextFu
             res.status(403).json({ message: "You can only update your own profile." });
             return;
         }
+       
         next();
     }
     catch(err) {

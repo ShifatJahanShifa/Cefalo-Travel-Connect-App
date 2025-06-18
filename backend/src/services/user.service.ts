@@ -25,13 +25,14 @@ export async function updateUser(username: string, updateUser: updateUserInfo): 
     if (!user) {
       throw new AppError("user not found",404)
     }
-
-    // need to change this error
-    const updatedUser: createdUser = await userDAO.updateUser(username, updateUser);
-    if (!updatedUser) {
-      throw new AppError("Internal server error",500)
+   
+    if(updateUser.hashed_password) 
+    {
+      const hashedPassword = await hash(updateUser.hashed_password, 10)
+      updateUser.hashed_password=hashedPassword
     }
-
+    const updatedUser: createdUser = await userDAO.updateUser(username, updateUser);
+    
     return new UserDTO(updatedUser)
 }
 

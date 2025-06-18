@@ -33,6 +33,7 @@ export const updateUserByUsername = (req, res, next) => __awaiter(void 0, void 0
     try {
         const username = req.params.username;
         const updatePayload = req.body;
+        console.log(req.body, updatePayload);
         const updatedUser = yield userService.updateUser(username, updatePayload);
         res.status(200).json(updatedUser);
     }

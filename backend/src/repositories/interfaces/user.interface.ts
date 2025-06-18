@@ -6,4 +6,5 @@ export interface IUser {
     getUserByUsername(username: string): Promise<createdUser>
     updateUser(username: string, updatUser: updateUserInfo): Promise<createdUser>
     deleteUser(username: string): Promise<createdUser>
+    // getMe(username: string): Promise<createdUser>
 }

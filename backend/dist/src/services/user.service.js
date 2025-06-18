@@ -7,6 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+import { hash } from 'bcrypt';
 import userDAO from "../repositories/dao/user.dao.js";
 import { UserDTO } from "../DTOs/user.dto.js";
 import { AppError } from "../utils/appError.js";
@@ -28,11 +29,13 @@ export function updateUser(username, updateUser) {
         if (!user) {
             throw new AppError("user not found", 404);
         }
-        // need to change this error
-        const updatedUser = yield userDAO.updateUser(username, updateUser);
-        if (!updatedUser) {
-            throw new AppError("Internal server error", 500);
+        console.log(updateUser);
+        if (updateUser.hashed_password) {
+            console.log('eruyfer');
+            const hashedPassword = yield hash(updateUser.hashed_password, 10);
+            updateUser.hashed_password = hashedPassword;
         }
+        const updatedUser = yield userDAO.updateUser(username, updateUser);
         return new UserDTO(updatedUser);
     });
 }

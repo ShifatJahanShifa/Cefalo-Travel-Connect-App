@@ -39,7 +39,42 @@ class AuthDAO implements IAuth{
 
     return user;
   }
+
+  async insertRefreshToken(user_id: number, token: string, expires_at: Date): Promise<void> {
+    await db('refresh_tokens') 
+    .insert({
+      user_id: user_id,
+      token: token,
+      expires_at: expires_at
+    })
+  }
+
+
+  async updateRefreshToken(user_id: number, token: string, expires_at: Date ): Promise<void> {
+    await db('refresh_tokens') 
+    .where({ user_id: user_id })
+    .update({
+    token: token,
+    expires_at: expires_at,
+    updated_at: db.fn.now()
+    })
+  }
+
+  async deleteRefreshToken(user_id: number): Promise<void> {
+    await db('refresh_tokens')
+    .where({ user_id: user_id })
+    .del()
+  }
+
+  async findRefreshToken(user_id: number): Promise<string> {
+    const token: string = await db('refresh_tokens')
+    .select('token')
+    .where({ user_id: user_id})
+    .first()
+
+    return token
+  }
 }
 
-const authDAO = new AuthDAO();
+const authDAO: AuthDAO = new AuthDAO();
 export default authDAO;

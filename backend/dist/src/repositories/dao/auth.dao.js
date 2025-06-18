@@ -40,6 +40,43 @@ class AuthDAO {
             return user;
         });
     }
+    insertRefreshToken(user_id, token, expires_at) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield db('refresh_tokens')
+                .insert({
+                user_id: user_id,
+                token: token,
+                expires_at: expires_at
+            });
+        });
+    }
+    updateRefreshToken(user_id, token, expires_at) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield db('refresh_tokens')
+                .where({ user_id: user_id })
+                .update({
+                token: token,
+                expires_at: expires_at,
+                updated_at: db.fn.now()
+            });
+        });
+    }
+    deleteRefreshToken(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield db('refresh_tokens')
+                .where({ user_id: user_id })
+                .del();
+        });
+    }
+    findRefreshToken(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const token = yield db('refresh_tokens')
+                .select('token')
+                .where({ user_id: user_id })
+                .first();
+            return token;
+        });
+    }
 }
 const authDAO = new AuthDAO();
 export default authDAO;

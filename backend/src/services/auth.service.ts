@@ -8,7 +8,10 @@ import { ExpressRequest } from '../middlewares/auth.middleware.ts'
 import { AuthDTO } from '../DTOs/auth.dto.ts'
 import { Role } from '../enums/role.ts'
 import { AppError } from '../utils/appError.ts'
-
+import userDAO from '../repositories/dao/user.dao.ts';
+import dotenv from 'dotenv'
+import { UserDTO } from '../DTOs/user.dto.ts'
+dotenv.config()
 
 export const signup = async (userData: signupUser): Promise<AuthDTO> => {
     const { username, email, password } = userData
@@ -34,6 +37,9 @@ export const signup = async (userData: signupUser): Promise<AuthDTO> => {
     const accessToken: string = generateAccessToken(user)
     const refreshToken: string = generateRefreshToken(user)
 
+    const refreshTokenExpiry = new Date(Date.now() + 365* 24 * 60 * 60 * 1000)
+    await authDAO.insertRefreshToken(user.user_id, refreshToken, refreshTokenExpiry)
+
     return new AuthDTO(user, accessToken, refreshToken)
 }
 
@@ -55,11 +61,24 @@ export const signin = async (userData: signinUser): Promise<AuthDTO> => {
   
   const accessToken: string = generateAccessToken(user)
   const refreshToken: string = generateRefreshToken(user)
+
   
+  const refreshTokenExpiry = new Date(Date.now() + 365* 24 * 60 * 60 * 1000)
+  const token: string = await authDAO.findRefreshToken(user.user_id) // if not, then null string 
+  if(token) 
+  {
+    await authDAO.updateRefreshToken(user.user_id, refreshToken, refreshTokenExpiry)
+  }
+  else 
+  {
+    await authDAO.insertRefreshToken(user.user_id, refreshToken, refreshTokenExpiry)
+  }
   return new AuthDTO(user, accessToken, refreshToken)
 }
 
-export const signout = async (req: Request, res: Response): Promise<void> => {
+export const signout = async (req: ExpressRequest, res: Response): Promise<void> => {
+    const user: UserDTO = await userDAO.getUserByUsername(req.username as string)
+    await authDAO.deleteRefreshToken(user.user_id)
     res.clearCookie('refreshToken')
     res.status(200).json({message: "signed out successfully"})
 }
@@ -72,7 +91,13 @@ export const refreshAccessToken = async (refreshToken: string): Promise<string> 
   {
     throw new AppError("Invalid refresh token",401)
   }
-  
+
+  const token: string = await authDAO.findRefreshToken(user.user_id)
+  if(!token) 
+  {
+    throw new AppError("Invalid refresh token",401)
+  }
+
   const newAccessToken: string = generateAccessToken(user)
   return newAccessToken
 }

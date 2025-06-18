@@ -41,7 +41,7 @@ export const signin = async (req: Request, res: Response, next: NextFunction): P
 }
 
 
-export const signout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const signout = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         await authService.signout(req, res);
     }

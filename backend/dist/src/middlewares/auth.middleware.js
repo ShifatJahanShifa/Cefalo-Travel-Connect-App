@@ -27,6 +27,7 @@ export const authenticate = (req, res, next) => __awaiter(void 0, void 0, void 0
         req.username = decode.username;
         req.email = decode.email;
         req.role = decode.role;
+        console.log(req.body, 'hsf');
         next();
     }
     catch (error) {
@@ -47,6 +48,7 @@ export const authorize = (req, res, next) => __awaiter(void 0, void 0, void 0, f
             res.status(403).json({ message: "You can only update your own profile." });
             return;
         }
+        console.log(req.body, 'hsf');
         next();
     }
     catch (err) {

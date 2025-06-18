@@ -17,4 +17,9 @@ export const updateUserSchema = z.object({
       errorMap: () => ({ message: 'Role must be either explorer, traveler, or admin' }),
     })
     .optional(),
+
+  hashed_password: z 
+    .string()
+    .max(70, 'Password length at most 70 characters')
+    .optional()
 });

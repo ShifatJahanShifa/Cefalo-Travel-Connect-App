@@ -23,7 +23,9 @@ export function seed(knex) {
             username: 'admin1',
             email: 'admin1@cefalo.com',
             hashed_password: hashedPassword,
+            phone_no: '+123456789',
             role: 'admin',
+            bio: 'i am the first user of this system',
             created_at: new Date(),
             updated_at: new Date(),
         });
