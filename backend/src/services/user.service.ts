@@ -26,6 +26,7 @@ export async function updateUser(username: string, updateUser: updateUserInfo): 
       throw new AppError("user not found",404)
     }
 
+    // need to change this error
     const updatedUser: createdUser = await userDAO.updateUser(username, updateUser);
     if (!updatedUser) {
       throw new AppError("Internal server error",500)

@@ -28,6 +28,7 @@ export function updateUser(username, updateUser) {
         if (!user) {
             throw new AppError("user not found", 404);
         }
+        // need to change this error
         const updatedUser = yield userDAO.updateUser(username, updateUser);
         if (!updatedUser) {
             throw new AppError("Internal server error", 500);

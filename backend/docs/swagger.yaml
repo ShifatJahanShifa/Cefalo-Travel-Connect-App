@@ -1,0 +1,2595 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/universityofdhaka/Cefalo-Travel-Connect/1.0.0
+info:
+  version: "1.0.0"
+  title: Cefalo-Travel-Connect
+  description: The API Lists for Cefalo-Travel-Connect App
+  
+paths:
+
+  /auth/signup:
+    post:
+      tags:
+        - Authentication 
+      summary: Register a new user
+      description: Creates a new user account with the provided information.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - email
+                - password
+              properties:
+                username:
+                  type: string
+                  example: johndoe
+                email:
+                  type: string
+                  format: email
+                  example: johndoe@example.com
+                password:
+                  type: string
+                  format: password
+                  example: strongPassword123
+      responses:
+        '201':
+          description: User successfully registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: number
+                    example: 1
+                  username:
+                    type: string
+                    example: johndoe
+                  email:
+                    type: string
+                    example: johndoe@example.com
+                  role:
+                    type: string
+                    example: explorer
+                  accessToken:
+                    type: string
+                    example: ahfhdf.wuuhfui.iuwhyfui
+                  refreshToken:
+                    type: string
+                    example: ewjfiuerw.wifji.iuwheui
+                  
+        '400':
+          description: Bad request - Email or username alreadys exists
+   
+   
+  /auth/signin:   
+    post:
+      tags:
+        -  Authentication
+      summary: Signin a user
+      description: Authenticate user's credentials
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: johndoe@example.com
+                password:
+                  type: string
+                  format: password
+                  example: strongPassword123
+      responses:
+        '200':
+          description: successfully logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: number
+                    example: 1
+                  username:
+                    type: string
+                    example: johndoe
+                  email:
+                    type: string
+                    example: johndoe@example.com
+                  role:
+                    type: string
+                    example: explorer
+                  accessToken:
+                    type: string
+                    example: ahfhdf.wuuhfui.iuwhyfui
+                  refreshToken:
+                    type: string
+                    example: ewjfiuerw.wifji.iuwheui
+          
+        '401':
+          description: Unauthorized - Invalid credentials
+          
+          
+  /auth/signout: 
+    post:
+      tags:
+        -  Authentication
+      summary: Signout a user
+      description: Signout a user from the system
+      parameters:
+        - in: header
+          name: Authorization
+          description: Bearer token
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success on signout a user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: signout user successfully
+                 
+        '401':
+          description: Unauthorized user
+          
+  
+  /auth/refresh-token:
+    get:
+      tags:
+        -  Authentication
+      summary: Refresh Access Token
+      description: Generate a new access token by refresh token
+      parameters:
+        - in: header
+          name: Authorization
+          description: Bearer token
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success on creating a new access token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: ahdfagf.fhwuedui.cnwiyg
+                 
+        '401':
+          description: Unauthorized user 
+      
+  /auth/reset-password: 
+    post:
+      tags: 
+        -  Authentication
+      summary: Forget Password
+      description: Create a new password for a user who forgets his previous password.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  format: email
+                  example: johndoe@example.com
+                password:
+                  type: string
+                  format: password
+                  example: newstrongPassword123
+      responses:
+        '200':
+          description: success on creating a new password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: successfully created a new password
+          
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: No user found with this email
+
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Internal server error 
+                    
+                    
+                    
+  /users/:
+    get:
+      tags: 
+        - User Management
+      summary: Get all users (paginated)
+      description: Retrieve a paginated list of all registered users.
+      parameters: 
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+          required: false
+          description: Page number to retrieve (default is 1)
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+          required: false
+          description: Number of users per page (default is 10)
+
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+        '500':
+          description: Internal server error 
+          
+          
+  /users/{username}:
+    get: 
+      tags: 
+      - User Management
+      summary: Get user details
+      description: Get user details by using username
+      parameters:
+        - in: path
+          name: username
+          required: true
+          description: username of the user
+          schema:
+            type: string
+            example: user1
+      responses:
+        '200':
+          description: Successfully retrieved user info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+          
+        '500':
+          description: Internal server error 
+        
+      
+    patch: 
+      tags: 
+      - User Management
+      summary: Update user details
+      description: Update user details like bio, role
+      parameters:
+        - in: path
+          name: username
+          required: true
+          description: username of the user
+          schema:
+            type: string
+            example: user1
+      responses:
+        '200':
+          description: Successfully updated user info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        
+        '403': 
+          description: Access forbidden 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example:  You cannot perform this action   
+          
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example:  User not found    
+          
+        '500':
+          description: Internal server error 
+        
+    
+    delete: 
+      tags: 
+      - User Management
+      summary: Update user details
+      description: Update user details like bio, role
+      parameters:
+        - in: path
+          name: username
+          required: true
+          description: username of the user
+          schema:
+            type: string
+            example: user1
+      responses:
+        '204':
+          description: Successfully updated user info
+          
+                
+        '403': 
+          description: Access forbidden 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example:  You cannot perform this action   
+                    
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example:  User not found    
+          
+        '500':
+          description: Internal server error 
+        
+  
+  /me: 
+    get: 
+      tags: 
+      - User Management
+      summary: Get my detailed info
+      description: Get my detailed info
+      responses:
+        '200':
+          description: Successfully retrieved user info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+        
+        '401': 
+          description: Unauthorized user
+          
+        '500':
+          description: Internal server error  
+          
+  
+  
+  
+  
+  /posts:
+    post:
+      tags:
+        - Posts
+      summary: Create a travel post
+      description: Create a new travel post with title, description, cost, duration, effort, images, categories, and geo-tracks.
+      parameters: 
+        - in: header
+          name: Authorization
+          required: true
+          description: Bearer token
+          schema:
+            type: string
+            example: Bearer eyJhbGci...
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - title
+                - description
+                - cost
+                - duration
+                - effort
+                - hotels
+                - places
+                - transports
+                - foods
+                - categories
+                - images
+                - geo_tracks
+              properties:
+                title:
+                  type: string
+                  example: A Trip to Sundarbans
+                description:
+                  type: string
+                  example: This was a thrilling journey through the world's largest mangrove forest.
+                cost:
+                  type: number
+                  example: 150.50
+                duration:
+                  type: string
+                  example: 3 days 2 nights
+                effort:
+                  type: string
+                  example: Moderate
+                hotels:
+                  type: array
+                  items:
+                    type: object
+                  example: [{ "name": "Hotel Tiger Inn", ...}, {"name": "Forest Retreat", ...}]
+                places:
+                  type: array
+                  items:
+                    type: object
+                  example: [{"name": "Kotka Beach",..}, {"name":"Karamjal",...}]
+                transports:
+                  type: array
+                  items:
+                    type: object
+                  example: [{"name":"Boat", "provider": "..",..},{"name": "Bus", ...}]
+                foods:
+                  type: array
+                  items:
+                    type: object
+                  example: [{"name": "Hilsha", "cost": ..}, {"name": "Deshi Chicken", ..}]
+                categories:
+                  type: array
+                  items:
+                    type: string
+                  example: ["Adventure", "Nature"]
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                geo_track:
+                  type: object
+                  description: GeoJSON object representing travel path
+                  example:
+                    type: FeatureCollection
+                    features:
+                      - type: Feature
+                        geometry:
+                          type: LineString
+                          coordinates:
+                            - [90.4125, 23.8103]
+                            - [90.5000, 23.8500]
+                
+
+      responses:
+        '201':
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse'
+        '400':
+          description: Bad request – Validation issue
+        '401':
+          description: Unauthorized – Missing or invalid token
+        '500':
+          description: Internal server error
+
+   
+    get:
+      tags:
+        - Posts
+      summary: Get all posts with filters and pagination
+      description: >
+        Retrieve all travel posts with optional filters such as category, section, max cost, and a flexible search term.
+        The `search` field looks into hotel names, transport types, places, foods, and categories.
+      parameters:
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+          description: Page number for pagination
+          example: 1
+  
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+          description: Number of posts per page
+          example: 10
+  
+      responses:
+        '200':
+          description: Successfully retrieved posts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: integer
+                    example: 1
+                  limit:
+                    type: integer
+                    example: 10
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PostDTO'
+        '500':
+          description: Internal server error
+  
+        
+  /posts/{postId}: 
+    get: 
+      tags:
+        - Posts
+      summary: Get a specific post by ID and slug
+      description: >
+        Retrieve details of a single post using its unique postId and optional slug.
+        Slug adds SEO friendliness; only `postId` is used for retrieval.
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          description: The ID of the post to retrieve
+          schema:
+            type: string
+            example: 64abc123de45
+        # - in: path
+        #   name: slug
+        #   required: true
+        #   description: Slugified title for SEO (e.g., trip-to-coxsbazar)
+        #   schema:
+        #     type: string
+        #     example: trip-to-coxsbazar
+      responses:
+        '200':
+          description: Successfully retrieved the post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostDTO'
+        # '301':
+        #   description: Slug mismatch – Redirect to correct slug
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Post not found
+        '500':
+          description: Internal server error
+
+    patch:
+      tags:
+        - Posts
+      summary: Update a specific post
+      description: >
+        Update a post including optional new images and geo track. 
+        Only the post creator can do this. Uses ID for lookup; slug is decorative.
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: string
+            example: 64abc123de45
+        # - in: path
+        #   name: slug
+        #   required: true
+        #   schema:
+        #     type: string
+        #     example: trip-to-coxsbazar
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGci...
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                cost:
+                  type: number
+                duration:
+                  type: string
+                effort:
+                  type: string
+                categories:
+                  type: array
+                  items:
+                    type: string
+                hotels:
+                  type: array
+                  items:
+                    type: string
+                    description: JSON stringified hotel objects
+                places:
+                  type: array
+                  items:
+                    type: string
+                    description: JSON stringified place objects
+                transports:
+                  type: array
+                  items:
+                    type: string
+                    description: JSON stringified transport objects
+                foods:
+                  type: array
+                  items:
+                    type: string
+                    description: JSON stringified food objects
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+                geo_track:
+                  type: object
+                  description: GeoJSON object representing the travel path
+                  example:
+                    type: FeatureCollection
+                    features:
+                      - type: Feature
+                        geometry:
+                          type: LineString
+                          coordinates:
+                            - [90.4125, 23.8103]
+                            - [90.5000, 23.8500]
+                        
+
+      responses:
+        '200':
+          description: Successfully updated the post
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostDTO'
+        '400':
+          description: Bad request – Invalid fields or validation failed
+        '401':
+          description: Unauthorized – Missing or invalid token
+        '403':
+          description: Forbidden – Only the creator can update this post
+        '404':
+          description: Post not found
+        '500':
+          description: Internal server error
+
+    delete:
+      tags:
+        - Posts
+      summary: Delete a post
+      description: >
+        Delete a post by its ID. Only the post creator is authorized to perform this action. 
+        Slug is decorative and optional on server side.
+      parameters:
+        - in: path
+          name: postId
+          required: true
+          schema:
+            type: string
+            example: 64abc123de45
+        # - in: path
+        #   name: slug
+        #   required: true
+        #   schema:
+        #     type: string
+        #     example: trip-to-coxsbazar
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+            example: Bearer eyJhbGci...
+      responses:
+        '204':
+          description: Post deleted successfully
+        
+        '401':
+          description: Unauthorized – Missing or invalid token
+        '403':
+          description: Forbidden – You are not allowed to delete this post
+        '404':
+          description: Post not found
+        '500':
+          description: Internal server error
+
+      
+  /users/{username}/posts:
+    get:
+      tags:
+        - Posts
+      summary: Get all posts by a specific user (via username)
+      description: >
+        Retrieve all travel posts created by a specific user using their username (slug-friendly).
+        Supports optional pagination, category filtering, and search term.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          description: The username (slug) of the user
+          schema:
+            type: string
+            example: explorer_john
+
+        - in: query
+          name: page
+          required: false
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            example: 1
+
+        - in: query
+          name: limit
+          required: false
+          description: Number of posts per page
+          schema:
+            type: integer
+            minimum: 1
+            example: 10
+
+      responses:
+        '200':
+          description: Successfully retrieved posts by user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                    example: explorer_john
+                  page:
+                    type: integer
+                    example: 1
+                  limit:
+                    type: integer
+                    example: 10
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PostDTO'
+
+        '404':
+          description: User not found or no posts available
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found or no posts available
+
+        '500':
+          description: Internal server error
+
+  
+  /posts/search:
+    get:
+      tags:
+        - Posts
+      summary: Search posts by section content
+      description: >
+        Search for posts based on content within a specific section (e.g., hotel, food, transport, place) and a query string.
+      parameters:
+        - in: query
+          name: section
+          required: true
+          description: The section of the post to search within
+          schema:
+            type: string
+            enum: [hotel, food, transport, place]
+            example: hotel
+
+        - in: query
+          name: query
+          required: true
+          description: The keyword to search for within the selected section
+          schema:
+            type: string
+            example: Sheraton
+
+        - in: query
+          name: page
+          required: false
+          description: Page number for pagination
+          schema:
+            type: integer
+            minimum: 1
+            example: 1
+
+        - in: query
+          name: limit
+          required: false
+          description: Number of results per page
+          schema:
+            type: integer
+            minimum: 1
+            example: 10
+
+      responses:
+        '200':
+          description: Search results returned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  page:
+                    type: integer
+                    example: 1
+                  limit:
+                    type: integer
+                    example: 10
+                  total:
+                    type: integer
+                    example: 23
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PostDTO'
+
+        '400':
+          description: Bad request – Missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Section and query are required
+
+        '500':
+          description: Internal server error
+    
+        
+  /posts/{id}/like:
+    post:
+      tags:
+        - Posts
+      summary: Like or unlike a post
+      description: Toggle like status for a post by the authenticated user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the post to like or unlike
+          schema:
+            type: string
+            example: 64abc123de45
+        - in: header
+          name: Authorization
+          required: true
+          description: Bearer token
+          schema:
+            type: string
+            example: Bearer eyJhbGci...
+      responses:
+        '200':
+          description: Post like status toggled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  liked:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Post liked
+        '401':
+          description: Unauthorized – Missing or invalid token
+        '404':
+          description: Post not found
+        '500':
+          description: Internal server error
+      
+  /posts/{id}/save:
+    post:
+      tags:
+        - Posts
+      summary: Save or unsave a post
+      description: Toggle saved status for a post by the authenticated user
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the post to save or unsave
+          schema:
+            type: string
+            example: 64abc123de45
+        - in: header
+          name: Authorization
+          required: true
+          description: Bearer token
+          schema:
+            type: string
+            example: Bearer eyJhbGci...
+      responses:
+        '200':
+          description: Post save status toggled
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  saved:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: Post saved
+        '401':
+          description: Unauthorized – Missing or invalid token
+        '404':
+          description: Post not found
+        '500':
+          description: Internal server error
+          
+    
+  /users/{username}/liked-posts:
+    get:
+      tags:
+        - Posts
+      summary: Get all posts liked by a specific user
+      description: Retrieve all posts that the specified user (by username slug) has liked.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          description: The username of the user (slug-friendly)
+          schema:
+            type: string
+            example: travel_guru
+      responses:
+        '200':
+          description: Successfully retrieved liked posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostDTO'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+        '500':
+          description: Internal server error
+      
+  /users/{username}/saved-posts:
+    get:
+      tags:
+        - Posts
+      summary: Get all posts saved by a specific user
+      description: Retrieve a list of all posts that the specified user (by username slug) has saved.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          description: The username of the user (slug-friendly)
+          schema:
+            type: string
+            example: travel_guru
+      responses:
+        '200':
+          description: Successfully retrieved saved posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostDTO'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+        '500':
+          description: Internal server error
+    
+  /posts/{id}/report:
+    post:
+      tags:
+        - Posts
+      summary: Report a post
+      description: Allows a user (typically admin or moderator) to report a post for issues such as spam or offensive content.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: Username of the reporting user
+          schema:
+            type: number
+            example: 1
+        - in: header
+          name: Authorization
+          required: true
+          description: Bearer token (JWT) of the reporting user
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - post_id
+                - reason
+              properties:
+                post_id:
+                  type: integer
+                  description: ID of the post being reported
+                  example: 123
+                reason:
+                  type: string
+                  description: Reason for reporting the post
+                  enum:
+                    - spam
+                    - offensive
+                    - duplicate
+                    - low_quality
+                    - wrong_category
+                    - other
+                  example: spam
+                note:
+                  type: string
+                  description: Optional additional information regarding the report
+                  example: This post is repeatedly posting spam content.
+      responses:
+        '201':
+          description: Report submitted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Report submitted successfully
+                  report_id:
+                    type: integer
+                    example: 45
+        '400':
+          description: Bad request – Missing or invalid input
+        '401':
+          description: Unauthorized – User not authenticated
+        '403':
+          description: Forbidden – User lacks permissions to report
+        '404':
+          description: Post not found
+        '500':
+          description: Internal server error
+          
+    patch:
+      tags:
+        - Posts
+      summary: Update the status of a reported post
+      description: Allows an admin or moderator to update the status and note of a reported post (e.g., mark it as resolved).
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the report to update
+          schema:
+            type: integer
+            example: 45
+        - in: header
+          name: Authorization
+          required: true
+          description: Bearer token (JWT) of the authenticated admin/moderator
+          schema:
+            type: string
+            example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum: [pending, resolved]
+                  description: New status of the report
+                  example: resolved
+                note:
+                  type: string
+                  description: Optional moderator/admin note on resolution
+                  example: Action taken and user warned
+      responses:
+        '200':
+          description: Report updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Report status updated successfully
+                  report_id:
+                    type: integer
+                    example: 45
+        '400':
+          description: Bad request – Invalid input
+        '401':
+          description: Unauthorized – User not authenticated
+        '403':
+          description: Forbidden – User lacks permission to update reports
+        '404':
+          description: Report not found
+        '500':
+          description: Internal server error
+
+    
+  /users/{username}/reports:
+    get:
+      tags:
+        - Posts
+      summary: Get all reports submitted by a user
+      description: Retrieve a list of all reports filed by a specific user, identified by username.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          description: Username of the reporting user
+          schema:
+            type: string
+            example: johndoe
+      responses:
+        '200':
+          description: Successfully retrieved user reports
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    report_id:
+                      type: integer
+                      example: 45
+                    post_id:
+                      type: integer
+                      example: 123
+                    reason:
+                      type: string
+                      enum:
+                        - spam
+                        - offensive
+                        - duplicate
+                        - low_quality
+                        - wrong_category
+                        - other
+                      example: spam
+                    status:
+                      type: string
+                      enum:
+                        - pending
+                        - resolved
+                      example: pending
+                    note:
+                      type: string
+                      example: This post is repeatedly posting spam content.
+                    created_at:
+                      type: string
+                      format: date-time
+                      example: '2025-06-17T09:00:00Z'
+                    updated_at:
+                      type: string
+                      format: date-time
+                      example: '2025-06-18T12:00:00Z'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User not found
+        '500':
+          description: Internal server error
+          
+          
+          
+          
+  /wishlists:  
+    post:
+      tags:
+        - Wishlists
+      summary: Add a destination to the wishlist
+      description: Add a new destination entry to the authenticated user's wishlist.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - destination_name
+                - latitude
+                - longitude
+                - theme
+                - region
+                - is_public
+                - note
+              properties:
+                destination_name:
+                  type: string
+                  example: Paris
+                latitude:
+                  type: number
+                  format: float
+                  example: 48.8566
+                longitude:
+                  type: number
+                  format: float
+                  example: 2.3522
+                theme:
+                  type: string
+                  example: Romantic
+                region:
+                  type: string
+                  example: Europe
+                note:
+                  type: string
+                  example: Must see Eiffel Tower
+                is_public:
+                  type: boolean
+                  example: true
+                shared_token: 
+                  type: number
+                  example: 857388567857
+      responses:
+        '201':
+          description: Wishlist item created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WishlistItem'
+        '400':
+          description: Bad request – Invalid input
+        '401':
+          description: Unauthorized – Missing or invalid token
+        '500':
+          description: Internal server error
+  
+    get:
+      tags:
+        - Wishlists
+      summary: Get all wishlist entries of the authenticated user
+      description: Retrieve all wishlist items for the authenticated user.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved wishlist entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WishlistItem'
+        '401':
+          description: Unauthorized – Missing or invalid token
+        '500':
+          description: Internal server error
+            
+          
+  /wishlist/{wishlistId}:
+    get:
+      tags:
+        - Wishlists
+      summary: Get a specific wishlist item by slug
+      description: Retrieve the details of a wishlist item using its unique id
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: wishlistId
+          required: true
+          description: wishlist id representing the wishlist item 
+          schema:
+            type: integer
+            example: 1234
+        # - in: path
+        #   name: slug
+        #   required: true
+        #   description: Slug representing the wishlist item (e.g., `eiffel-tower-paris`)
+        #   schema:
+        #     type: string
+        #     example: eiffel-tower-paris
+      responses:
+        '200':
+          description: Successfully retrieved wishlist item
+          content:
+            application/json:
+              schema:
+                type: object
+                items:
+                  $ref: '#/components/schemas/WishlistItem'
+                
+        '401':
+          description: Unauthorized – Missing or invalid token
+        '403':
+          description: Forbidden – Only the creator can view a private wishlist
+        '404':
+          description: Wishlist item not found
+        '500':
+          description: Internal server error
+          
+    patch:
+      tags:
+        - Wishlists
+      summary: Update wishlist item by slug
+      description: Update note, theme, region, or visibility of a wishlist item. Only the owner can perform this action.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: wishlistId
+          required: true
+          description: wishlist id representing the wishlist item 
+          schema:
+            type: integer
+            example: 1234
+        # - in: path
+        #   name: slug
+        #   required: true
+        #   description: Slug representing the wishlist item (e.g., `eiffel-tower-paris`)
+        #   schema:
+        #     type: string
+        #     example: eiffel-tower-paris
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                note:
+                  type: string
+                  example: Updated note
+                theme:
+                  type: string
+                  example: Nature
+                region:
+                  type: string
+                  example: Europe
+                is_public:
+                  type: boolean
+                  example: true
+      responses:
+        '200':
+          description: Wishlist item updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WishlistItem'
+        '400':
+          description: Bad request – Invalid input or missing fields
+        '401':
+          description: Unauthorized – Missing or invalid token
+        '403':
+          description: Forbidden – Only the wishlist owner can update
+        '404':
+          description: Wishlist item not found
+        '500':
+          description: Internal server error
+
+    delete:
+      tags:
+        - Wishlists
+      summary: Delete a wishlist item by slug
+      description: Permanently delete a wishlist entry. Only the creator can perform this action.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: wishlistId
+          required: true
+          description: wishlist id representing the wishlist item 
+          schema:
+            type: integer
+            example: 1234
+        # - in: path
+        #   name: slug
+        #   required: true
+        #   description: Slug representing the wishlist item (e.g., `eiffel-tower-paris`)
+        #   schema:
+        #     type: string
+        #     example: eiffel-tower-paris
+      responses:
+        '204':
+          description: Wishlist item deleted successfully
+          
+        '401':
+          description: Unauthorized – Missing or invalid token
+        '403':
+          description: Forbidden – Only the creator can delete
+        '404':
+          description: Wishlist item not found
+        '500':
+          description: Internal server error
+      
+          
+  /users/{username}/wishlists:
+    get:
+      tags:
+        - Wishlists
+      summary: Get all public wishlist items of a user
+      description: Retrieve all wishlist items for a specific user. If accessed by the user themselves, both public and private items are returned; otherwise, only public items are shown.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          description: Username of the user whose wishlist is being fetched
+          schema:
+            type: string
+            example: john_doe
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved wishlist items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WishlistItem'
+                  
+        '404':
+          description: User not found or has no public wishlist
+        '500':
+          description: Internal server error
+      
+         
+  /wishlist/search:
+    get:
+      tags:
+        - Wishlists
+      summary: Search public wishlist entries
+      description: >
+        Search public wishlist entries by theme and region. Supports filtering only public wishlists.
+      parameters:
+        - in: query
+          name: theme
+          required: false
+          schema:
+            type: string
+          description: Filter wishlist items by travel theme
+          example: Adventure
+  
+        - in: query
+          name: region
+          required: false
+          schema:
+            type: string
+          description: Filter wishlist items by geographical region
+          example: Europe
+  
+      responses:
+        '200':
+          description: Successfully retrieved filtered wishlist items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WishlistItem'
+        '400':
+          description: Invalid query parameters
+        '500':
+          description: Internal server error
+   
+  /wishlist/shared/{token}:
+    get:
+      tags:
+        - Wishlists
+      summary: Retrieve a shared wishlist item by token
+      description: >
+        Fetch a public wishlist entry using a share token.  
+        Returns 404 if the entry does not exist or is not public.
+      parameters:
+        - in: path
+          name: token
+          required: true
+          description: The share token for the wishlist entry
+          schema:
+            type: string
+            example: 8f3d9a7b-c2e1-4b5f-9d2e-1a2b3c4d5e6f
+      responses:
+        '200':
+          description: Successfully retrieved shared wishlist entry
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WishlistItem'
+        '404':
+          description: Not found or entry is private
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not found or private
+        '500':
+          description: Internal server error
+
+  /wishlist/{wishlistId}/users-overlapping:
+    get:
+      tags:
+        - Wishlists
+      summary: Get users with overlapping wishlist for a destination
+      description: >
+        Retrieves users who have a wishlist item matching the destination of the given wishlist ID.
+      parameters:
+        - in: path
+          name: wishlistId
+          required: true
+          description: The ID of the wishlist entry
+          schema:
+            type: integer
+            example: 101
+      responses:
+        '200':
+          description: Users with overlapping wishlist destination
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+        '404':
+          description: Wishlist entry not found
+        '500':
+          description: Internal server error
+
+  /wishlist/{wishlistId}/notify:
+    post:
+      tags:
+      - Wishlists
+      summary: Log a notification trigger for a wishlist item
+      description: Creates an entry in the `wishlist_notifications` table when a push notification is triggered for a wishlist item.
+      parameters:
+        - in: path
+          name: wishlistId
+          required: true
+          schema:
+            type: integer
+          description: ID of the wishlist item
+          example: 12
+        - in: header
+          name: Authorization
+          required: true
+          schema:
+            type: string
+          description: Bearer token (JWT) for authenticated user
+          example: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - lat
+                - lng
+              properties:
+                lat:
+                  type: number
+                  format: float
+                  description: Latitude where the notification was triggered
+                  example: 23.7806
+                lng:
+                  type: number
+                  format: float
+                  description: Longitude where the notification was triggered
+                  example: 90.4000
+      responses:
+        '201':
+          description: Notification log created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Notification entry created
+                  notification_id:
+                    type: integer
+                    example: 58
+        '400':
+          description: Bad request – missing or invalid input
+        '401':
+          description: Unauthorized – user not authenticated
+        '404':
+          description: Wishlist item not found
+        '500':
+          description: Internal server error
+      
+
+
+  /trip-plans:
+    post:
+      tags:
+        - TripPlans
+      summary: Create a new trip plan
+      description: Create a collaborative trip plan for a specific destination.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - destination_name
+                - start_date
+                - end_date
+              properties:
+                destination_name:
+                  type: string
+                  example: Sundarbans
+                start_date:
+                  type: string
+                  format: date
+                  example: 2025-12-10
+                end_date:
+                  type: string
+                  format: date
+                  example: 2025-12-15
+                note:
+                  type: string
+                  example: Group trip for New Year
+                transportation:
+                  type: string
+                  example: Boat, Train
+                accomodation:
+                  type: string
+                  example: Forest Lodge
+                estimated_cost:
+                  type: number
+                  format: float
+                  example: 450.75
+                third_party_links:
+                  type: object
+                  example: {
+                    "hotel": "https://booking.com/example",
+                    "bus": "https://example.com/bus"
+                  }
+      responses:
+        '201':
+          description: Trip plan created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TripPlanDTO'
+        '400':
+          description: Validation error
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+
+  /trip-plans/{id}:
+    get:
+      tags:
+        - TripPlans
+      summary: Get details of a trip plan
+      description: Get the full details of a specific trip plan.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the trip plan
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Trip plan details retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TripPlanDTO'
+        '404':
+          description: Trip plan not found
+        '500':
+          description: Internal server error
+          
+    patch:
+      tags:
+        - TripPlans
+      summary: Update a trip plan
+      description: Allows the creator of the trip plan to update fields such as destination, note, dates, etc.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the trip plan to update
+          schema:
+            type: integer
+            example: 1
+        - in: header
+          name: Authorization
+          required: true
+          description: Bearer token (JWT) of the user
+          schema:
+            type: string
+            example: Bearer eyJhbGciOi...
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                destination_name:
+                  type: string
+                  example: Bali
+                start_date:
+                  type: string
+                  format: date
+                  example: 2025-07-01
+                end_date:
+                  type: string
+                  format: date
+                  example: 2025-07-10
+                note:
+                  type: string
+                  example: Plan beach visit and hike
+                transportation:
+                  type: string
+                  example: Flight, rented scooter
+                accomodation:
+                  type: string
+                  example: Airbnb near beach
+                estimated_cost:
+                  type: number
+                  example: 1500.00
+                third_party_links:
+                  type: array
+                  items:
+                    type: string
+                  example: ["https://booking.com/hotel", "https://maps.google.com"]
+      responses:
+        '200':
+          description: Trip plan updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Trip plan updated successfully
+                  trip_plan_id:
+                    type: integer
+                    example: 1
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden – Only the creator can update
+        '404':
+          description: Trip plan not found
+        '500':
+          description: Internal server error
+
+    delete:
+      tags:
+        - TripPlans
+      summary: Delete a trip plan
+      description: Allows the creator of the trip plan to delete it
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the trip plan to delete
+          schema:
+            type: integer
+            example: 1
+        - in: header
+          name: Authorization
+          required: true
+          description: Bearer token (JWT) of the user
+          schema:
+            type: string
+            example: Bearer eyJhbGciOi...
+      responses:
+        '200':
+          description: Trip plan deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Trip plan deleted
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden – Only the creator can delete
+        '404':
+          description: Trip plan not found
+        '500':
+          description: Internal server error
+
+  /trip-plans/{id}/add-member:
+    post:
+      tags:
+        - TripPlans
+      summary: Invite user to a trip plan
+      description: Add another user to an existing trip plan.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the trip plan
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+              properties:
+                user_id:
+                  type: integer
+                  example: 22
+                role:
+                  type: string
+                  example: viewer
+      responses:
+        '200':
+          description: User invited successfully
+        '400':
+          description: Validation error
+        '401':
+          description: Unauthorized
+        '404':
+          description: Trip plan not found
+        '500':
+          description: Internal server error
+        
+  /trip-plans/{id}/messages:
+    get:
+      tags:
+        - TripPlans
+      summary: Get all messages in a trip plan chat
+      description: Fetch all chat messages related to the specified trip plan.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the trip plan
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Messages retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '404':
+          description: Trip plan or chat not found
+        '500':
+          description: Internal server error
+
+    post:
+      tags:
+        - TripPlans
+      summary: Post a new message in a trip plan chat
+      description: Send a new message in the chat of the specified trip plan.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the trip plan
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  example: Let's finalize the hotel booking by tomorrow!
+      responses:
+        '201':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema: 
+                type: string
+                example: "message sent successfully"
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+        '404':
+          description: Trip plan not found
+        '500':
+          description: Internal server error
+          
+  /trip-plans/{id}/messages/{messageId}:
+    get:
+      tags:
+        - TripPlans
+      summary: Get all messages in a trip plan chat
+      description: Fetch all chat messages related to the specified trip plan.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the trip plan
+          schema:
+            type: integer
+            example: 1
+        - in: path
+          name: messageId
+          required: true
+          description: ID of the message to update
+          schema:
+            type: integer
+            example: 42
+            
+      responses:
+        '200':
+          description: Messages retrieved
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: Trip plan or chat not found
+        '500':
+          description: Internal server error
+          
+    patch:
+      tags:
+        - TripPlans
+      summary: Update a specific message in a trip plan chat
+      description: Allows the message sender to update the content of a previously sent message.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the trip plan
+          schema:
+            type: integer
+            example: 1
+        - in: path
+          name: messageId
+          required: true
+          description: ID of the message to update
+          schema:
+            type: integer
+            example: 42
+        - in: header
+          name: Authorization
+          required: true
+          description: Bearer token of the user
+          schema:
+            type: string
+            example: Bearer eyJhbGciOi...
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - content
+              properties:
+                content:
+                  type: string
+                  example: Updated message content.
+      responses:
+        '200':
+          description: Message updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Message updated
+        '400':
+          description: Invalid input
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden – Only the message sender can update
+        '404':
+          description: Trip plan or message not found
+        '500':
+          description: Internal server error
+
+    delete:
+      tags:
+        - TripPlans
+      summary: Delete a specific message from a trip plan chat
+      description: Allows the message sender (or optionally an admin) to delete a specific chat message.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID of the trip plan
+          schema:
+            type: integer
+            example: 1
+        - in: path
+          name: messageId
+          required: true
+          description: ID of the message to delete
+          schema:
+            type: integer
+            example: 42
+        - in: header
+          name: Authorization
+          required: true
+          description: Bearer token of the user
+          schema:
+            type: string
+            example: Bearer eyJhbGciOi...
+      responses:
+        '200':
+          description: Message deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Message deleted
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden – Only the message sender can delete
+        '404':
+          description: Trip plan or message not found
+        '500':
+          description: Internal server error
+          
+  /users/{username}/trip-plans:
+    get:
+      tags:
+        - TripPlans
+      summary: Get all trip plans by username
+      description: Retrieve all trip plans created by a specific user identified by their username.
+      parameters:
+        - in: path
+          name: username
+          required: true
+          description: Username of the trip plan creator
+          schema:
+            type: string
+            example: shifat
+      responses:
+        '200':
+          description: Successfully retrieved trip plans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TripPlanDTO'
+        '404':
+          description: User not found
+        '500':
+          description: Internal server error
+        
+          
+    
+  /location/update:
+    post:
+      tags:
+        - Push Notification
+      summary: Update current GPS position
+      description: Used by frontend to send the user's current GPS position (latitude and longitude).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - lat
+                - lng
+              properties:
+                lat:
+                  type: number
+                  format: float
+                  description: Latitude coordinate
+                  example: 23.78
+                lng:
+                  type: number
+                  format: float
+                  description: Longitude coordinate
+                  example: 90.40
+      responses:
+        '200':
+          description: Location updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Location updated
+        '400':
+          description: Bad request – Invalid or missing coordinates
+        '401':
+          description: Unauthorized – Missing or invalid token
+        '500':
+          description: Internal server error
+
+          
+          
+  /services/discover:
+    get:
+      tags:
+        - Services
+      summary: Discover services near a location
+      description: Returns services such as hotels, restaurants, or transport near a given location with optional filters.
+      parameters:
+        - in: query
+          name: lat
+          required: true
+          schema:
+            type: number
+            format: float
+          description: Latitude coordinate of the location
+          example: 23.78
+        - in: query
+          name: lng
+          required: true
+          schema:
+            type: number
+            format: float
+          description: Longitude coordinate of the location
+          example: 90.40
+        - in: query
+          name: type
+          required: false
+          schema:
+            type: string
+            enum: [hotel, restaurant, transport]
+          description: Filter services by type
+          example: hotel
+        - in: query
+          name: maxPrice
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5
+          description: Maximum price level (1 to 5)
+          example: 3
+        - in: query
+          name: minRating
+          required: false
+          schema:
+            type: number
+            format: float
+            minimum: 0
+            maximum: 5
+          description: Minimum rating to filter services
+          example: 4
+      responses:
+        '200':
+          description: List of nearby services
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                      example: Hotel Shuktara
+                    type:
+                      type: string
+                      enum: [hotel, restaurant, transport]
+                      example: hotel
+                    rating:
+                      type: number
+                      format: float
+                      example: 4.5
+                    price_level:
+                      type: integer
+                      example: 3
+                    lat:
+                      type: number
+                      format: float
+                      example: 23.78
+                    lng:
+                      type: number
+                      format: float
+                      example: 90.40
+                    source:
+                      type: string
+                      example: google
+        '400':
+          description: Bad request – Missing or invalid parameters
+        '500':
+          description: Internal server error
+            
+          
+          
+          
+        
+components:
+  schemas:
+    UserDTO:
+      type: object
+      properties:
+        username:
+          type: string
+          example: johndoe
+        email:
+          type: string
+          format: email
+          example: johndoe@example.com
+        role:
+          type: string
+          enum: [explorer, planner, admin]
+          example: explorer
+        bio: 
+          type: string
+          example: an user who loves travel
+        
+    PostResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Post created successfully
+        postId:
+          type: string
+          example: 64abd123f89abc0987
+          
+    PostDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 64abc123de45
+  
+        title:
+          type: string
+          example: A Trip to Sundarbans
+  
+        description:
+          type: string
+          example: This was a thrilling journey through the world's largest mangrove forest.
+  
+        cost:
+          type: number
+          example: 150.50
+  
+        duration:
+          type: string
+          example: 3 days 2 nights
+  
+        effort:
+          type: string
+          example: Moderate
+  
+        hotels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Hotel'
+  
+        places:
+          type: array
+          items:
+            $ref: '#/components/schemas/Place'
+  
+        transports:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transport'
+  
+        foods:
+          type: array
+          items:
+            $ref: '#/components/schemas/Food'
+  
+        categories:
+          type: array
+          items:
+            type: string
+          example: ["Adventure", "Nature"]
+  
+        images:
+          type: array
+          items:
+            type: string
+            format: binary
+  
+        geo_track:
+          type: object
+          description: GeoJSON object representing travel path
+          example:
+            type: FeatureCollection
+            features:
+              - type: Feature
+                geometry:
+                  type: LineString
+                  coordinates:
+                    - [90.4125, 23.8103]
+                    - [90.5000, 23.8500]
+                properties: {}
+  
+        author:
+          type: string
+          example: user1
+  
+        createdAt:
+          type: string
+          format: date-time
+          example: 2025-06-17T08:30:00Z
+  
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2025-06-18T10:00:00Z
+          
+          
+    Hotel:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Hotel Tiger Inn
+        location:
+          type: string
+          example: Mongla
+        rating:
+          type: number
+          example: 4.5
+
+    Place:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Kotka Beach
+        description:
+          type: string
+          example: Famous for tiger sightings and scenic views.
+
+    Transport:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Boat
+        provider:
+          type: string
+          example: Sundarban Travel Agency
+
+    Food:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Hilsha
+        cost:
+          type: number
+          example: 12.5
+      
+          
+    WishlistItem:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "64abc123de45"
+        destination_name:
+          type: string
+          example: Paris
+        latitude:
+          type: number
+          format: float
+          example: 48.8566
+        longitude:
+          type: number
+          format: float
+          example: 2.3522
+        theme:
+          type: string
+          example: Romantic
+        region:
+          type: string
+          example: Europe
+        note:
+          type: string
+          example: Must see Eiffel Tower
+        is_public:
+          type: boolean
+          example: true
+        created_at:
+          type: string
+          format: date-time
+          example: '2025-06-17T09:00:00Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2025-06-17T10:00:00Z'      
+          
+    TripPlanDTO:
+      type: object
+      properties:
+        trip_plan_id:
+          type: integer
+          example: 1
+        creator_id:
+          type: integer
+          example: 12
+        destination_name:
+          type: string
+          example: Sundarbans
+        start_date:
+          type: string
+          format: date
+          example: 2025-12-10
+        end_date:
+          type: string
+          format: date
+          example: 2025-12-15
+        note:
+          type: string
+          example: This trip is for nature photography and forest exploration.
+        transportation:
+          type: string
+          example: Boat, Train
+        accomodation:
+          type: string
+          example: Forest Lodge
+        estimated_cost:
+          type: number
+          format: float
+          example: 500.75
+        third_party_links:
+          type: object
+          additionalProperties:
+            type: string
+          example: {
+            "hotel": "https://booking.com/hotel-example",
+            "transport": "https://example.com/bus"
+          }
+        created_at:
+          type: string
+          format: date-time
+          example: 2025-06-17T08:00:00Z
+        updated_at:
+          type: string
+          format: date-time
+          example: 2025-06-18T10:30:00Z      
+          
+  
+  
+          
+          
+          
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+

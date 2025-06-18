@@ -8,5 +8,5 @@ export const authRouter=express.Router()
 
 authRouter.post('/signup', validateSignup, signup)
 authRouter.post('/signin', validateSignin, signin)
-authRouter.post('/signout', signout)
+authRouter.post('/signout', authenticate, signout)
 authRouter.get('/refresh-token', authenticate, refreshAccessToken)

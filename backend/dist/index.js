@@ -14,12 +14,14 @@ import { authRouter } from "./src/routes/auth.route.js";
 import { userRouter } from "./src/routes/user.route.js";
 import { dbClient } from "./src/db/db.js";
 import { globalErrorHandler } from "./src/utils/globalErrorHandler.js";
+import { swaggerUi, swaggerDocument } from "./src/utils/swagger.js";
 import dotenv from 'dotenv';
 dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 // testing
@@ -33,6 +35,7 @@ function startServer() {
             yield dbClient.connect();
             app.listen(process.env.PORT, () => {
                 console.log(`Connected to server on port ${process.env.PORT}`);
+                console.log(`Swagger docs: http://localhost:${process.env.PORT}/api-docs`);
             });
             process.on('SIGINT', () => __awaiter(this, void 0, void 0, function* () {
                 console.log('Shutting down...');

@@ -10,4 +10,4 @@ export const userRouter=express.Router()
 userRouter.get('/', authenticate, validatePagination, getAllUsers)   // done
 userRouter.get('/:username', authenticate, getUserByUsername)  // done
 userRouter.patch('/:username', authenticate, authorize, validateUpdateUser, updateUserByUsername) // not created admin till now
-userRouter.delete('/:username', authenticate, authorizeAdmin,deleteUserByUsername)  // done
+userRouter.delete('/:username', authenticate, authorizeAdmin, deleteUserByUsername)  // done
