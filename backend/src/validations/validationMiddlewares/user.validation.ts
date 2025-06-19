@@ -1,4 +1,3 @@
-// src/middlewares/validateUpdateUser.ts
 import { Request, Response, NextFunction } from 'express';
 import { updateUserSchema } from '../schemas/user.schema.ts'; 
 

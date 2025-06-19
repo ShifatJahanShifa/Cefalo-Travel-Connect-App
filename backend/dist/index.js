@@ -16,6 +16,7 @@ import { dbClient } from "./src/db/db.js";
 import { globalErrorHandler } from "./src/utils/globalErrorHandler.js";
 import { swaggerUi, swaggerDocument } from "./src/utils/swagger.js";
 import dotenv from 'dotenv';
+import { postRouter } from "./src/routes/post.route.js";
 dotenv.config();
 const app = express();
 app.use(cors());
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/posts', postRouter);
 // testing
 app.get('/', (req, res) => {
     res.send('hello world');

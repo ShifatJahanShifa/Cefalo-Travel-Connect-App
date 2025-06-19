@@ -29,9 +29,7 @@ export function updateUser(username, updateUser) {
         if (!user) {
             throw new AppError("user not found", 404);
         }
-        console.log(updateUser);
         if (updateUser.hashed_password) {
-            console.log('eruyfer');
             const hashedPassword = yield hash(updateUser.hashed_password, 10);
             updateUser.hashed_password = hashedPassword;
         }

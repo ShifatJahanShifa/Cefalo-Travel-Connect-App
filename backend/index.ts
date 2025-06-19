@@ -7,6 +7,7 @@ import { dbClient } from './src/db/db.ts'
 import { globalErrorHandler } from './src/utils/globalErrorHandler.ts'
 import { swaggerUi, swaggerDocument } from './src/utils/swagger.ts'
 import dotenv from 'dotenv'
+import { postRouter } from './src/routes/post.route.ts'
 dotenv.config()
 
 const app = express()
@@ -19,6 +20,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 app.use('/api/v1/auth',authRouter)
 app.use('/api/v1/users',userRouter)
+app.use('/api/v1/posts',postRouter)
 
 // testing
 app.get('/',(req: Request, res: Response)=>{
