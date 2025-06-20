@@ -5,25 +5,37 @@ export type CreatePostInput = {
     total_cost: number;
     duration: string;
     effort: string;
+    categories: string
 
     hotels?: Array<{
         hotel_name: string;
-        hotel_location: string;
-        cost_per_night: number;
+        cost_per_night?: number;
+        latitude?: number;
+        longitude?: number;
+        cost: number 
+        rating: number
         review: string;
     }>;
 
     transports?: Array<{
         transport_type: string;
         transport_provider: string;
-        cost_per_person: number;
+        cost_per_person?: number;
+        starting_point_latitude?: number;
+        ending_point_latitude?: number;
+        starting_point_longitude?: number;
+        ending_point_longitude?: number;
+        cost: number 
+        rating: number
         review: string;
     }>;
 
     places?: Array<{
         place_name: string;
-        place_location: string;
-        review?: string;
+        latitude?: number;
+        longitude?: number;
+        rating: number
+        review: string;
     }>;
 
     foods?: Array<{
@@ -33,17 +45,9 @@ export type CreatePostInput = {
         review: string;
     }>;
 
-    category_names?: string[];
-
     images?: Array<{
         image_url: string;
         caption?: string;
-    }>;
-
-    geo_locations?: Array<{
-        latitude: number;
-        longitude: number;
-        location_name: string;
     }>;
 }
 
@@ -56,7 +60,9 @@ export type CreatedPost = {
     total_cost: number;
     duration: string;
     effort: string;
+    categories: string
     likes_count: number
+    comments_count: number
     created_at: string;
     updated_at: string;
 }
@@ -69,7 +75,9 @@ export type getPost = {
     total_cost: number;
     duration: string;
     effort: string;
+    categories: string
     likes_count: number;
+    comments_count: number;
     created_at: string;
     updated_at: string;
 
@@ -77,9 +85,7 @@ export type getPost = {
     transports?: any[];
     places?: any[];
     foods?: any[];
-    categories?: string[];
     images?: any[];
-    geo_locations?: any[];
 }
 
 export type UpdatePostInput = {
@@ -88,25 +94,37 @@ export type UpdatePostInput = {
     total_cost: number;
     duration: string;
     effort: string;
+    categories: string
 
     hotels?: Array<{
         hotel_name: string;
-        hotel_location: string;
-        cost_per_night: number;
+        cost_per_night?: number;
+        latitude?: number;
+        longitude?: number;
+        cost: number 
+        rating: number
         review: string;
     }>;
 
     transports?: Array<{
         transport_type: string;
         transport_provider: string;
-        cost_per_person: number;
+        cost_per_person?: number;
+        starting_point_latitude?: number;
+        ending_point_latitude?: number;
+        starting_point_longitude?: number;
+        ending_point_longitude?: number;
+        cost: number 
+        rating: number
         review: string;
     }>;
 
     places?: Array<{
         place_name: string;
-        place_location: string;
-        review?: string;
+        latitude?: number;
+        longitude?: number;
+        rating: number
+        review: string;
     }>;
 
     foods?: Array<{
@@ -116,16 +134,8 @@ export type UpdatePostInput = {
         review: string;
     }>;
 
-    category_names?: string[];
-
     images?: Array<{
         image_url: string;
         caption?: string;
-    }>;
-
-    geo_locations?: Array<{
-        latitude: number;
-        longitude: number;
-        location_name: string;
     }>;
 };

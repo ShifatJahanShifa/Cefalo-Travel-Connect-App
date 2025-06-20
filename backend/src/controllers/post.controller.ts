@@ -3,6 +3,8 @@ import { ExpressRequest } from '../middlewares/auth.middleware.ts'
 import { Request, Response, NextFunction } from 'express'
 import { CreatedPost, UpdatePostInput } from '../types/post.type.ts'
 import { PostResponseDTO } from '../DTOs/post.dto.ts'
+import { UserDTO } from '../DTOs/user.dto.ts'
+import * as UserService from '../services/user.service.ts'
 
 export const createPost = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try { 
@@ -72,3 +74,21 @@ export const deletePost = async (req: ExpressRequest, res: Response, next: NextF
         next(error)
     }
 }
+
+
+export const getPostsByUserID = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
+   try {
+        // at first i will get user_id from user table
+        const username: string = req.params.username
+        const user: UserDTO = await UserService.getUserByUsername(username)
+
+        // call the post service 
+        const posts: PostResponseDTO[] = await PostService.getPostsByUserID(user.user_id)
+
+        res.status(200).json(posts)
+    }
+    catch (error) 
+    {
+        next(error)
+    }
+} 

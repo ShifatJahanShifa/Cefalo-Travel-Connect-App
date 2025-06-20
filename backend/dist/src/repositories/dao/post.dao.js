@@ -13,7 +13,7 @@ const db = dbClient.getConnection();
 class PostDAO {
     createPost(input) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a, _b, _c, _d, _e, _f, _g;
+            var _a, _b, _c, _d, _e, _f, _g, _h;
             const [post] = yield db('posts')
                 .insert({
                 user_id: input.user_id,
@@ -21,34 +21,78 @@ class PostDAO {
                 description: input.description,
                 total_cost: input.total_cost,
                 duration: input.duration,
-                effort: input.effort
+                effort: input.effort,
+                categories: input.categories
             })
                 .returning('*');
             const post_id = post.post_id;
             if ((_a = input.hotels) === null || _a === void 0 ? void 0 : _a.length) {
-                yield db('post_hotels').insert(input.hotels.map(hotel => (Object.assign({ post_id }, hotel))));
+                // at first search in hotels table
+                for (let index = 0; index < ((_b = input.hotels) === null || _b === void 0 ? void 0 : _b.length); index++) {
+                    const hotelRecord = yield db('hotels')
+                        .select('hotel_id')
+                        .where({ hotel_name: input.hotels[index].hotel_name })
+                        .first();
+                    if (hotelRecord) {
+                        yield db('post_hotels').insert({
+                            post_id,
+                            hotel_id: hotelRecord.hotel_id,
+                            cost: input.hotels[index].cost,
+                            rating: input.hotels[index].rating,
+                            review: input.hotels[index].review,
+                        });
+                    }
+                    else {
+                        // later will include creation logic
+                    }
+                }
             }
-            if ((_b = input.transports) === null || _b === void 0 ? void 0 : _b.length) {
-                yield db('post_transports').insert(input.transports.map(transport => (Object.assign({ post_id }, transport))));
+            if ((_c = input.transports) === null || _c === void 0 ? void 0 : _c.length) {
+                for (let index = 0; index < ((_d = input.transports) === null || _d === void 0 ? void 0 : _d.length); index++) {
+                    const transportRecord = yield db('transports')
+                        .select('transport_id')
+                        .where({ transport_type: input.transports[index].transport_type,
+                        transport_provider: input.transports[index].transport_provider
+                    })
+                        .first();
+                    if (transportRecord) {
+                        yield db('post_transports').insert({
+                            post_id,
+                            transport_id: transportRecord.transport_id,
+                            cost: input.transports[index].cost,
+                            rating: input.transports[index].rating,
+                            review: input.transports[index].review,
+                        });
+                    }
+                    else {
+                        // later will include creation logic
+                    }
+                }
             }
-            if ((_c = input.places) === null || _c === void 0 ? void 0 : _c.length) {
-                yield db('post_places').insert(input.places.map(place => (Object.assign({ post_id }, place))));
+            if ((_e = input.places) === null || _e === void 0 ? void 0 : _e.length) {
+                for (let index = 0; index < ((_f = input.places) === null || _f === void 0 ? void 0 : _f.length); index++) {
+                    const placeRecord = yield db('places')
+                        .select('place_id')
+                        .where({ place_name: input.places[index].place_name })
+                        .first();
+                    if (placeRecord) {
+                        yield db('post_places').insert({
+                            post_id,
+                            place_id: placeRecord.place_id,
+                            rating: input.places[index].rating,
+                            review: input.places[index].review,
+                        });
+                    }
+                    else {
+                        // later will include creation logic
+                    }
+                }
             }
-            if ((_d = input.foods) === null || _d === void 0 ? void 0 : _d.length) {
+            if ((_g = input.foods) === null || _g === void 0 ? void 0 : _g.length) {
                 yield db('post_foods').insert(input.foods.map(food => (Object.assign({ post_id }, food))));
             }
-            if ((_e = input.category_names) === null || _e === void 0 ? void 0 : _e.length) {
-                const categories = yield db('post_categories')
-                    .whereIn('category_name', input.category_names)
-                    .select('category_id');
-                const links = categories.map(({ category_id }) => ({ post_id, category_id }));
-                yield db('post_category_links').insert(links);
-            }
-            if ((_f = input.images) === null || _f === void 0 ? void 0 : _f.length) {
+            if ((_h = input.images) === null || _h === void 0 ? void 0 : _h.length) {
                 yield db('post_images').insert(input.images.map(image => (Object.assign({ post_id }, image))));
-            }
-            if ((_g = input.geo_locations) === null || _g === void 0 ? void 0 : _g.length) {
-                yield db('post_geo_locations').insert(input.geo_locations.map(loc => (Object.assign({ post_id }, loc))));
             }
             return post;
         });
@@ -59,25 +103,18 @@ class PostDAO {
             const offset = (page - 1) * limit;
             const posts = yield db('posts').select('*').orderBy('created_at', 'desc').limit(limit).offset(offset);
             const enrichedPosts = yield Promise.all(posts.map((post) => __awaiter(this, void 0, void 0, function* () {
-                const [hotels, transports, places, foods, images, geo_locations, categories] = yield Promise.all([
+                const [hotels, transports, places, foods, images] = yield Promise.all([
                     db('post_hotels').where('post_id', post.post_id),
                     db('post_transports').where('post_id', post.post_id),
                     db('post_places').where('post_id', post.post_id),
                     db('post_foods').where('post_id', post.post_id),
                     db('post_images').where('post_id', post.post_id),
-                    db('post_geo_locations').where('post_id', post.post_id),
-                    db('post_category_links')
-                        .join('post_categories', 'post_category_links.category_id', 'post_categories.category_id')
-                        .where('post_category_links.post_id', post.post_id)
-                        .pluck('post_categories.category_name'),
                 ]);
                 return Object.assign(Object.assign({}, post), { hotels,
                     transports,
                     places,
                     foods,
-                    images,
-                    geo_locations,
-                    categories });
+                    images });
             })));
             return enrichedPosts;
         });
@@ -88,30 +125,24 @@ class PostDAO {
             if (!post) {
                 throw new AppError("post not found", 404);
             }
-            const [hotels, transports, places, foods, images, geo_locations, categories] = yield Promise.all([
+            const [hotels, transports, places, foods, images] = yield Promise.all([
                 db('post_hotels').where('post_id', post.post_id),
                 db('post_transports').where('post_id', post.post_id),
                 db('post_places').where('post_id', post.post_id),
                 db('post_foods').where('post_id', post.post_id),
                 db('post_images').where('post_id', post.post_id),
-                db('post_geo_locations').where('post_id', post.post_id),
-                db('post_category_links')
-                    .join('post_categories', 'post_category_links.category_id', 'post_categories.category_id')
-                    .where('post_category_links.post_id', post.post_id)
-                    .pluck('post_categories.category_name'),
             ]);
             const enrichedPost = Object.assign(Object.assign({}, post), { hotels,
                 transports,
                 places,
                 foods,
-                images,
-                geo_locations,
-                categories });
+                images });
             return enrichedPost;
         });
     }
     updatePost(post_id, updatedPostData) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a, _b, _c;
             yield db('posts').where({ post_id: post_id }).update({
                 title: updatedPostData.title,
                 description: updatedPostData.description,
@@ -121,19 +152,61 @@ class PostDAO {
                 updated_at: db.fn.now()
             });
             if (updatedPostData.hotels && updatedPostData.hotels.length > 0) {
-                yield db('post_hotels').where({ post_id }).del();
-                const hotelRecords = updatedPostData.hotels.map(hotel => (Object.assign({ post_id }, hotel)));
-                yield db('post_hotels').insert(hotelRecords);
+                for (let index = 0; index < ((_a = updatedPostData.hotels) === null || _a === void 0 ? void 0 : _a.length); index++) {
+                    const hotelRecord = yield db('hotels')
+                        .select('hotel_id')
+                        .where({ hotel_name: updatedPostData.hotels[index].hotel_name })
+                        .first();
+                    if (hotelRecord) {
+                        yield db('post_hotels').where({ post_id: post_id, hotel_id: hotelRecord.hotel_id }).update({
+                            cost: updatedPostData.hotels[index].cost,
+                            rating: updatedPostData.hotels[index].rating,
+                            review: updatedPostData.hotels[index].review,
+                        });
+                    }
+                    else {
+                        // later will include creation logic
+                    }
+                }
             }
             if (updatedPostData.transports && updatedPostData.transports.length > 0) {
-                yield db('post_transports').where({ post_id }).del();
-                const transportRecords = updatedPostData.transports.map(transport => (Object.assign({ post_id }, transport)));
-                yield db('post_transports').insert(transportRecords);
+                for (let index = 0; index < ((_b = updatedPostData.transports) === null || _b === void 0 ? void 0 : _b.length); index++) {
+                    const transportRecord = yield db('transports')
+                        .select('transport_id')
+                        .where({ transport_type: updatedPostData.transports[index].transport_type,
+                        transport_provider: updatedPostData.transports[index].transport_provider
+                    })
+                        .first();
+                    if (transportRecord) {
+                        yield db('post_transports').where({ post_id: post_id,
+                            transport_id: transportRecord.transport_id, }).update({
+                            cost: updatedPostData.transports[index].cost,
+                            rating: updatedPostData.transports[index].rating,
+                            review: updatedPostData.transports[index].review,
+                        });
+                    }
+                    else {
+                        // later will include creation logic
+                    }
+                }
             }
             if (updatedPostData.places && updatedPostData.places.length > 0) {
-                yield db('post_places').where({ post_id }).del();
-                const placeRecords = updatedPostData.places.map(place => (Object.assign({ post_id }, place)));
-                yield db('post_places').insert(placeRecords);
+                for (let index = 0; index < ((_c = updatedPostData.places) === null || _c === void 0 ? void 0 : _c.length); index++) {
+                    const placeRecord = yield db('places')
+                        .select('place_id')
+                        .where({ place_name: updatedPostData.places[index].place_name })
+                        .first();
+                    if (placeRecord) {
+                        yield db('post_places').where({ post_id,
+                            place_id: placeRecord.place_id, }).update({
+                            rating: updatedPostData.places[index].rating,
+                            review: updatedPostData.places[index].review,
+                        });
+                    }
+                    else {
+                        // later will include creation logic
+                    }
+                }
             }
             if (updatedPostData.foods && updatedPostData.foods.length > 0) {
                 yield db('post_foods').where({ post_id }).del();
@@ -145,22 +218,6 @@ class PostDAO {
                 const imageRecords = updatedPostData.images.map(img => (Object.assign({ post_id }, img)));
                 yield db('post_images').insert(imageRecords);
             }
-            if (updatedPostData.geo_locations && updatedPostData.geo_locations.length > 0) {
-                yield db('post_geo_locations').where({ post_id }).del();
-                const geoRecords = updatedPostData.geo_locations.map(geo => (Object.assign({ post_id }, geo)));
-                yield db('post_geo_locations').insert(geoRecords);
-            }
-            if (updatedPostData.category_names && updatedPostData.category_names.length > 0) {
-                const categories = yield db('post_categories')
-                    .whereIn('category_name', updatedPostData.category_names)
-                    .select('category_id');
-                const categoryRecords = categories.map(category => ({
-                    post_id,
-                    category_id: category.category_id,
-                }));
-                yield db('post_category_links').where({ post_id }).del();
-                yield db('post_category_links').insert(categoryRecords);
-            }
             return "successfully updated post";
         });
     }
@@ -168,6 +225,27 @@ class PostDAO {
         return __awaiter(this, void 0, void 0, function* () {
             const postDeleted = yield db("posts").where({ post_id: post_id }).del();
             return "successfully deleted the post";
+        });
+    }
+    getPostsByUserID(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // i am not applying pagination rn
+            const posts = yield db("posts").select('*').where({ user_id: user_id }).orderBy('created_at', 'desc');
+            const enrichedPosts = yield Promise.all(posts.map((post) => __awaiter(this, void 0, void 0, function* () {
+                const [hotels, transports, places, foods, images] = yield Promise.all([
+                    db('post_hotels').where('post_id', post.post_id),
+                    db('post_transports').where('post_id', post.post_id),
+                    db('post_places').where('post_id', post.post_id),
+                    db('post_foods').where('post_id', post.post_id),
+                    db('post_images').where('post_id', post.post_id),
+                ]);
+                return Object.assign(Object.assign({}, post), { hotels,
+                    transports,
+                    places,
+                    foods,
+                    images });
+            })));
+            return enrichedPosts;
         });
     }
 }

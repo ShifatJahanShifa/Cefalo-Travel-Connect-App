@@ -30,3 +30,8 @@ export const deletePost = async(post_id: number): Promise<string> => {
     const status: string = await postDAO.deletePost(post_id)
     return status
 }
+
+export const getPostsByUserID = async(user_id: number): Promise<PostResponseDTO[]> => {
+    const posts: PostResponseDTO[] = await postDAO.getPostsByUserID(user_id)
+    return posts
+}

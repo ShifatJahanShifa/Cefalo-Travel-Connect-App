@@ -30,3 +30,7 @@ export const deletePost = (post_id) => __awaiter(void 0, void 0, void 0, functio
     const status = yield postDAO.deletePost(post_id);
     return status;
 });
+export const getPostsByUserID = (user_id) => __awaiter(void 0, void 0, void 0, function* () {
+    const posts = yield postDAO.getPostsByUserID(user_id);
+    return posts;
+});

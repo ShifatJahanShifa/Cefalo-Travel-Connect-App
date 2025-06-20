@@ -7,6 +7,7 @@ export class PostResponseDTO {
   duration!: string;
   effort!: string;
   likes_count!: number;
+  comments_count!: number;
   created_at!: string;
   updated_at!: string;
 
@@ -14,9 +15,8 @@ export class PostResponseDTO {
   transports?: any[];
   places?: any[];
   foods?: any[];
-  categories?: string[];
   images?: any[];
-  geo_locations?: any[];
+  
 
   constructor(data: Partial<PostResponseDTO>) {
     Object.assign(this, data);

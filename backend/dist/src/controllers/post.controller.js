@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import * as PostService from "../services/post.service.js";
+import * as UserService from "../services/user.service.js";
 export const createPost = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const post = yield PostService.createPost(req.body);
@@ -55,6 +56,19 @@ export const deletePost = (req, res, next) => __awaiter(void 0, void 0, void 0, 
         const post_id = parseInt(req.params.post_id);
         const status = yield PostService.deletePost(post_id);
         res.status(204).send(status);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+export const getPostsByUserID = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // at first i will get user_id from user table
+        const username = req.params.username;
+        const user = yield UserService.getUserByUsername(username);
+        // call the post service 
+        const posts = yield PostService.getPostsByUserID(user.user_id);
+        res.status(200).json(posts);
     }
     catch (error) {
         next(error);

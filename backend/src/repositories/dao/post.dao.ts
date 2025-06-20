@@ -14,28 +14,80 @@ class PostDAO implements IPost {
                         description: input.description,
                         total_cost: input.total_cost,
                         duration: input.duration,
-                        effort: input.effort
+                        effort: input.effort,
+                        categories: input.categories
                     })
                     .returning('*');
 
         const post_id = post.post_id;
+        
 
         if(input.hotels?.length) {
-            await db('post_hotels').insert(
-                input.hotels.map(hotel => ({ post_id, ...hotel }))
-            );
+            // at first search in hotels table
+
+            for (let index=0; index<input.hotels?.length;index++) {
+                const hotelRecord = await db('hotels')
+                    .select('hotel_id')
+                    .where({ hotel_name: input.hotels[index].hotel_name })
+                    .first();
+
+                if (hotelRecord) {
+                    await db('post_hotels').insert({
+                    post_id,
+                    hotel_id: hotelRecord.hotel_id,
+                    cost: input.hotels[index].cost,
+                    rating: input.hotels[index].rating,
+                    review: input.hotels[index].review,
+                    });
+                } else {
+                    // later will include creation logic
+                }
+            }
+
         }
 
         if(input.transports?.length) {
-            await db('post_transports').insert(
-                input.transports.map(transport => ({ post_id, ...transport }))
-            );
+            for (let index=0; index<input.transports?.length;index++) {
+                const transportRecord = await db('transports')
+                    .select('transport_id')
+                    .where({ transport_type: input.transports[index].transport_type,
+                        transport_provider: input.transports[index].transport_provider
+                    })
+                    .first();
+
+                if (transportRecord) {
+                    await db('post_transports').insert({
+                    post_id,
+                    transport_id: transportRecord.transport_id,
+                    cost: input.transports[index].cost,
+                    rating: input.transports[index].rating,
+                    review: input.transports[index].review,
+                    });
+                } else {
+                    // later will include creation logic
+                }
+            }   
         }
 
         if(input.places?.length) {
-            await db('post_places').insert(
-                input.places.map(place => ({ post_id, ...place }))
-            );
+            for (let index=0; index<input.places?.length;index++) {
+                const placeRecord = await db('places')
+                    .select('place_id')
+                    .where({ place_name: input.places[index].place_name })
+                    .first();
+
+                if (placeRecord) {
+                    await db('post_places').insert({
+                    post_id,
+                    place_id: placeRecord.place_id,
+                    
+                    rating: input.places[index].rating,
+                    review: input.places[index].review,
+                    });
+                } else {
+                    // later will include creation logic
+                }
+            }
         }
 
         if(input.foods?.length) {
@@ -44,24 +96,9 @@ class PostDAO implements IPost {
             );
         }
 
-        if(input.category_names?.length) {
-            const categories = await db('post_categories')
-                .whereIn('category_name', input.category_names)
-                .select('category_id');
-
-            const links = categories.map(({ category_id }) => ({ post_id, category_id }));
-            await db('post_category_links').insert(links);
-        }
-
         if(input.images?.length) {
             await db('post_images').insert(
                 input.images.map(image => ({ post_id, ...image }))
-            );
-        }
-
-        if(input.geo_locations?.length) {
-            await db('post_geo_locations').insert(
-                input.geo_locations.map(loc => ({ post_id, ...loc }))
             );
         }
 
@@ -74,17 +111,12 @@ class PostDAO implements IPost {
 
         const enrichedPosts: getPost[] = await Promise.all(
             posts.map(async post => {
-            const [hotels, transports, places, foods, images, geo_locations, categories] = await Promise.all([
+            const [hotels, transports, places, foods, images] = await Promise.all([
                 db('post_hotels').where('post_id', post.post_id),
                 db('post_transports').where('post_id', post.post_id),
                 db('post_places').where('post_id', post.post_id),
                 db('post_foods').where('post_id', post.post_id),
                 db('post_images').where('post_id', post.post_id),
-                db('post_geo_locations').where('post_id', post.post_id),
-                db('post_category_links')
-                .join('post_categories', 'post_category_links.category_id', 'post_categories.category_id')
-                .where('post_category_links.post_id', post.post_id)
-                .pluck('post_categories.category_name'),
             ]);
 
             return {
@@ -94,8 +126,6 @@ class PostDAO implements IPost {
                 places,
                 foods,
                 images,
-                geo_locations,
-                categories,
             };
             })
         );
@@ -111,17 +141,12 @@ class PostDAO implements IPost {
             throw new AppError("post not found",404);
         }
       
-        const [hotels, transports, places, foods, images, geo_locations, categories] = await Promise.all([
+        const [hotels, transports, places, foods, images] = await Promise.all([
             db('post_hotels').where('post_id', post.post_id),
             db('post_transports').where('post_id', post.post_id),
             db('post_places').where('post_id', post.post_id),
             db('post_foods').where('post_id', post.post_id),
             db('post_images').where('post_id', post.post_id),
-            db('post_geo_locations').where('post_id', post.post_id),
-            db('post_category_links')
-            .join('post_categories', 'post_category_links.category_id', 'post_categories.category_id')
-            .where('post_category_links.post_id', post.post_id)
-            .pluck('post_categories.category_name'),
         ]);
 
         const enrichedPost: getPost = {
@@ -130,9 +155,7 @@ class PostDAO implements IPost {
                 transports,
                 places,
                 foods,
-                images,
-                geo_locations,
-                categories,
+                images
             };
 
         return enrichedPost;
@@ -151,27 +174,76 @@ class PostDAO implements IPost {
 
        
         if (updatedPostData.hotels && updatedPostData.hotels.length>0) {
-            await db('post_hotels').where({ post_id }).del();
-            const hotelRecords = updatedPostData.hotels.map(hotel => ({ post_id, ...hotel })); 
-            await db('post_hotels').insert(hotelRecords);
+
+            for (let index=0; index<updatedPostData.hotels?.length;index++) {
+                const hotelRecord = await db('hotels')
+                    .select('hotel_id')
+                    .where({ hotel_name: updatedPostData.hotels[index].hotel_name })
+                    .first();
+
+                if (hotelRecord) {
+                    await db('post_hotels').where({post_id: post_id, hotel_id: hotelRecord.hotel_id}).update({
+                    
+                    cost: updatedPostData.hotels[index].cost,
+                    rating: updatedPostData.hotels[index].rating,
+                    review: updatedPostData.hotels[index].review,
+                    
+                    });
+                } else {
+                    // later will include creation logic
+                }
+            }
         }
 
         if (updatedPostData.transports && updatedPostData.transports.length>0) {
-            await db('post_transports').where({ post_id }).del();
-            const transportRecords = updatedPostData.transports.map(transport => ({ post_id, ...transport }));
-            await db('post_transports').insert(transportRecords);
+             for (let index=0; index<updatedPostData.transports?.length;index++) {
+                const transportRecord = await db('transports')
+                    .select('transport_id')
+                    .where({ transport_type: updatedPostData.transports[index].transport_type,
+                        transport_provider: updatedPostData.transports[index].transport_provider
+                    })
+                    .first();
+
+                if (transportRecord) {
+                    await db('post_transports').where({post_id: post_id,
+                    transport_id: transportRecord.transport_id,}).update({
+                    
+                    
+                    cost: updatedPostData.transports[index].cost,
+                    rating: updatedPostData.transports[index].rating,
+                    review: updatedPostData.transports[index].review,
+                    });
+                } else {
+                    // later will include creation logic
+                }
+            }   
         }
 
         if (updatedPostData.places && updatedPostData.places.length>0) {
-            await db('post_places').where({ post_id }).del();
-            const placeRecords = updatedPostData.places.map(place => ({ post_id, ...place }));
-            await db('post_places').insert(placeRecords);
+           
+            for (let index=0; index<updatedPostData.places?.length;index++) {
+                const placeRecord = await db('places')
+                    .select('place_id')
+                    .where({ place_name: updatedPostData.places[index].place_name })
+                    .first();
+
+                if (placeRecord) {
+                    await db('post_places').where({ post_id,
+                    place_id: placeRecord.place_id,}).update({
+                    rating: updatedPostData.places[index].rating,
+                    review: updatedPostData.places[index].review,
+                });
+                } else {
+                    // later will include creation logic
+                }
+            }
         }
 
         if (updatedPostData.foods && updatedPostData.foods.length>0) {
             await db('post_foods').where({ post_id }).del();
             const foodRecords = updatedPostData.foods.map(food => ({ post_id, ...food }));
             await db('post_foods').insert(foodRecords);
+
         }
 
         if (updatedPostData.images && updatedPostData.images.length>0) {
@@ -180,31 +252,41 @@ class PostDAO implements IPost {
             await db('post_images').insert(imageRecords);
         }
 
-        if (updatedPostData.geo_locations && updatedPostData.geo_locations.length>0) {
-            await db('post_geo_locations').where({ post_id }).del();
-            const geoRecords = updatedPostData.geo_locations.map(geo => ({post_id,...geo }));
-            await db('post_geo_locations').insert(geoRecords);
-        }
-
-        if (updatedPostData.category_names && updatedPostData.category_names.length>0) {
-            const categories = await db('post_categories')
-                .whereIn('category_name', updatedPostData.category_names)
-                .select('category_id');
-
-            const categoryRecords = categories.map(category => ({
-                post_id,
-                category_id: category.category_id,
-            }));
-
-            await db('post_category_links').where({ post_id }).del();
-            await db('post_category_links').insert(categoryRecords);
-        }
+      
         return "successfully updated post"
     }
 
     async deletePost(post_id: number): Promise<string> {
         const postDeleted = await db("posts").where({post_id: post_id}).del()
         return "successfully deleted the post"
+    }
+
+    async getPostsByUserID(user_id: number): Promise<getPost[]> {
+        // i am not applying pagination rn
+        const posts: getPost[] = await db("posts").select('*').where({ user_id: user_id}).orderBy('created_at','desc')
+        
+        const enrichedPosts: getPost[] = await Promise.all(
+            posts.map(async post => {
+            const [hotels, transports, places, foods, images] = await Promise.all([
+                db('post_hotels').where('post_id', post.post_id),
+                db('post_transports').where('post_id', post.post_id),
+                db('post_places').where('post_id', post.post_id),
+                db('post_foods').where('post_id', post.post_id),
+                db('post_images').where('post_id', post.post_id),
+            ]);
+
+            return {
+                ...post,
+                hotels,
+                transports,
+                places,
+                foods,
+                images,
+            };
+            })
+        );
+
+        return enrichedPosts;
     }
 }
 

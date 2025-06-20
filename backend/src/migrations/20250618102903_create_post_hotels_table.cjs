@@ -2,9 +2,9 @@ exports.up = function(knex) {
   return knex.schema.createTable("post_hotels", (table)=>{
     table.increments("post_hotel_id").primary()
     table.integer("post_id").notNullable().references('post_id').inTable('posts').onDelete('CASCADE') 
-    table.string("hotel_name").notNullable()
-    table.string("hotel_location").notNullable()
-    table.decimal("cost_per_night",null,2) 
+    table.integer("hotel_id").notNullable().references('hotel_id').inTable('hotels').onDelete('CASCADE') 
+    table.decimal("cost",null,2).notNullable() 
+    table.integer("rating").notNullable()
     table.text("review").notNullable()
 })
 };
