@@ -52,6 +52,14 @@ class UserDAO implements IUser{
 
         return result;
     }
+
+    async getUserByID(user_id: number): Promise<createdUser> {
+        const result: createdUser = await db('users')
+            .where({ user_id: user_id })
+            .first();
+
+        return result;
+    }
 }
 
 const userDAO = new UserDAO();

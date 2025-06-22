@@ -48,3 +48,9 @@ export async function deleteUser(username: string):  Promise<UserDTO> {
     console.log(result)
     return new UserDTO(result); 
 }
+
+
+export async function getUserByUserID(user_id: number):  Promise<UserDTO> {
+  const data: createdUser = await userDAO.getUserByID(user_id)
+  return new UserDTO(data)
+}
