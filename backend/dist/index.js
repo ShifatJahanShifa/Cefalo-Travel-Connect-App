@@ -12,11 +12,15 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import { authRouter } from "./src/routes/auth.route.js";
 import { userRouter } from "./src/routes/user.route.js";
+import { postRouter } from "./src/routes/post.route.js";
+import { accommodationRouter } from "./src/routes/accommodation.route.js";
+import { placeRouter } from "./src/routes/place.route.js";
+import { transportRouter } from "./src/routes/transport.route.js";
+import { resrestaurantRouter } from "./src/routes/restaurant.route.js";
 import { dbClient } from "./src/db/db.js";
 import { globalErrorHandler } from "./src/utils/globalErrorHandler.js";
 import { swaggerUi, swaggerDocument } from "./src/utils/swagger.js";
 import dotenv from 'dotenv';
-import { postRouter } from "./src/routes/post.route.js";
 dotenv.config();
 const app = express();
 app.use(cors());
@@ -26,6 +30,10 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/posts', postRouter);
+app.use('/api/v1/accommodations', accommodationRouter);
+app.use('/api/v1/places', placeRouter);
+app.use('/api/v1/transports', transportRouter);
+app.use('/api/v1/restaurants', resrestaurantRouter);
 // testing
 app.get('/', (req, res) => {
     res.send('hello world');

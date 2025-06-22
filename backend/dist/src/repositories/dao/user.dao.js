@@ -47,6 +47,14 @@ class UserDAO {
             return result;
         });
     }
+    getUserByID(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield db('users')
+                .where({ user_id: user_id })
+                .first();
+            return result;
+        });
+    }
 }
 const userDAO = new UserDAO();
 export default userDAO;

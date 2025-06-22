@@ -50,3 +50,13 @@ export const deleteUserByUsername = (req, res, next) => __awaiter(void 0, void 0
         next(err);
     }
 });
+export const getUserByUserId = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user_id = parseInt(req.params.userId);
+        const data = yield userService.getUserByUserID(user_id);
+        res.status(200).json(data);
+    }
+    catch (err) {
+        next(err);
+    }
+});

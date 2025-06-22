@@ -8,8 +8,8 @@ import * as UserService from '../services/user.service.ts'
 
 export const createPost = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try { 
-        const post: CreatedPost = await PostService.createPost(req.body)
-        res.status(201).json(post)
+        const post: string = await PostService.createPost(req.body)
+        res.status(201).send(post)
     }
     catch(error)
     {
@@ -17,7 +17,7 @@ export const createPost = async (req: ExpressRequest, res: Response, next: NextF
     }
 }
 
-// no auth middleware now
+
 export const getAllPosts = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
         const page: number = parseInt(req.query.page as string);
@@ -92,3 +92,53 @@ export const getPostsByUserID = async (req: ExpressRequest, res: Response, next:
         next(error)
     }
 } 
+
+
+
+export const searchPosts = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    console.log('in the con')
+    const {
+      title,
+      min_cost,
+      max_cost,
+      transport_type,
+      place_name,
+      restaurant_name,
+      accommodation_type
+    } = req.query;
+
+    const filters = {
+      title: title as string,
+      min_cost: min_cost ? Number(min_cost) : undefined,
+      max_cost: max_cost ? Number(max_cost) : undefined,
+      transport_type: transport_type as string,
+      place_name: place_name as string,
+      restaurant_name: restaurant_name as string,
+      accommodation_type: accommodation_type as string
+    };
+
+    const posts = await PostService.searchPosts(filters);
+    res.status(200).json(posts);
+
+  } catch (err) {
+    next(err); 
+  }
+};
+
+
+export const togglePostLike = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const post_id = parseInt(req.params.postId)
+        const username: string = req.username!
+        const user: UserDTO = await UserService.getUserByUsername(username)
+        
+        const result: string = await PostService.togglePostLike(post_id, user.user_id)
+
+        res.status(200).json(result)
+    }
+    catch (error) 
+    {
+        next(error)
+    }
+}

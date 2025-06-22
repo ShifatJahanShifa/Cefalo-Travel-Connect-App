@@ -11,10 +11,10 @@ export class PostResponseDTO {
   created_at!: string;
   updated_at!: string;
 
-  hotels?: any[];
+  accommodations?: any[];
   transports?: any[];
   places?: any[];
-  foods?: any[];
+  restaurants?: any[];
   images?: any[];
   
 

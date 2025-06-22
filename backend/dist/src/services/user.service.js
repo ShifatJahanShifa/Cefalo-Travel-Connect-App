@@ -51,3 +51,9 @@ export function deleteUser(username) {
         return new UserDTO(result);
     });
 }
+export function getUserByUserID(user_id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const data = yield userDAO.getUserByID(user_id);
+        return new UserDTO(data);
+    });
+}

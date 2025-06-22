@@ -1,108 +1,93 @@
 import { z } from 'zod';
 
-export const createPostSchema = z.object({
-    user_id: z.number(),
-  title: z.string(),
-  description: z.string(),
-  total_cost: z.number(),
-  duration: z.string(),
-  effort: z.string(),
-  categories: z.string(), // or use z.string().array() if it's meant to be multiple
+const categoryEnum = z.enum([
+  'Adventure',
+  'Beach',
+  'Cultural Site',
+  'Budget Travel',
+  'Historical',
+  'Nature',
+  'Heritage',
+]);
 
-  hotels: z.array(z.object({
-    hotel_name: z.string(),
-    cost_per_night: z.number().optional(),
-    latitude: z.number().optional(),
-    longitude: z.number().optional(),
-    cost: z.number(),
-    rating: z.number(),
-    review: z.string()
-  })).optional(),
+const accommodationSchema = z.object({
+  accommodation_type: z.string(),
+  accommodation_name: z.string().min(1),
+  cost_per_night: z.number().optional(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
+  cost: z.number().min(0),
+  rating: z.number().int().min(0).max(5),
+  review: z.string().min(1),
+});
 
-  transports: z.array(z.object({
-    transport_type: z.string(),
-    transport_provider: z.string(),
-    cost_per_person: z.number().optional(),
-    starting_point_latitude: z.number().optional(),
-    ending_point_latitude: z.number().optional(),
-    starting_point_longitude: z.number().optional(),
-    ending_point_longitude: z.number().optional(),
-    cost: z.number(),
-    rating: z.number(),
-    review: z.string()
-  })).optional(),
+const transportSchema = z.object({
+  transport_type: z.string(),
+  transport_name: z.string(),
+  cost_per_person: z.number().optional(),
+  starting_location_name: z.string().optional(),
+  starting_location_latitude: z.number().optional(),
+  starting_location_longitude: z.number().optional(),
+  ending_location_name: z.string().optional(),
+  ending_location_latitude: z.number().optional(),
+  ending_location_longitude: z.number().optional(),
+  cost: z.number().min(0),
+  rating: z.number().int().min(0).max(5),
+  review: z.string().min(1),
+});
 
-  places: z.array(z.object({
-    place_name: z.string(),
-    latitude: z.number().optional(),
-    longitude: z.number().optional(),
-    rating: z.number(),
-    review: z.string()
-  })).optional(),
+const placeSchema = z.object({
+  place_name: z.string().min(1),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
+  rating: z.number().int().min(0).max(5),
+  review: z.string().min(1),
+});
 
-  foods: z.array(z.object({
-    food_name: z.string(),
-    restaurant: z.string(),
-    food_cost: z.number(),
-    review: z.string()
-  })).optional(),
+const restaurantSchema = z.object({
+  restaurant_name: z.string().min(1),
+  popular_food: z.string().optional(),
+  cost: z.number().min(0),
+  rating: z.number().int().min(0).max(5),
+  review: z.string().min(1),
+});
 
-  images: z.array(z.object({
-    image_url: z.string().url(),
-    caption: z.string().optional()
-  })).optional()
+const imageSchema = z.object({
+  image_url: z.string().url(),
+  caption: z.string().optional(),
 });
 
 
+export const createPostSchema = z.object({
+  user_id: z.number().int().min(1),
+  title: z.string().min(1),
+  description: z.string().min(1),
+  total_cost: z.number().min(0),
+  duration: z.string().min(1),
+  effort: z.string().min(1),
+  categories: z.array(categoryEnum),
+
+  accommodations: z.array(accommodationSchema).optional(),
+  transports: z.array(transportSchema).optional(),
+  places: z.array(placeSchema).optional(),
+  restaurants: z.array(restaurantSchema).optional(),
+  images: z.array(imageSchema).optional(),
+});
+
+// ----------------------
+// ✅ UpdatePost Schema
+// ----------------------
 export const updatePostSchema = z.object({
+  title: z.string().min(1),
+  description: z.string().min(1),
+  total_cost: z.number().min(0),
+  duration: z.string().min(1),
+  effort: z.string().min(1),
+  categories: z.array(categoryEnum),
 
-  title: z.string(),
-  description: z.string(),
-  total_cost: z.number(),
-  duration: z.string(),
-  effort: z.string(),
-  categories: z.string(), // or use z.string().array() if it's meant to be multiple
-
-  hotels: z.array(z.object({
-    hotel_name: z.string(),
-    cost_per_night: z.number().optional(),
-    latitude: z.number().optional(),
-    longitude: z.number().optional(),
-    cost: z.number(),
-    rating: z.number(),
-    review: z.string()
-  })).optional(),
-
-  transports: z.array(z.object({
-    transport_type: z.string(),
-    transport_provider: z.string(),
-    cost_per_person: z.number().optional(),
-    starting_point_latitude: z.number().optional(),
-    ending_point_latitude: z.number().optional(),
-    starting_point_longitude: z.number().optional(),
-    ending_point_longitude: z.number().optional(),
-    cost: z.number(),
-    rating: z.number(),
-    review: z.string()
-  })).optional(),
-
-  places: z.array(z.object({
-    place_name: z.string(),
-    latitude: z.number().optional(),
-    longitude: z.number().optional(),
-    rating: z.number(),
-    review: z.string()
-  })).optional(),
-
-  foods: z.array(z.object({
-    food_name: z.string(),
-    restaurant: z.string(),
-    food_cost: z.number(),
-    review: z.string()
-  })).optional(),
-
-  images: z.array(z.object({
-    image_url: z.string().url(),
-    caption: z.string().optional()
-  })).optional()
+  accommodations: z.array(accommodationSchema).optional(),
+  transports: z.array(transportSchema).optional(),
+  places: z.array(placeSchema).optional(),
+  restaurants: z.array(restaurantSchema).optional(),
+  images: z.array(imageSchema).optional(),
 });
