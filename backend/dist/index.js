@@ -17,6 +17,7 @@ import { accommodationRouter } from "./src/routes/accommodation.route.js";
 import { placeRouter } from "./src/routes/place.route.js";
 import { transportRouter } from "./src/routes/transport.route.js";
 import { resrestaurantRouter } from "./src/routes/restaurant.route.js";
+import { wishlistRouter } from "./src/routes/wishlist.route.js";
 import { dbClient } from "./src/db/db.js";
 import { globalErrorHandler } from "./src/utils/globalErrorHandler.js";
 import { swaggerUi, swaggerDocument } from "./src/utils/swagger.js";
@@ -34,6 +35,7 @@ app.use('/api/v1/accommodations', accommodationRouter);
 app.use('/api/v1/places', placeRouter);
 app.use('/api/v1/transports', transportRouter);
 app.use('/api/v1/restaurants', resrestaurantRouter);
+app.use('/api/v1/wishlists', wishlistRouter);
 // testing
 app.get('/', (req, res) => {
     res.send('hello world');

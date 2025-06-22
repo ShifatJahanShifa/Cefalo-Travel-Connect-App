@@ -86,12 +86,11 @@ export const searchPosts = (req, res, next) => __awaiter(void 0, void 0, void 0,
             restaurant_name: restaurant_name,
             accommodation_type: accommodation_type
         };
-        console.log(filters);
         const posts = yield PostService.searchPosts(filters);
         res.status(200).json(posts);
     }
     catch (err) {
-        next(err); // Pass to global error handler
+        next(err);
     }
 });
 export const togglePostLike = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

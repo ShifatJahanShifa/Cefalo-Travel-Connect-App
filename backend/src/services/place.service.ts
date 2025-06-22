@@ -2,6 +2,7 @@ import { ExpressRequest } from "../middlewares/auth.middleware";
 import placeDao from "../repositories/dao/place.dao.ts";
 import { placeDTO } from "../DTOs/place.dto.ts";
 import { placeCreation, placeUpdation, getPlace } from "../types/place.type.ts";
+import { AppError } from "../utils/appError.ts";
 
 export const createPlace = async (data: placeCreation): Promise<placeDTO> => {
     const place: placeCreation = await placeDao.createPlace(data)
@@ -13,8 +14,13 @@ export const getPlaces = async (): Promise<placeDTO[]> => {
     return places.map((place) => new placeDTO(place))
 }
 
-export const getPlaceByTypeAndName = async (name: string): Promise<placeDTO> => {
+export const getPlaceByName = async (name: string): Promise<placeDTO> => {
     const place: getPlace = await placeDao.getPlaceByName(name)
+    
+    if(!place) 
+    {
+        throw new AppError("place not found", 404)
+    }
     return new placeDTO(place)
 }
 
