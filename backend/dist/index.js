@@ -22,6 +22,7 @@ import { dbClient } from "./src/db/db.js";
 import { globalErrorHandler } from "./src/utils/globalErrorHandler.js";
 import { swaggerUi, swaggerDocument } from "./src/utils/swagger.js";
 import dotenv from 'dotenv';
+import { travelPlan } from "./src/routes/travelplan.route.js";
 dotenv.config();
 const app = express();
 app.use(cors());
@@ -36,6 +37,7 @@ app.use('/api/v1/places', placeRouter);
 app.use('/api/v1/transports', transportRouter);
 app.use('/api/v1/restaurants', resrestaurantRouter);
 app.use('/api/v1/wishlists', wishlistRouter);
+app.use('/api/v1/travelplans', travelPlan);
 // testing
 app.get('/', (req, res) => {
     res.send('hello world');
