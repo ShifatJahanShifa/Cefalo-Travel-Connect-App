@@ -4,7 +4,7 @@ import { AccommodationDTO } from "../DTOs/accommodation.dto.ts";
 import { accommodationCreation, accommodationUpdation, getAccommodation } from "../types/accommodation.type.ts";
 
 export const createAccommodation = async (data: accommodationCreation): Promise<AccommodationDTO> => {
-    const accommodation: accommodationCreation = await accommodationDao.createAccommodation(data)
+    const accommodation: getAccommodation = await accommodationDao.createAccommodation(data)
     return new AccommodationDTO(accommodation)
 }
 
@@ -18,7 +18,7 @@ export const getAccommodationByTypeAndName = async (type: string, name: string):
     return new AccommodationDTO(accommodation)
 }
 
-export const updateAccommodation = async (accommodation_id: number, data: accommodationUpdation): Promise<AccommodationDTO> => {
+export const updateAccommodation = async (accommodation_id: string, data: accommodationUpdation): Promise<AccommodationDTO> => {
     const accommodation: accommodationCreation = await accommodationDao.updateAccommodation(accommodation_id, data)
     return new AccommodationDTO(accommodation)
 }

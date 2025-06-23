@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
 export function seed(knex) {
     return __awaiter(this, void 0, void 0, function* () {
         // Check if admin already exists
@@ -20,6 +21,7 @@ export function seed(knex) {
         }
         const hashedPassword = yield bcrypt.hash('admin1', 10);
         yield knex('users').insert({
+            user_id: uuidv4(),
             username: 'admin1',
             email: 'admin1@cefalo.com',
             hashed_password: hashedPassword,

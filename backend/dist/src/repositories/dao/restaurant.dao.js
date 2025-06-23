@@ -16,12 +16,10 @@ class Restaurant {
             const [restaurant] = yield db("restaurants")
                 .insert({
                 restaurant_name: data.restaurant_name,
-                popular_food: data.popular_food,
                 location: db.raw(`ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography`, [longitude, latitude]),
             })
                 .returning([
                 "restaurant_name",
-                "popular_food",
                 db.raw("ST_Y(location::geometry) as latitude"),
                 db.raw("ST_X(location::geometry) as longitude"),
             ]);
@@ -31,7 +29,7 @@ class Restaurant {
     getRestaurants() {
         return __awaiter(this, void 0, void 0, function* () {
             const restaurants = yield db("restaurants")
-                .select("restaurant_id", "restaurant_name", "popular_food", db.raw("ST_Y(location::geometry) as latitude"), db.raw("ST_X(location::geometry) as longitude"))
+                .select("restaurant_id", "restaurant_name", db.raw("ST_Y(location::geometry) as latitude"), db.raw("ST_X(location::geometry) as longitude"))
                 .orderBy("restaurant_name", "asc");
             return restaurants;
         });
@@ -39,7 +37,7 @@ class Restaurant {
     getRestaurantByName(name) {
         return __awaiter(this, void 0, void 0, function* () {
             const restaurant = yield db("restaurants")
-                .select("restaurant_id", "restaurant_name", "popular_food", db.raw("ST_Y(location::geometry) as latitude"), db.raw("ST_X(location::geometry) as longitude"))
+                .select("restaurant_id", "restaurant_name", db.raw("ST_Y(location::geometry) as latitude"), db.raw("ST_X(location::geometry) as longitude"))
                 .where({
                 restaurant_name: name,
             })
@@ -52,8 +50,6 @@ class Restaurant {
             const updates = {};
             if (data.restaurant_name)
                 updates.restaurant_name = data.restaurant_name;
-            if (data.popular_food)
-                updates.popular_food = data.popular_food;
             const hasLat = data.latitude !== undefined;
             const hasLng = data.longitude !== undefined;
             if (hasLat || hasLng) {
@@ -70,7 +66,6 @@ class Restaurant {
                 .update(updates)
                 .returning([
                 "restaurant_name",
-                "popular_food",
                 db.raw("ST_Y(location::geometry) as latitude"),
                 db.raw("ST_X(location::geometry) as longitude"),
             ]);
@@ -80,7 +75,7 @@ class Restaurant {
     getRestaurantsByProximity(latitude, longitude, radius) {
         return __awaiter(this, void 0, void 0, function* () {
             const restaurants = yield db("restaurants")
-                .select("restaurant_id", "restaurant_name", "popular_food", db.raw("ST_Y(location::geometry) as latitude"), db.raw("ST_X(location::geometry) as longitude"))
+                .select("restaurant_id", "restaurant_name", db.raw("ST_Y(location::geometry) as latitude"), db.raw("ST_X(location::geometry) as longitude"))
                 .whereRaw(`ST_DWithin(location, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography, ?)`, [longitude, latitude, radius]);
             return restaurants;
         });
@@ -89,7 +84,7 @@ class Restaurant {
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const restaurant = yield db("restaurants")
-                .select("restaurant_id", "restaurant_name", "popular_food", db.raw("ST_Y(location::geometry) as latitude"), db.raw("ST_X(location::geometry) as longitude"))
+                .select("restaurant_id", "restaurant_name", db.raw("ST_Y(location::geometry) as latitude"), db.raw("ST_X(location::geometry) as longitude"))
                 .whereIn('restaurant_id', id);
             return restaurant;
         });

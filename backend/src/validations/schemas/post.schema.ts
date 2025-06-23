@@ -40,13 +40,13 @@ const placeSchema = z.object({
   place_name: z.string().min(1),
   latitude: z.number().optional(),
   longitude: z.number().optional(),
+  cost: z.number(),
   rating: z.number().int().min(0).max(5),
   review: z.string().min(1),
 });
 
-const restaurantSchema = z.object({
-  restaurant_name: z.string().min(1),
-  popular_food: z.string().optional(),
+const foodSchema = z.object({
+  food_name: z.string().min(1),
   cost: z.number().min(0),
   rating: z.number().int().min(0).max(5),
   review: z.string().min(1),
@@ -59,7 +59,7 @@ const imageSchema = z.object({
 
 
 export const createPostSchema = z.object({
-  user_id: z.number().int().min(1),
+  user_id: z.string().min(1),
   title: z.string().min(1),
   description: z.string().min(1),
   total_cost: z.number().min(0),
@@ -70,7 +70,7 @@ export const createPostSchema = z.object({
   accommodations: z.array(accommodationSchema).optional(),
   transports: z.array(transportSchema).optional(),
   places: z.array(placeSchema).optional(),
-  restaurants: z.array(restaurantSchema).optional(),
+  foods: z.array(foodSchema).optional(),
   images: z.array(imageSchema).optional(),
 });
 
@@ -88,6 +88,6 @@ export const updatePostSchema = z.object({
   accommodations: z.array(accommodationSchema).optional(),
   transports: z.array(transportSchema).optional(),
   places: z.array(placeSchema).optional(),
-  restaurants: z.array(restaurantSchema).optional(),
+ foods: z.array(foodSchema).optional(),
   images: z.array(imageSchema).optional(),
 });

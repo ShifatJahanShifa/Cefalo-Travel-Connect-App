@@ -18,7 +18,7 @@ export const gettransportByTypeAndName = async (type: string, name: string): Pro
     return new transportDTO(transport)
 }
 
-export const updatetransport = async (transport_id: number, data: transportUpdation): Promise<transportDTO> => {
+export const updatetransport = async (transport_id: string, data: transportUpdation): Promise<transportDTO> => {
     const transport: transportCreation = await transportDao.updateTransport(transport_id, data)
     return new transportDTO(transport)
 }

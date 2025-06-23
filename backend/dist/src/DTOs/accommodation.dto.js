@@ -7,6 +7,5 @@ export class AccommodationDTO {
             latitude: accommodation.latitude,
             longitude: accommodation.longitude
         };
-        this.cost_per_night = accommodation.cost_per_night;
     }
 }

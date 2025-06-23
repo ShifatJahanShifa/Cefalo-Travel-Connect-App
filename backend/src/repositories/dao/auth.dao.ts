@@ -40,7 +40,7 @@ class AuthDAO implements IAuth{
     return user;
   }
 
-  async insertRefreshToken(user_id: number, token: string, expires_at: Date): Promise<void> {
+  async insertRefreshToken(user_id: string, token: string, expires_at: Date): Promise<void> {
     await db('refresh_tokens') 
     .insert({
       user_id: user_id,
@@ -50,7 +50,7 @@ class AuthDAO implements IAuth{
   }
 
 
-  async updateRefreshToken(user_id: number, token: string, expires_at: Date ): Promise<void> {
+  async updateRefreshToken(user_id: string, token: string, expires_at: Date ): Promise<void> {
     await db('refresh_tokens') 
     .where({ user_id: user_id })
     .update({
@@ -60,13 +60,13 @@ class AuthDAO implements IAuth{
     })
   }
 
-  async deleteRefreshToken(user_id: number): Promise<void> {
+  async deleteRefreshToken(user_id: string): Promise<void> {
     await db('refresh_tokens')
     .where({ user_id: user_id })
     .del()
   }
 
-  async findRefreshToken(user_id: number): Promise<string> {
+  async findRefreshToken(user_id: string): Promise<string> {
     const token: string = await db('refresh_tokens')
     .select('token')
     .where({ user_id: user_id})

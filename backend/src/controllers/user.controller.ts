@@ -60,7 +60,7 @@ export const deleteUserByUsername = async (req: ExpressRequest, res: Response, n
 
 export const getUserByUserId = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const user_id: number = parseInt(req.params.userId);
+    const user_id: string = (req.params.userId);
     const data: UserDTO = await userService.getUserByUserID(user_id);
    
     res.status(200).json(data);

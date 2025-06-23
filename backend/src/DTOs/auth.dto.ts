@@ -1,7 +1,7 @@
 import { createdUser } from "../types/auth.type.ts"
 
 export class AuthDTO {
-  user_id: number
+  user_id: string
   username: string
   email: string
   role: string

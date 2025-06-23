@@ -6,7 +6,7 @@ import { AppError } from "../../utils/appError.ts";
 const db: Knex = dbClient.getConnection();
 
 class Place implements IPlace {
-    async createPlace(data: placeCreation): Promise<placeCreation> {
+    async createPlace(data: placeCreation): Promise<getPlace> {
 
         const { latitude, longitude } = data;
 
@@ -16,6 +16,7 @@ class Place implements IPlace {
             location: db.raw(`ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography`, [longitude, latitude]),
         })
         .returning([
+            'place_id',
             'place_name',
             db.raw('ST_Y(location::geometry) as latitude'),
             db.raw('ST_X(location::geometry) as longitude'),
@@ -56,7 +57,7 @@ class Place implements IPlace {
        
     }
 
-    async updatePlace(place_id: number, data: placeUpdation): Promise<placeCreation> {
+    async updatePlace(place_id: string, data: placeUpdation): Promise<placeCreation> {
         
         const updates: Record<string, any> = {};
 

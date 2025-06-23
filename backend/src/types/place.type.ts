@@ -5,7 +5,7 @@ export type placeCreation = {
 }
 
 export type getPlace = {
-    place_id: number
+    place_id: string
     place_name: string 
     latitude: number
     longitude: number

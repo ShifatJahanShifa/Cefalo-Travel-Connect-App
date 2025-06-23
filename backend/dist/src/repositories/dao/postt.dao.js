@@ -21,7 +21,7 @@ class PosttDAO {
                 total_cost: input.total_cost,
                 duration: input.duration,
                 effort: input.effort,
-                categories: input.categories // will change it. 
+                categories: input.categories
             })
                 .returning('*');
             return post;

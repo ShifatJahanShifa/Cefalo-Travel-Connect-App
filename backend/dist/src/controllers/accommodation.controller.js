@@ -29,7 +29,7 @@ export const getAccommodations = (req, res, next) => __awaiter(void 0, void 0, v
 });
 export const updateAccommodation = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const accommodation_id = parseInt(req.params.accommodationId);
+        const accommodation_id = (req.params.accommodationId);
         const data = req.body;
         const accommodation = yield AccommodationService.updateAccommodation(accommodation_id, data);
         res.status(200).json(accommodation);

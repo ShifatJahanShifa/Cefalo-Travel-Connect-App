@@ -19,6 +19,7 @@ class Place {
                 location: db.raw(`ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography`, [longitude, latitude]),
             })
                 .returning([
+                'place_id',
                 'place_name',
                 db.raw('ST_Y(location::geometry) as latitude'),
                 db.raw('ST_X(location::geometry) as longitude'),

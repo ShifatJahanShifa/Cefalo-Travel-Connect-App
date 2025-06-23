@@ -50,7 +50,7 @@ export async function deleteUser(username: string):  Promise<UserDTO> {
 }
 
 
-export async function getUserByUserID(user_id: number):  Promise<UserDTO> {
+export async function getUserByUserID(user_id: string):  Promise<UserDTO> {
   const data: createdUser = await userDAO.getUserByID(user_id)
   return new UserDTO(data)
 }
