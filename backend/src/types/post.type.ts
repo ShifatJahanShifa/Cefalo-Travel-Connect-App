@@ -1,5 +1,5 @@
 export type CreatePostInput = {
-    user_id: number;
+    user_id: string;
     title: string;
     description: string;
     total_cost: number;
@@ -11,8 +11,8 @@ export type CreatePostInput = {
         accommodation_type: string
         accommodation_name: string;
         cost_per_night?: number;
-        latitude?: number;
-        longitude?: number;
+        latitude: number;
+        longitude: number;
         cost: number 
         rating: number
         review: string;
@@ -35,8 +35,9 @@ export type CreatePostInput = {
 
     places?: Array<{
         place_name: string;
-        latitude?: number;
-        longitude?: number;
+        latitude: number;
+        longitude: number;
+        cost: number;
         rating: number
         review: string;
     }>;
@@ -44,6 +45,13 @@ export type CreatePostInput = {
     restaurants?: Array<{
         restaurant_name: string;
         popular_food?: string;
+        cost: number;
+        rating: number
+        review: string;
+    }>;
+
+    foods?: Array<{
+        food_name: string;
         cost: number;
         rating: number
         review: string;
@@ -57,8 +65,8 @@ export type CreatePostInput = {
 
 
 export type CreatedPost = {
-    post_id: number;
-    user_id: number;
+    post_id: string;
+    user_id: string;
     title: string;
     description: string;
     total_cost: number;
@@ -72,8 +80,8 @@ export type CreatedPost = {
 }
 
 export type getPost = {
-    post_id: number;
-    user_id: number;
+    post_id: string;
+    user_id: string;
     title: string;
     description: string;
     total_cost: number;
@@ -90,6 +98,7 @@ export type getPost = {
     places?: any[];
     restaurants?: any[];
     images?: any[];
+    foods?: any[]
 }
 
 export type UpdatePostInput = {
@@ -104,8 +113,8 @@ export type UpdatePostInput = {
         accommodation_type: string
         accommodation_name: string;
         cost_per_night?: number;
-        latitude?: number;
-        longitude?: number;
+        latitude: number;
+        longitude: number;
         cost: number 
         rating: number
         review: string;
@@ -128,6 +137,7 @@ export type UpdatePostInput = {
         place_name: string;
         latitude?: number;
         longitude?: number;
+        cost: number;
         rating: number
         review: string;
     }>;
@@ -137,6 +147,13 @@ export type UpdatePostInput = {
         popular_food?: string;
         cost: number;
         rating: number;
+        review: string;
+    }>;
+
+    foods?: Array<{
+        food_name: string;
+        cost: number;
+        rating: number
         review: string;
     }>;
 
@@ -159,9 +176,9 @@ export type SearchFilters = {
 
 
 export type post_interaction = {
-    post_interaction_id: number
-    post_id: number
-    user_id: number 
+    post_interaction_id: string
+    post_id: string
+    user_id: string
     type: string 
     value: string
     created_at: string;

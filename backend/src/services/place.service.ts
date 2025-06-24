@@ -24,7 +24,7 @@ export const getPlaceByName = async (name: string): Promise<placeDTO> => {
     return new placeDTO(place)
 }
 
-export const updatePlace = async (place_id: number, data: placeUpdation): Promise<placeDTO> => {
+export const updatePlace = async (place_id: string, data: placeUpdation): Promise<placeDTO> => {
     const place: placeCreation = await placeDao.updatePlace(place_id, data)
     return new placeDTO(place)
 }

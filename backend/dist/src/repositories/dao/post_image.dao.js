@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { dbClient } from "../../db/db.js";
-import { AppError } from "../../utils/appError.js";
 const db = dbClient.getConnection();
 class PostImageDao {
     createPostImage(post_id, image_url, caption) {
@@ -22,11 +21,7 @@ class PostImageDao {
     }
     getById(post_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!post_id) {
-                throw new AppError("not valid id", 400);
-            }
             const data = yield db('post_images').where({ post_id });
-            console.log(data);
             return data;
         });
     }

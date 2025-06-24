@@ -32,7 +32,7 @@ export const getTransports = async(req: ExpressRequest, res: Response, next: Nex
 
 export const updateTransport = async(req:ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const transport_id: number = parseInt(req.params.transportId) 
+        const transport_id: string = (req.params.transportId) 
         const data: transportUpdation = req.body
         const transport: transportDTO = await TransportService.updatetransport(transport_id,data)
 

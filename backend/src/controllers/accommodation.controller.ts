@@ -32,7 +32,7 @@ export const getAccommodations = async(req: ExpressRequest, res: Response, next:
 
 export const updateAccommodation = async(req:ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const accommodation_id: number = parseInt(req.params.accommodationId) 
+        const accommodation_id: string = (req.params.accommodationId) 
         const data: accommodationUpdation = req.body
         const accommodation: AccommodationDTO = await AccommodationService.updateAccommodation(accommodation_id,data)
 

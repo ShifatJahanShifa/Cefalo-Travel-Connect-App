@@ -18,7 +18,7 @@ export const getRestaurantByTypeAndName = async (name: string): Promise<restaura
     return new restaurantDTO(restaurant)
 }
 
-export const updateRestaurant = async (restaurant_id: number, data: restaurantUpdation): Promise<restaurantDTO> => {
+export const updateRestaurant = async (restaurant_id: string, data: restaurantUpdation): Promise<restaurantDTO> => {
     const restaurant: restaurantCreation = await restaurantDao.updateRestaurant(restaurant_id, data)
     return new restaurantDTO(restaurant)
 }

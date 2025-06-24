@@ -3,7 +3,7 @@ import { WishlistDTO } from "../DTOs/wishlist.dto.ts";
 import placeDao from "../repositories/dao/place.dao.ts";
 import wishlistDao from "../repositories/dao/wishlist.dao.ts";
 import { getPlace } from "../types/place.type.ts";
-import { createWishlistType, getWishlistType } from "../types/wishlist.type.ts";
+import { createWishlistType, getWishlistType, groupedUsers } from "../types/wishlist.type.ts";
 import { AppError } from "../utils/appError.ts";
 
 import dotenv from 'dotenv'
@@ -25,13 +25,13 @@ export const getWishlists = async(page: number, limit: number): Promise<Wishlist
 
     // adding place info 
     const filteredResults = results.filter(result => result.type==="place")
-    const ids: number[] = [];
+    const ids: string[] = [];
 
     for (let index = 0; index < filteredResults.length; index++) {
         ids.push(filteredResults[index].reference_id)
     } 
 
-    let placeMap: Record<number, getPlace> = {};
+    let placeMap: Record<string, getPlace> = {};
     
     if(ids.length) 
     {
@@ -39,7 +39,7 @@ export const getWishlists = async(page: number, limit: number): Promise<Wishlist
         placeMap = places.reduce((acc, place) => {
             acc[place.place_id] = place;
             return acc;
-        }, {} as Record<number, getPlace>);
+        }, {} as Record<string, getPlace>);
     }
 
     const enrichedWishlists = results.map(wishlist => {
@@ -100,7 +100,7 @@ export const deleteWishlist = async(wishlist_id: string): Promise<string> => {
     return result
 }
 
-export const getWishlistByUserid = async(user_id: number, page: number, limit: number): Promise<WishlistDTO[]> => {
+export const getWishlistByUserid = async(user_id: string, page: number, limit: number): Promise<WishlistDTO[]> => {
     const results: getWishlistType[] = await wishlistDao.getWishlistByUserid(user_id, page, limit)
 
     if(!results || results.length === 0) 
@@ -115,4 +115,18 @@ export const toggleVisibility = async(wishlist_id: string): Promise<string> => {
     const result: string = await wishlistDao.toggleVisibility(wishlist_id)
 
     return result
+}
+
+
+// returning the type, not calling dto
+export const groupUsersByWishlistTheme = async (theme: string): Promise<groupedUsers[]> => {
+    const results: groupedUsers[] = await wishlistDao.groupUsersByWishlistTheme(theme)
+
+    if(!results) 
+    {
+        throw new AppError("no user matchted found", 400) 
+    }
+
+    // not the dto , but the type
+    return results;
 }

@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { dbClient } from "../../db/db.js";
-import { AppError } from "../../utils/appError.js";
 const db = dbClient.getConnection();
 class PostRestaurantDao {
     createPostRestaurant(post_id, restaurant_id, cost, rating, review) {
@@ -24,11 +23,7 @@ class PostRestaurantDao {
     }
     getById(post_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!post_id) {
-                throw new AppError("not valid id", 400);
-            }
             const data = yield db('post_restaurants').where({ post_id });
-            console.log(data, 'gg');
             return data;
         });
     }

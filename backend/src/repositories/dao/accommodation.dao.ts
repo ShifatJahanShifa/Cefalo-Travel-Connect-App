@@ -6,7 +6,7 @@ import { AppError } from "../../utils/appError.ts";
 const db: Knex = dbClient.getConnection();
 
 class Accommodation implements IAccommodation {
-    async createAccommodation(data: accommodationCreation): Promise<accommodationCreation> {
+    async createAccommodation(data: accommodationCreation): Promise<getAccommodation> {
         const latitude = data.latitude
         const longitude = data.longitude
 
@@ -14,12 +14,12 @@ class Accommodation implements IAccommodation {
             accommodation_type: data.accommodation_type,
             accommodation_name: data.accommodation_name,
             location: db.raw(`ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography`, [longitude, latitude]),
-            cost_per_night: data.cost_per_night
+            
         })
         .returning([
+            'accommodation_id',
             'accommodation_type',
             'accommodation_name',
-            'cost_per_night',
             db.raw('ST_Y(location::geometry) as latitude'),
             db.raw('ST_X(location::geometry) as longitude')
         ]) 
@@ -32,7 +32,6 @@ class Accommodation implements IAccommodation {
             "accommodation_id",
             "accommodation_type",
             "accommodation_name",
-            "cost_per_night",
             db.raw("ST_Y(location::geometry) as latitude"),
             db.raw("ST_X(location::geometry) as longitude")
         )
@@ -46,7 +45,6 @@ class Accommodation implements IAccommodation {
             "accommodation_id",
             "accommodation_type",
             "accommodation_name",
-            "cost_per_night",
             db.raw("ST_Y(location::geometry) as latitude"),
             db.raw("ST_X(location::geometry) as longitude")
         )
@@ -59,12 +57,12 @@ class Accommodation implements IAccommodation {
         return accommodation;
     }
 
-    async updateAccommodation(accommodation_id: number, data: accommodationUpdation): Promise<accommodationCreation> {
+    async updateAccommodation(accommodation_id: string, data: accommodationUpdation): Promise<accommodationCreation> {
         const updates: Record<string, any> = {};
 
         if (data.accommodation_type) updates.accommodation_type = data.accommodation_type;
         if (data.accommodation_name) updates.accommodation_name = data.accommodation_name;
-        if (data.cost_per_night !== undefined) updates.cost_per_night = data.cost_per_night;
+        
 
         const hasLat = data.latitude !== undefined;
         const hasLng = data.longitude !== undefined;
@@ -90,7 +88,6 @@ class Accommodation implements IAccommodation {
             .returning([
             "accommodation_type",
             "accommodation_name",
-            "cost_per_night",
             db.raw("ST_Y(location::geometry) as latitude"),
             db.raw("ST_X(location::geometry) as longitude")
             ]);
@@ -104,7 +101,6 @@ class Accommodation implements IAccommodation {
             'accommodation_id',
             'accommodation_type',
             'accommodation_name',
-            'cost_per_night',
             db.raw('ST_Y(location::geometry) as latitude'),
             db.raw('ST_X(location::geometry) as longitude')
             )
@@ -121,7 +117,6 @@ class Accommodation implements IAccommodation {
             "accommodation_id",
             "accommodation_type",
             "accommodation_name",
-            "cost_per_night",
             db.raw("ST_Y(location::geometry) as latitude"),
             db.raw("ST_X(location::geometry) as longitude")
         )
@@ -129,7 +124,6 @@ class Accommodation implements IAccommodation {
             'accommodation_id', id
         )
        
-
         return accommodation;
     }
 }

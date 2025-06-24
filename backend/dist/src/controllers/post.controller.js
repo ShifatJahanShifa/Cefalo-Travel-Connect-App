@@ -31,7 +31,7 @@ export const getAllPosts = (req, res, next) => __awaiter(void 0, void 0, void 0,
 });
 export const getPostByPostID = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const post_id = parseInt(req.params.post_id, 10);
+        const post_id = (req.params.post_id);
         const post = yield PostService.getPostByPostID(post_id);
         res.status(200).json(post);
     }
@@ -41,7 +41,7 @@ export const getPostByPostID = (req, res, next) => __awaiter(void 0, void 0, voi
 });
 export const updatePost = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const post_id = parseInt(req.params.post_id);
+        const post_id = (req.params.post_id);
         const updatedPostData = req.body;
         const status = yield PostService.updatePost(post_id, updatedPostData);
         res.status(200).send(status);
@@ -52,7 +52,7 @@ export const updatePost = (req, res, next) => __awaiter(void 0, void 0, void 0, 
 });
 export const deletePost = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const post_id = parseInt(req.params.post_id);
+        const post_id = (req.params.post_id);
         const status = yield PostService.deletePost(post_id);
         res.status(204).send(status);
     }
@@ -95,7 +95,7 @@ export const searchPosts = (req, res, next) => __awaiter(void 0, void 0, void 0,
 });
 export const togglePostLike = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const post_id = parseInt(req.params.postId);
+        const post_id = (req.params.postId);
         const username = req.username;
         const user = yield UserService.getUserByUsername(username);
         const result = yield PostService.togglePostLike(post_id, user.user_id);

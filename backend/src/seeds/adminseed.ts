@@ -16,6 +16,7 @@ export async function seed(knex: Knex): Promise<void> {
   const hashedPassword = await bcrypt.hash('admin1', 10);
 
   await knex('users').insert({
+    user_id: uuidv4(),
     username: 'admin1',
     email: 'admin1@cefalo.com',
     hashed_password: hashedPassword,

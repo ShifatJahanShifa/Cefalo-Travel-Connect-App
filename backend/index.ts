@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { authRouter } from './src/routes/auth.route.ts'
@@ -13,6 +13,7 @@ import { dbClient } from './src/db/db.ts'
 import { globalErrorHandler } from './src/utils/globalErrorHandler.ts'
 import { swaggerUi, swaggerDocument } from './src/utils/swagger.ts'
 import dotenv from 'dotenv'
+import { groupUsersByWishlistTheme } from './src/controllers/wishlist.controller.ts'
 dotenv.config()
 
 const app = express()
@@ -23,6 +24,11 @@ app.use(cookieParser())
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
+app.use((req: Request, res: Response, next: NextFunction) => {
+  console.log(`[INCOMING REQUEST] ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 app.use('/api/v1/auth',authRouter)
 app.use('/api/v1/users',userRouter)
 app.use('/api/v1/posts',postRouter)
@@ -30,6 +36,7 @@ app.use('/api/v1/accommodations',accommodationRouter)
 app.use('/api/v1/places',placeRouter)
 app.use('/api/v1/transports',transportRouter)
 app.use('/api/v1/restaurants',resrestaurantRouter)
+// app.get('/api/v1/wishlists/grouped/users', groupUsersByWishlistTheme)
 app.use('/api/v1/wishlists',wishlistRouter)
 
 // testing

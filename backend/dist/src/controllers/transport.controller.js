@@ -29,7 +29,7 @@ export const getTransports = (req, res, next) => __awaiter(void 0, void 0, void 
 });
 export const updateTransport = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const transport_id = parseInt(req.params.transportId);
+        const transport_id = (req.params.transportId);
         const data = req.body;
         const transport = yield TransportService.updatetransport(transport_id, data);
         res.status(200).json(transport);

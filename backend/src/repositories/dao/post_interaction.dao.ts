@@ -6,7 +6,7 @@ import { post_interaction } from "../../types/post.type.ts";
 const db: Knex = dbClient.getConnection();
 
 class PostInteraction implements IPostInteraction {
-    async createPostInteraction(post_id: number, user_id: number, type: string, value: string): Promise<post_interaction> {
+    async createPostInteraction(post_id: string, user_id: string, type: string, value: string): Promise<post_interaction> {
         const [interactiuon] = await db("posts_interactions").insert({
             post_id: post_id,
             user_id: user_id,
@@ -18,7 +18,7 @@ class PostInteraction implements IPostInteraction {
         return interactiuon
     }
 
-    async getPostInteraction(post_id: number, user_id: number, type: string): Promise<post_interaction> {
+    async getPostInteraction(post_id: string, user_id: string, type: string): Promise<post_interaction> {
         const interactiuon = await db("posts_interactions").where({
             post_id: post_id,
             user_id: user_id,
@@ -29,7 +29,7 @@ class PostInteraction implements IPostInteraction {
         return interactiuon
     }
 
-    async deletePostInteraction(post_id: number, user_id: number, type: string): Promise<void> {
+    async deletePostInteraction(post_id: string, user_id: string, type: string): Promise<void> {
         await db("posts_interactions").where({
             post_id: post_id,
             user_id: user_id,

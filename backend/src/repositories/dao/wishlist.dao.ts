@@ -1,4 +1,4 @@
-import { createWishlistType, getWishlistType } from "../../types/wishlist.type.ts";
+import { createWishlistType, getWishlistType, groupedUsers } from "../../types/wishlist.type.ts";
 import { IWishlist } from "../interfaces/wishlist.interface.ts";
 import { Knex } from 'knex';
 import { dbClient } from '../../db/db.ts';
@@ -65,7 +65,7 @@ class Wishlist implements IWishlist {
         return "deleted wishlist"
     }
 
-    async getWishlistByUserid(user_id: number, page: number, limit: number): Promise<getWishlistType[]> {
+    async getWishlistByUserid(user_id: string, page: number, limit: number): Promise<getWishlistType[]> {
         const offset=(page-1)*limit
         const wishlists = await db("wishlists").where({ user_id: user_id }).orderBy('created_at', 'desc').offset(offset).limit(limit)
         
@@ -81,6 +81,27 @@ class Wishlist implements IWishlist {
         });
 
         return "toggled"
+    }
+
+
+    async groupUsersByWishlistTheme(theme: string): Promise<groupedUsers[]> {
+        // only for visible
+        const results: groupedUsers[] = await db('wishlists as w')
+                        .join('users as u', 'w.user_id', 'u.user_id')
+                        .select(
+                            'w.wishlist_id',
+                            'w.title',
+                            'w.note',
+                            'w.theme',
+                            'w.type',
+                            'w.user_id',
+                            'u.username',
+                            'u.email',
+                            'u.profile_picture_url'
+                        )
+                        .where('w.theme', theme);
+        
+        return results
     }
 }
 
