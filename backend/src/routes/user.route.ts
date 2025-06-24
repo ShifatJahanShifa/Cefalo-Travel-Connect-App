@@ -7,6 +7,7 @@ import { validatePagination } from '../validations/validationMiddlewares/paginat
 import { validateUpdateUser } from '../validations/validationMiddlewares/user.validation.ts'
 import { getPostsByUserID } from '../controllers/post.controller.ts'
 import { getWishlistByUserid } from '../controllers/wishlist.controller.ts'
+import { getNotificationByUserId } from '../controllers/notification.controller.ts'
 export const userRouter=express.Router()
 
 userRouter.get('/', authenticate, validatePagination, getAllUsers)   // done
@@ -15,3 +16,4 @@ userRouter.patch('/:username', authenticate, authorize, validateUpdateUser, upda
 userRouter.delete('/:username', authenticate, authorizeAdmin, deleteUserByUsername)  // done
 userRouter.get('/:username/posts', authenticate, getPostsByUserID)
 userRouter.get('/:username/wishlists', authenticate, getWishlistByUserid)
+userRouter.get('/:username/notifications', authenticate, getNotificationByUserId)
