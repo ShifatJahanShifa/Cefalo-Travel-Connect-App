@@ -5,7 +5,7 @@ import { AppError } from "../../utils/appError.ts";
 const db: Knex = dbClient.getConnection();
 
 class PostTransportDao implements IPostTransport {
-    async createPostTransport(post_id: number, transport_id: number, cost: number, rating: number, review: string): Promise<void> {
+    async createPostTransport(post_id: string, transport_id: string, cost: number, rating: number, review: string): Promise<void> {
         await db('post_transports').insert({
             post_id: post_id,
             transport_id: transport_id,
@@ -15,17 +15,14 @@ class PostTransportDao implements IPostTransport {
         });
     }
 
-    async getById(post_id: number): Promise<any[]> {
-         if(!post_id) 
-        {
-            throw new AppError("not valid id", 400)
-        }
+    async getById(post_id: string): Promise<any[]> {
+       
         const data: any[] = await db('post_transports').where({ post_id: post_id }) 
-        console.log(data, 'wee')
+       
         return data
     }
 
-    async updatePostTransport(post_id: number, transport_id: number, cost: number, rating: number, review: string): Promise<any> {
+    async updatePostTransport(post_id: string, transport_id: string, cost: number, rating: number, review: string): Promise<any> {
          await db('post_transports').where({post_id: post_id, transport_id: transport_id}).update({
                     cost: cost,
                     rating: rating,

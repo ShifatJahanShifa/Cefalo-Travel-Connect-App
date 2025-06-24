@@ -35,7 +35,7 @@ export const getAllPosts = async (req: Request, res: Response, next: NextFunctio
 
 export const getPostByPostID = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const post_id: number = parseInt(req.params.post_id,10)
+        const post_id: string = (req.params.post_id)
         const post: PostResponseDTO = await PostService.getPostByPostID(post_id)
 
         res.status(200).json(post)
@@ -49,7 +49,7 @@ export const getPostByPostID = async (req: ExpressRequest, res: Response, next: 
 
 export const updatePost = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const post_id: number = parseInt(req.params.post_id)
+        const post_id: string = (req.params.post_id)
         const updatedPostData: UpdatePostInput = req.body
         const status: string = await PostService.updatePost(post_id, updatedPostData)
 
@@ -64,7 +64,7 @@ export const updatePost = async (req: ExpressRequest, res: Response, next: NextF
 
 export const deletePost = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const post_id: number = parseInt(req.params.post_id)
+        const post_id: string = (req.params.post_id)
         const status: string = await PostService.deletePost(post_id)
 
         res.status(204).send(status)
@@ -129,7 +129,7 @@ export const searchPosts = async (req: ExpressRequest, res: Response, next: Next
 
 export const togglePostLike = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const post_id = parseInt(req.params.postId)
+        const post_id: string = (req.params.postId)
         const username: string = req.username!
         const user: UserDTO = await UserService.getUserByUsername(username)
         

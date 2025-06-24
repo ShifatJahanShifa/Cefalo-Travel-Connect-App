@@ -29,7 +29,7 @@ export const getRestaurants = (req, res, next) => __awaiter(void 0, void 0, void
 });
 export const updateRestaurant = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const restaurant_id = parseInt(req.params.restaurantId);
+        const restaurant_id = (req.params.restaurantId);
         const data = req.body;
         const restaurant = yield RestaurantService.updateRestaurant(restaurant_id, data);
         res.status(200).json(restaurant);

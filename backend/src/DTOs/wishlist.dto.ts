@@ -2,13 +2,13 @@ import { getWishlistType } from "../types/wishlist.type.ts"
 
 export class WishlistDTO {
     wishlist_id: string
-    user_id: number
+    user_id: string
     title: string
     type: string 
     place_name?: string 
     place_latitude?: number 
     place_longitude?: number 
-    reference_id: number
+    reference_id: string
     theme: string 
     region: string 
     note: string 

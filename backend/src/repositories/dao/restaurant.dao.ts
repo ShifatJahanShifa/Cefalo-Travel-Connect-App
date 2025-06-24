@@ -13,12 +13,10 @@ class Restaurant implements IRestaurant {
         const [restaurant] = await db("restaurants")
         .insert({
             restaurant_name: data.restaurant_name,
-            popular_food: data.popular_food,
             location: db.raw(`ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography`, [longitude, latitude]),
         })
         .returning([
             "restaurant_name",
-            "popular_food",
             db.raw("ST_Y(location::geometry) as latitude"),
             db.raw("ST_X(location::geometry) as longitude"),
         ]);
@@ -31,7 +29,6 @@ class Restaurant implements IRestaurant {
         .select(
             "restaurant_id",
             "restaurant_name",
-            "popular_food",
             db.raw("ST_Y(location::geometry) as latitude"),
             db.raw("ST_X(location::geometry) as longitude")
         )
@@ -47,7 +44,6 @@ class Restaurant implements IRestaurant {
         .select(
             "restaurant_id",
             "restaurant_name",
-            "popular_food",
             db.raw("ST_Y(location::geometry) as latitude"),
             db.raw("ST_X(location::geometry) as longitude")
         )
@@ -60,12 +56,12 @@ class Restaurant implements IRestaurant {
        
     }
 
-    async updateRestaurant(restaurant_id: number, data: restaurantUpdation): Promise<restaurantCreation> {
+    async updateRestaurant(restaurant_id: string, data: restaurantUpdation): Promise<restaurantCreation> {
         
         const updates: Record<string, any> = {};
 
         if (data.restaurant_name) updates.restaurant_name = data.restaurant_name;
-        if (data.popular_food) updates.popular_food = data.popular_food;
+      
 
         const hasLat = data.latitude !== undefined;
         const hasLng = data.longitude !== undefined;
@@ -90,7 +86,6 @@ class Restaurant implements IRestaurant {
         .update(updates)
         .returning([
             "restaurant_name",
-            "popular_food",
             db.raw("ST_Y(location::geometry) as latitude"),
             db.raw("ST_X(location::geometry) as longitude"),
         ]);
@@ -105,7 +100,6 @@ class Restaurant implements IRestaurant {
         .select(
             "restaurant_id",
             "restaurant_name",
-            "popular_food",
             db.raw("ST_Y(location::geometry) as latitude"),
             db.raw("ST_X(location::geometry) as longitude")
         )
@@ -123,7 +117,6 @@ class Restaurant implements IRestaurant {
         .select(
             "restaurant_id",
             "restaurant_name",
-            "popular_food",
             db.raw("ST_Y(location::geometry) as latitude"),
             db.raw("ST_X(location::geometry) as longitude")
         )

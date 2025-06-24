@@ -2,10 +2,10 @@ import { transportCreation, transportUpdation, getTransport } from "../../types/
 
 
 export interface ITransport {
-    createTransport(data:  transportCreation): Promise<transportCreation>     // suppose admin creates it
+    createTransport(data:  transportCreation): Promise<getTransport>     // suppose admin creates it
     getTransports(): Promise<getTransport[]>        // recommendation time
     getTransportByTypeAndName(type: string, name: string): Promise<getTransport>        // post and plan e use
-    updateTransport(transport_id: number, data: transportUpdation): Promise<transportCreation>      // admin controls it
-    getTransportsByProximity(latitude: number, longitude: number, radius: number): Promise<getTransport[]>
+    updateTransport(transport_id: string, data: transportUpdation): Promise<transportCreation>      // admin controls it
+    // getTransportsByProximity(latitude: number, longitude: number, radius: number): Promise<getTransport[]>
     getById(id: any[]): Promise<getTransport[]>
 }

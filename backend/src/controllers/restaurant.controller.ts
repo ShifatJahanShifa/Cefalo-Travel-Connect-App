@@ -32,7 +32,7 @@ export const getRestaurants = async(req: ExpressRequest, res: Response, next: Ne
 
 export const updateRestaurant = async(req:ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const restaurant_id: number = parseInt(req.params.restaurantId) 
+        const restaurant_id: string = (req.params.restaurantId) 
         const data: restaurantUpdation = req.body
         const restaurant: restaurantDTO = await RestaurantService.updateRestaurant(restaurant_id,data)
 

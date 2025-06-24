@@ -103,3 +103,13 @@ export const toggleVisibility = (req, res, next) => __awaiter(void 0, void 0, vo
         next(err);
     }
 });
+export const groupUsersByWishlistTheme = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const theme = req.body.theme;
+        const results = yield WishlistService.groupUsersByWishlistTheme(theme);
+        res.status(200).json(results);
+    }
+    catch (error) {
+        next(error);
+    }
+});

@@ -29,6 +29,10 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use((req, res, next) => {
+    console.log(`[INCOMING REQUEST] ${req.method} ${req.originalUrl}`);
+    next();
+});
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/posts', postRouter);
@@ -36,6 +40,7 @@ app.use('/api/v1/accommodations', accommodationRouter);
 app.use('/api/v1/places', placeRouter);
 app.use('/api/v1/transports', transportRouter);
 app.use('/api/v1/restaurants', resrestaurantRouter);
+// app.get('/api/v1/wishlists/grouped/users', groupUsersByWishlistTheme)
 app.use('/api/v1/wishlists', wishlistRouter);
 app.use('/api/v1/travelplans', travelPlan);
 // testing

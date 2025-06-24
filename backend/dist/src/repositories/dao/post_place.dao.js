@@ -8,14 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { dbClient } from "../../db/db.js";
-import { AppError } from "../../utils/appError.js";
 const db = dbClient.getConnection();
 class PostPlaceDao {
-    createPostPlace(post_id, place_id, rating, review) {
+    createPostPlace(post_id, place_id, cost, rating, review) {
         return __awaiter(this, void 0, void 0, function* () {
             yield db('post_places').insert({
                 post_id: post_id,
                 place_id: place_id,
+                cost: cost,
                 rating: rating,
                 review: review,
             });
@@ -23,17 +23,14 @@ class PostPlaceDao {
     }
     getById(post_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!post_id) {
-                throw new AppError("not valid id", 400);
-            }
             const data = yield db('post_places').where({ post_id });
-            console.log(data);
             return data;
         });
     }
-    updatePostPlace(post_id, place_id, rating, review) {
+    updatePostPlace(post_id, place_id, cost, rating, review) {
         return __awaiter(this, void 0, void 0, function* () {
             yield db('post_places').where({ post_id: post_id, place_id: place_id }).update({
+                cost: cost,
                 rating: rating,
                 review: review
             });

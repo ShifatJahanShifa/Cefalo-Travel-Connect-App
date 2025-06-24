@@ -3,7 +3,7 @@ exports.up = async function(knex) {
     await knex.schema.createTable('wishlists', (table) => {
         table.uuid('wishlist_id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
 
-        table.integer('user_id')
+        table.uuid('user_id')
         .unsigned()
         .notNullable()
         .references('user_id')
@@ -14,7 +14,7 @@ exports.up = async function(knex) {
         
         table.enu('type', ['place', 'travel_plan']).notNullable();
 
-        table.integer('reference_id').notNullable();
+        table.uuid('reference_id').notNullable();
 
         table.string('theme');
         table.string('region');

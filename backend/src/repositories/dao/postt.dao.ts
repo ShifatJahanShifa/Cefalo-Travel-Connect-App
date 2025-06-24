@@ -15,7 +15,7 @@ class PosttDAO implements IPost {
                     total_cost: input.total_cost,
                     duration: input.duration,
                     effort: input.effort,
-                    categories: input.categories  // will change it. 
+                    categories: input.categories  
                 })
                 .returning('*');
         
@@ -29,7 +29,7 @@ class PosttDAO implements IPost {
         return posts
     }
 
-    async getPostByPostID(post_id: number): Promise<any> {
+    async getPostByPostID(post_id: string): Promise<any> {
         const post: any = await db('posts').select('*').where({post_id: post_id}).first();
         
         if(!post) 
@@ -40,7 +40,7 @@ class PosttDAO implements IPost {
         return post
     }
 
-    async updatePost(post_id: number, updatedPostData: UpdatePostInput): Promise<string> {
+    async updatePost(post_id: string, updatedPostData: UpdatePostInput): Promise<string> {
         await db('posts').where({ post_id: post_id }).update({
             title: updatedPostData.title,
             description: updatedPostData.description,
@@ -52,12 +52,12 @@ class PosttDAO implements IPost {
         return "updated post table"
     }
 
-    async deletePost(post_id: number): Promise<string> {
+    async deletePost(post_id: string): Promise<string> {
         const postDeleted = await db("posts").where({post_id: post_id}).del()
         return "successfully deleted the post"
     }
 
-    async getPostsByUserID(user_id: number): Promise<any[]> {
+    async getPostsByUserID(user_id: string): Promise<any[]> {
         // i am not applying pagination rn
         const posts: getPost[] = await db("posts").select('*').where({ user_id: user_id}).orderBy('created_at','desc')
     
@@ -106,7 +106,7 @@ class PosttDAO implements IPost {
         return rawPosts;
     }
 
-    async togglePostLike(post_id: number, add: boolean): Promise<string> {
+    async togglePostLike(post_id: string, add: boolean): Promise<string> {
         if(add) 
         {
             await db("posts").where({post_id: post_id}).increment('likes_count',1)

@@ -85,3 +85,12 @@ export const toggleVisibility = (wishlist_id) => __awaiter(void 0, void 0, void 
     const result = yield wishlistDao.toggleVisibility(wishlist_id);
     return result;
 });
+// returning the type, not calling dto
+export const groupUsersByWishlistTheme = (theme) => __awaiter(void 0, void 0, void 0, function* () {
+    const results = yield wishlistDao.groupUsersByWishlistTheme(theme);
+    if (!results) {
+        throw new AppError("no user matchted found", 400);
+    }
+    // not the dto , but the type
+    return results;
+});

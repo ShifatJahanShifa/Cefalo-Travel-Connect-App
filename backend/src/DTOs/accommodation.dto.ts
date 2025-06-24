@@ -1,14 +1,14 @@
 import { accommodationCreation, getAccommodation } from "../types/accommodation.type.ts"
 
 export class AccommodationDTO {
-    accommodation_id: number
+    accommodation_id: string
     accommodation_type: 'hotel' | 'motel' | 'resort' | 'villa' | 'cottage' 
     accommodation_name: string 
     location: {
         latitude: number
         longitude: number
     }
-    cost_per_night: number  
+
 
     constructor(accommodation: any) 
     {
@@ -19,6 +19,6 @@ export class AccommodationDTO {
             latitude: accommodation.latitude,
             longitude:  accommodation.longitude
         }
-        this.cost_per_night = accommodation.cost_per_night 
+       
     }
 }

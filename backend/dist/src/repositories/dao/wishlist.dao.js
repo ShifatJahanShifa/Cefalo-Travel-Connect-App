@@ -85,6 +85,16 @@ class Wishlist {
             return "toggled";
         });
     }
+    groupUsersByWishlistTheme(theme) {
+        return __awaiter(this, void 0, void 0, function* () {
+            // only for visible
+            const results = yield db('wishlists as w')
+                .join('users as u', 'w.user_id', 'u.user_id')
+                .select('w.wishlist_id', 'w.title', 'w.note', 'w.theme', 'w.type', 'w.user_id', 'u.username', 'u.email', 'u.profile_picture_url')
+                .where('w.theme', theme);
+            return results;
+        });
+    }
 }
 const wishlistDao = new Wishlist();
 export default wishlistDao;

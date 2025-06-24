@@ -32,7 +32,7 @@ export const getPlaces = async(req: ExpressRequest, res: Response, next: NextFun
 
 export const updatePlace = async(req:ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const place_id: number = parseInt(req.params.placeId) 
+        const place_id: string = (req.params.placeId) 
         const data: placeUpdation = req.body
         const place: placeDTO = await PlaceService.updatePlace(place_id,data)
 

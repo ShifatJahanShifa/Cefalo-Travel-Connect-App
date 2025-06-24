@@ -1,7 +1,7 @@
 import { placeCreation, getPlace } from "../types/place.type.ts"
 
 export class placeDTO {
-    place_id: number 
+    place_id: string
     place_name: string 
     location: {
         latitude: number

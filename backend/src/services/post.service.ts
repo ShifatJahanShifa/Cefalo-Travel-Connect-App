@@ -14,8 +14,8 @@ import restaurantDao from "../repositories/dao/restaurant.dao.ts";
 import postRestaurantDao from "../repositories/dao/post_restaurant.dao.ts";
 import postImageDao from "../repositories/dao/post_image.dao.ts";
 import posttDAO from "../repositories/dao/postt.dao.ts";
-import { getTransport } from "../types/transport.type.ts";
-import { getAccommodation } from "../types/accommodation.type.ts";
+import { getTransport, transportCreation } from "../types/transport.type.ts";
+import { accommodationCreation, getAccommodation } from "../types/accommodation.type.ts";
 import { SearchFilters } from "../types/post.type.ts";
 
 import { Knex } from "knex";
@@ -23,6 +23,9 @@ import { dbClient } from "../db/db.ts";
 import { Console } from "console";
 import { AppError } from "../utils/appError.ts";
 import postInteractionDao from "../repositories/dao/post_interaction.dao.ts";
+import postFoodDao from "../repositories/dao/post_food.dao.ts";
+import { AccommodationDTO } from "../DTOs/accommodation.dto.ts";
+import { getPlace, placeCreation } from "../types/place.type.ts";
 // import { AppError } from "../../utils/appError.ts";
 const db: Knex = dbClient.getConnection();
 
@@ -51,7 +54,22 @@ export const createPost = async(input: CreatePostInput): Promise<string> => {
                 input.accommodations[index].review,
                 );
             } else {
-                // nothing
+               // create  
+               const data: accommodationCreation = {
+               accommodation_name : input.accommodations[index].accommodation_name,
+               accommodation_type : input.accommodations[index].accommodation_type,
+               latitude : input.accommodations[index].latitude,
+               longitude : input.accommodations[index].longitude 
+               }
+               const accommodation: getAccommodation = await accommodationDao.createAccommodation(data) 
+
+               await postAccommodationDao.createPostAccommodation(
+                post_id,
+                accommodation.accommodation_id,
+                input.accommodations[index].cost,
+                input.accommodations[index].rating,
+                input.accommodations[index].review,
+                );
             }
         }
     }
@@ -72,6 +90,20 @@ export const createPost = async(input: CreatePostInput): Promise<string> => {
             );
             } else {
                 // nothing
+                 const data: transportCreation = {
+                     transport_type : input.transports[index].transport_type,
+                     transport_name : input.transports[index].transport_name,
+              
+               }
+               const transport: getTransport = await transportDao.createTransport(data) 
+
+               await postTransportDao.createPostTransport(
+                post_id,
+                transport.transport_id,
+                input.transports[index].cost,
+                input.transports[index].rating,
+                input.transports[index].review,
+                );
             }
         }   
     }
@@ -85,32 +117,42 @@ export const createPost = async(input: CreatePostInput): Promise<string> => {
                 await postPlaceDao.createPostPlace(
                 post_id,
                 placeRecord.place_id,
+                input.places[index].cost,
                 input.places[index].rating,
                 input.places[index].review,
             );
             } else {
                 // nothing
+                const data: placeCreation = {
+                place_name : input.places[index].place_name,
+               
+               latitude : input.places[index].latitude,
+               longitude : input.places[index].longitude 
+               }
+               const place: getPlace = await placeDao.createPlace(data) 
+
+               await postPlaceDao.createPostPlace(
+                post_id,
+                place.place_id,
+                input.places[index].cost,
+                input.places[index].rating,
+                input.places[index].review,
+                );
             }
         }
     }
 
      
-    if(input.restaurants?.length) 
+    if(input.foods?.length) 
     {
-        for (let index=0; index<input.restaurants?.length;index++) {
-            const restaurantRecord = await restaurantDao.getRestaurantByName(input.restaurants[index].restaurant_name)
-
-            if (restaurantRecord) {
-                await postRestaurantDao.createPostRestaurant(
-                post_id,
-                restaurantRecord.restaurant_id,
-                input.restaurants[index].cost,
-                input.restaurants[index].rating,
-                input.restaurants[index].review
-            );
-            } else {
-                // nothing
-            }
+        for (let index=0; index<input.foods?.length;index++) {
+            await postFoodDao.createPostFood(
+            post_id,
+            input.foods[index].food_name,
+            input.foods[index].cost,
+            input.foods[index].rating,
+            input.foods[index].review
+            )
         }
     }
 
@@ -140,13 +182,13 @@ export const getAllPosts = async (page: number, limit: number): Promise<PostResp
             postTransports,
             postPlaces,
             postAccommodations,
-            postRestaurants,
+            postFoods,
             images
         ] = await Promise.all([
             postTransportDao.getById(post_id),
             postPlaceDao.getById(post_id),
             postAccommodationDao.getById(post_id),
-            postRestaurantDao.getById(post_id),
+            postFoodDao.getById(post_id),
             postImageDao.getById(post_id)
         ]);
 
@@ -154,19 +196,17 @@ export const getAllPosts = async (page: number, limit: number): Promise<PostResp
         const transportIds = postTransports.map((t: any) => t.transport_id).filter(Boolean);
         const placeIds = postPlaces.map((p: any) => p.place_id).filter(Boolean);
         const accommodationIds = postAccommodations.map(a => a.accommodation_id).filter(Boolean);
-        const restaurantIds = postRestaurants.map((r: any) => r.restaurant_id).filter(Boolean);
+        // const restaurantIds = postfoods.map((r: any) => r.restaurant_id).filter(Boolean);
 
         
         const [
             transportsData,
             placesData,
             accommodationsData,
-            restaurantsData
         ] = await Promise.all([
             transportIds.length ? transportDao.getById(transportIds) : [],
             placeIds.length ? placeDao.getById(placeIds) : [],
             accommodationIds.length ? accommodationDao.getById(accommodationIds) : [],
-            restaurantIds.length ? restaurantDao.getById(restaurantIds) : []
         ]);
 
        
@@ -185,17 +225,17 @@ export const getAllPosts = async (page: number, limit: number): Promise<PostResp
             return { ...(core ?? {}), ...postItem };
         });
 
-        const restaurants = postRestaurants.map((postItem: any) => {
-            const core = restaurantsData.find(r => r.restaurant_id === postItem.restaurant_id);
-            return { ...(core ?? {}), ...postItem };
-        });
+        // const foods = postfoods.map((postItem: any) => {
+        //     const core = foodsData.find(r => r.restaurant_id === postItem.restaurant_id);
+        //     return { ...(core ?? {}), ...postItem };
+        // });
 
         return {
             ...post,
             transports,
             places,
             accommodations,
-            restaurants,
+            postFoods,
             images
         };
         })
@@ -206,7 +246,7 @@ export const getAllPosts = async (page: number, limit: number): Promise<PostResp
 
 
 
-export const getPostByPostID = async(post_id: number): Promise<PostResponseDTO> => {
+export const getPostByPostID = async(post_id: string): Promise<PostResponseDTO> => {
     const post: CreatedPost = await posttDAO.getPostByPostID(post_id)
    
     if(!post) 
@@ -218,13 +258,13 @@ export const getPostByPostID = async(post_id: number): Promise<PostResponseDTO> 
             postTransports,
             postPlaces,
             postAccommodations,
-            postRestaurants,
+            postFoods,
             images
         ] = await Promise.all([
             postTransportDao.getById(post_id),
             postPlaceDao.getById(post_id),
             postAccommodationDao.getById(post_id),
-            postRestaurantDao.getById(post_id),
+            postFoodDao.getById(post_id),
             postImageDao.getById(post_id)
         ]);
 
@@ -232,19 +272,19 @@ export const getPostByPostID = async(post_id: number): Promise<PostResponseDTO> 
         const transportIds = postTransports.map((t: any) => t.transport_id).filter(Boolean);
         const placeIds = postPlaces.map((p: any) => p.place_id).filter(Boolean);
         const accommodationIds = postAccommodations.map(a => a.accommodation_id).filter(Boolean);
-        const restaurantIds = postRestaurants.map((r: any) => r.restaurant_id).filter(Boolean);
+        // const restaurantIds = postfoods.map((r: any) => r.restaurant_id).filter(Boolean);
 
        
         const [
             transportsData,
             placesData,
-            accommodationsData,
-            restaurantsData
+            accommodationsData
+           
         ] = await Promise.all([
             transportIds.length ? transportDao.getById(transportIds) : [],
             placeIds.length ? placeDao.getById(placeIds) : [],
             accommodationIds.length ? accommodationDao.getById(accommodationIds) : [],
-            restaurantIds.length ? restaurantDao.getById(restaurantIds) : []
+            // restaurantIds.length ? restaurantDao.getById(restaurantIds) : []
         ]);
 
        
@@ -263,17 +303,17 @@ export const getPostByPostID = async(post_id: number): Promise<PostResponseDTO> 
             return { ...(core ?? {}), ...postItem };
         });
 
-        const restaurants = postRestaurants.map((postItem: any) => {
-            const core = restaurantsData.find(r => r.restaurant_id === postItem.restaurant_id);
-            return { ...(core ?? {}), ...postItem };
-        });
+        // const foods = postfoods.map((postItem: any) => {
+        //     const core = foodsData.find(r => r.restaurant_id === postItem.restaurant_id);
+        //     return { ...(core ?? {}), ...postItem };
+        // });
 
         const enrichedPost= {
             ...post,
             transports,
             places,
             accommodations,
-            restaurants,
+            postFoods,
             images
         };
     
@@ -281,7 +321,7 @@ export const getPostByPostID = async(post_id: number): Promise<PostResponseDTO> 
 }
 
 
-export const updatePost = async (post_id: number, input: UpdatePostInput): Promise<string> => {
+export const updatePost = async (post_id: string, input: UpdatePostInput): Promise<string> => {
   const existingPost = await posttDAO.updatePost(post_id, input);
     if (!existingPost) 
     {
@@ -339,7 +379,7 @@ export const updatePost = async (post_id: number, input: UpdatePostInput): Promi
             await postPlaceDao.updatePostPlace(
             post_id,
             placeRecord.place_id,
-            
+                pl.cost,
                 pl.rating,
                 pl.review
             
@@ -348,21 +388,16 @@ export const updatePost = async (post_id: number, input: UpdatePostInput): Promi
         }
     }
 
-    if (input.restaurants?.length) {
-        for (const res of input.restaurants) {
-        const restaurantRecord = await restaurantDao.getRestaurantByName(res.restaurant_name);
-
-        if (restaurantRecord) {
-            await postRestaurantDao.updatePostRestaurant(
+     if(input.foods?.length) 
+    {
+        for (let index=0; index<input.foods?.length;index++) {
+            await postFoodDao.updatePostFood(
             post_id,
-            restaurantRecord.restaurant_id,
-            
-                res.cost,
-                res.rating,
-                res.review
-            
-            );
-        }
+            input.foods[index].food_name,
+            input.foods[index].cost,
+            input.foods[index].rating,
+            input.foods[index].review
+            )
         }
     }
 
@@ -379,12 +414,12 @@ export const updatePost = async (post_id: number, input: UpdatePostInput): Promi
 
 
 
-export const deletePost = async(post_id: number): Promise<string> => {
+export const deletePost = async(post_id: string): Promise<string> => {
     const status: string = await posttDAO.deletePost(post_id)
     return status
 }
 
-export const getPostsByUserID = async(user_id: number): Promise<PostResponseDTO[]> => {
+export const getPostsByUserID = async(user_id: string): Promise<PostResponseDTO[]> => {
     const posts: CreatedPost[] = await posttDAO.getPostsByUserID(user_id)
    
     const enrichedPosts: getPost[] = await Promise.all(
@@ -395,13 +430,13 @@ export const getPostsByUserID = async(user_id: number): Promise<PostResponseDTO[
                 postTransports,
                 postPlaces,
                 postAccommodations,
-                postRestaurants,
+                postFoods,
                 images
             ] = await Promise.all([
                 postTransportDao.getById(post_id),
                 postPlaceDao.getById(post_id),
                 postAccommodationDao.getById(post_id),
-                postRestaurantDao.getById(post_id),
+                postFoodDao.getById(post_id),
                 postImageDao.getById(post_id)
             ]);
 
@@ -410,19 +445,19 @@ export const getPostsByUserID = async(user_id: number): Promise<PostResponseDTO[
             const transportIds = postTransports.map((t: any) => t.transport_id).filter(Boolean);
             const placeIds = postPlaces.map((p: any) => p.place_id).filter(Boolean);
             const accommodationIds = postAccommodations.map(a => a.accommodation_id).filter(Boolean);
-            const restaurantIds = postRestaurants.map((r: any) => r.restaurant_id).filter(Boolean);
+            // const restaurantIds = postfoods.map((r: any) => r.restaurant_id).filter(Boolean);
 
             
             const [
                 transportsData,
                 placesData,
                 accommodationsData,
-                restaurantsData
+                // foodsData
             ] = await Promise.all([
                 transportIds.length ? transportDao.getById(transportIds) : [],
                 placeIds.length ? placeDao.getById(placeIds) : [],
                 accommodationIds.length ? accommodationDao.getById(accommodationIds) : [],
-                restaurantIds.length ? restaurantDao.getById(restaurantIds) : []
+                // restaurantIds.length ? restaurantDao.getById(restaurantIds) : []
             ]);
 
             
@@ -441,17 +476,13 @@ export const getPostsByUserID = async(user_id: number): Promise<PostResponseDTO[
                 return { ...(core ?? {}), ...postItem };
             });
 
-            const restaurants = postRestaurants.map((postItem: any) => {
-                const core = restaurantsData.find(r => r.restaurant_id === postItem.restaurant_id);
-                return { ...(core ?? {}), ...postItem };
-            });
 
             return {
                 ...post,
                 transports,
                 places,
                 accommodations,
-                restaurants,
+                postFoods,
                 images
             };
         })
@@ -473,7 +504,7 @@ export const searchPosts = async (filters: SearchFilters): Promise<PostResponseD
 };
 
 
-export const togglePostLike = async (post_id: number, user_id: number): Promise<string> => {
+export const togglePostLike = async (post_id: string, user_id: string): Promise<string> => {
     // at first check whether the entry is in the post interaction tablke or not 
     const data = await postInteractionDao.getPostInteraction(post_id, user_id, "like")
     let status

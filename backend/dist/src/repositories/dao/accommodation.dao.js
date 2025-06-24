@@ -18,12 +18,11 @@ class Accommodation {
                 accommodation_type: data.accommodation_type,
                 accommodation_name: data.accommodation_name,
                 location: db.raw(`ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography`, [longitude, latitude]),
-                cost_per_night: data.cost_per_night
             })
                 .returning([
+                'accommodation_id',
                 'accommodation_type',
                 'accommodation_name',
-                'cost_per_night',
                 db.raw('ST_Y(location::geometry) as latitude'),
                 db.raw('ST_X(location::geometry) as longitude')
             ]);
@@ -32,14 +31,14 @@ class Accommodation {
     }
     getAccommodations() {
         return __awaiter(this, void 0, void 0, function* () {
-            const accommodations = yield db("accommodations").select("accommodation_id", "accommodation_type", "accommodation_name", "cost_per_night", db.raw("ST_Y(location::geometry) as latitude"), db.raw("ST_X(location::geometry) as longitude"))
+            const accommodations = yield db("accommodations").select("accommodation_id", "accommodation_type", "accommodation_name", db.raw("ST_Y(location::geometry) as latitude"), db.raw("ST_X(location::geometry) as longitude"))
                 .orderBy("accommodation_name", 'asc');
             return accommodations;
         });
     }
     getAccommodationByTypeAndName(type, name) {
         return __awaiter(this, void 0, void 0, function* () {
-            const accommodation = yield db("accommodations").select("accommodation_id", "accommodation_type", "accommodation_name", "cost_per_night", db.raw("ST_Y(location::geometry) as latitude"), db.raw("ST_X(location::geometry) as longitude"))
+            const accommodation = yield db("accommodations").select("accommodation_id", "accommodation_type", "accommodation_name", db.raw("ST_Y(location::geometry) as latitude"), db.raw("ST_X(location::geometry) as longitude"))
                 .where({
                 accommodation_type: type,
                 accommodation_name: name
@@ -55,8 +54,6 @@ class Accommodation {
                 updates.accommodation_type = data.accommodation_type;
             if (data.accommodation_name)
                 updates.accommodation_name = data.accommodation_name;
-            if (data.cost_per_night !== undefined)
-                updates.cost_per_night = data.cost_per_night;
             const hasLat = data.latitude !== undefined;
             const hasLng = data.longitude !== undefined;
             if (hasLat || hasLng) {
@@ -74,7 +71,6 @@ class Accommodation {
                 .returning([
                 "accommodation_type",
                 "accommodation_name",
-                "cost_per_night",
                 db.raw("ST_Y(location::geometry) as latitude"),
                 db.raw("ST_X(location::geometry) as longitude")
             ]);
@@ -84,7 +80,7 @@ class Accommodation {
     getAccommodationsByProximity(latitude, longitude, radius) {
         return __awaiter(this, void 0, void 0, function* () {
             const accommodations = yield db('accommodations')
-                .select('accommodation_id', 'accommodation_type', 'accommodation_name', 'cost_per_night', db.raw('ST_Y(location::geometry) as latitude'), db.raw('ST_X(location::geometry) as longitude'))
+                .select('accommodation_id', 'accommodation_type', 'accommodation_name', db.raw('ST_Y(location::geometry) as latitude'), db.raw('ST_X(location::geometry) as longitude'))
                 .whereRaw(`ST_DWithin(location, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography, ?)`, [longitude, latitude, radius]);
             return accommodations;
         });
@@ -92,7 +88,7 @@ class Accommodation {
     ;
     getById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const accommodation = yield db("accommodations").select("accommodation_id", "accommodation_type", "accommodation_name", "cost_per_night", db.raw("ST_Y(location::geometry) as latitude"), db.raw("ST_X(location::geometry) as longitude"))
+            const accommodation = yield db("accommodations").select("accommodation_id", "accommodation_type", "accommodation_name", db.raw("ST_Y(location::geometry) as latitude"), db.raw("ST_X(location::geometry) as longitude"))
                 .whereIn('accommodation_id', id);
             return accommodation;
         });

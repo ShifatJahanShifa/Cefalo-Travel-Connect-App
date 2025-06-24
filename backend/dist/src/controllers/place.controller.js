@@ -29,7 +29,7 @@ export const getPlaces = (req, res, next) => __awaiter(void 0, void 0, void 0, f
 });
 export const updatePlace = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const place_id = parseInt(req.params.placeId);
+        const place_id = (req.params.placeId);
         const data = req.body;
         const place = yield PlaceService.updatePlace(place_id, data);
         res.status(200).json(place);

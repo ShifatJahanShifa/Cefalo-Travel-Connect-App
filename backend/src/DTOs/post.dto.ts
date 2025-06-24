@@ -1,6 +1,6 @@
 export class PostResponseDTO {
-  post_id!: number;
-  user_id!: number;
+  post_id!: string;
+  user_id!: string;
   title!: string;
   description!: string;
   total_cost!: number;
@@ -16,6 +16,7 @@ export class PostResponseDTO {
   places?: any[];
   restaurants?: any[];
   images?: any[];
+  foods?: any[]
   
 
   constructor(data: Partial<PostResponseDTO>) {

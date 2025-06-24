@@ -134,3 +134,17 @@ export const toggleVisibility = async (req: ExpressRequest, res: Response, next:
         next(err)
     }
 } 
+
+export const groupUsersByWishlistTheme = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const theme: string = req.body.theme
+
+        const results = await WishlistService.groupUsersByWishlistTheme(theme)
+
+        res.status(200).json(results)
+    }
+    catch(error) 
+    {
+        next(error)
+    }
+}
