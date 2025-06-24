@@ -1,11 +1,9 @@
 import express from 'express';
 import { authenticate } from "../middlewares/auth.middleware.js";
-import { createWishlist, deleteWishlist, getWishlistById, getWishlists, updateWishlist, shareWishlist, toggleVisibility } from "../controllers/wishlist.controller.js";
+import { createWishlist, deleteWishlist, getWishlistById, getWishlists, updateWishlist, shareWishlist, toggleVisibility, groupUsersByWishlistTheme } from "../controllers/wishlist.controller.js";
 import { validateWishlistCreationData } from "../validations/validationMiddlewares/wishlist.validation.js";
 export const wishlistRouter = express.Router();
-wishlistRouter.get('/grouped/users', (req, res) => {
-    res.json({ message: 'Route works!' });
-});
+wishlistRouter.get('/grouped/users', authenticate, groupUsersByWishlistTheme);
 wishlistRouter.post('/', authenticate, validateWishlistCreationData, createWishlist);
 wishlistRouter.get('/', authenticate, getWishlists);
 wishlistRouter.get('/shared/:wishlist_id', getWishlistById);

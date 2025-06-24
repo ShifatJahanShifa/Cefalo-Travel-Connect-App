@@ -9,27 +9,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { dbClient } from "../../db/db.js";
 const db = dbClient.getConnection();
-class TravelPlanTransportDao {
-    createTravelPlanTransport(travel_plan_id, transport_id) {
+class TravelPlanMember {
+    addTravelPlanMember(travel_plan_id, user_id, role) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield db('travel_plan_transports').insert({
+            yield db("travel_plan_members").insert({
                 travel_plan_id: travel_plan_id,
-                transport_id: transport_id,
+                user_id: user_id,
+                role: role
             });
+            return "add member";
         });
     }
-    getById(travel_plan_id) {
+    getTravelPlanMemmebrs(travel_plan_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield db('travel_plan_transports').where({ travel_plan_id: travel_plan_id });
-            return data;
+            const travelPlanMembers = yield db("travel_plan_members").select("*").where({
+                travel_plan_id: travel_plan_id
+            });
+            return travelPlanMembers;
         });
     }
-    // update mane delete kore new ta rakha
-    updateTravelPlanTransport(travel_plan_id, transport_id) {
+    updateTravelPlanMemberRole(travel_plan_id, user_id, role) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield db('travel_plan_transports').where({ travel_plan_id: travel_plan_id, transport_id: transport_id }).update({});
+            yield db("travel_plan_members").update({
+                travel_plan_id: travel_plan_id,
+                user_id: user_id
+            })
+                .update({
+                role: role
+            });
+            return "role updated";
         });
     }
 }
-const travelPlanTransportDao = new TravelPlanTransportDao();
-export default travelPlanTransportDao;
+const travelPlanMemberdao = new TravelPlanMember();
+export default travelPlanMemberdao;

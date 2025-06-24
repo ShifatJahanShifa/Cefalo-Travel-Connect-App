@@ -18,11 +18,12 @@ import { placeRouter } from "./src/routes/place.route.js";
 import { transportRouter } from "./src/routes/transport.route.js";
 import { resrestaurantRouter } from "./src/routes/restaurant.route.js";
 import { wishlistRouter } from "./src/routes/wishlist.route.js";
+import { travelPlanRouter } from "./src/routes/travelplan.route.js";
 import { dbClient } from "./src/db/db.js";
 import { globalErrorHandler } from "./src/utils/globalErrorHandler.js";
 import { swaggerUi, swaggerDocument } from "./src/utils/swagger.js";
 import dotenv from 'dotenv';
-import { travelPlan } from "./src/routes/travelplan.route.js";
+// import { travelPlan } from './src/routes/travelplan.route.ts'
 dotenv.config();
 const app = express();
 app.use(cors());
@@ -42,7 +43,7 @@ app.use('/api/v1/transports', transportRouter);
 app.use('/api/v1/restaurants', resrestaurantRouter);
 // app.get('/api/v1/wishlists/grouped/users', groupUsersByWishlistTheme)
 app.use('/api/v1/wishlists', wishlistRouter);
-app.use('/api/v1/travelplans', travelPlan);
+app.use('/api/v1/travelplans', travelPlanRouter);
 // testing
 app.get('/', (req, res) => {
     res.send('hello world');

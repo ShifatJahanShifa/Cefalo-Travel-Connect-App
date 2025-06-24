@@ -1,5 +1,5 @@
 export type travelPlanInput = {
-    planner_id?: number
+    planner_id?: string
     start_date: string 
     end_data: string 
     note: string 
@@ -9,11 +9,8 @@ export type travelPlanInput = {
         accommodation_type: string
         accommodation_name: string;
         cost_per_night?: number;
-        latitude?: number;
-        longitude?: number;
-        cost: number 
-        rating: number
-        review: string;
+        latitude: number;
+        longitude: number;
     }>;
 
     transports?: Array<{
@@ -26,23 +23,24 @@ export type travelPlanInput = {
         ending_location_name?: string
         ending_location_latitude?: number;
         ending_location_longitude?: number;
-        cost: number 
-        rating: number
-        review: string;
+        // cost: number 
+        // rating: number
+        // review: string;
     }>;
 
     places?: Array<{
         place_name: string;
-        latitude?: number;
-        longitude?: number;
-        rating: number
-        review: string;
+        latitude: number;
+        longitude: number;
+        // cost: number;
+        // rating: number
+        // review: string;
     }>;
 }
 
 export type travelPlanOutput = {
     travel_plan_id: string;         
-    planner_id: number;             
+    planner_id: string;             
     start_date: string       
     end_date: string         
     note: string            
@@ -57,7 +55,7 @@ export type travelPlanOutput = {
 
 export type travelPlanUpdation = {
     travel_plan_id: string;         
-    planner_id: number;     
+    planner_id: string;     
     start_date: string 
     end_data: string 
     note: string 
@@ -67,32 +65,35 @@ export type travelPlanUpdation = {
         accommodation_type: string
         accommodation_name: string;
         cost_per_night?: number;
-        latitude?: number;
-        longitude?: number;
-        cost: number 
-        rating: number
-        review: string;
+        latitude: number;
+        longitude: number;
+        // cost: number 
+        // rating: number
+        // review: string;
     }>;
 
     transports?: Array<{
         transport_type: string;
         transport_name: string;
         cost_per_person?: number;
+        starting_location_name?: string;
         starting_location_latitude?: number;
-        ending_location_latitude?: number;
         starting_location_longitude?: number;
+        ending_location_name?: string
+        ending_location_latitude?: number;
         ending_location_longitude?: number;
-        cost: number 
-        rating: number
-        review: string;
+        // cost: number 
+        // rating: number
+        // review: string;
     }>;
 
     places?: Array<{
         place_name: string;
-        latitude?: number;
-        longitude?: number;
-        rating: number
-        review: string;
+        latitude: number;
+        longitude: number;
+        // cost: number;
+        // rating: number
+        // review: string;
     }>;
 }
 
@@ -102,4 +103,20 @@ export type SearchFilters = {
     place_name?: string;
     accommodation_type?: string;
     accommodation_name?: string
+}
+
+
+export type travelPlanMember = {
+    user_id: string 
+    username: string
+    email: string 
+    travel_plan_role: string 
+}
+
+
+export type travelPlanComment = {
+    message_id?: string 
+    travel_plan_id: string 
+    sender_id: string 
+    message: string 
 }

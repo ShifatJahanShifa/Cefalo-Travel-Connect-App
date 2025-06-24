@@ -6,21 +6,21 @@ const db: Knex = dbClient.getConnection();
 
 
 class TravelPlanTransportDao implements ITravelPlanTransport {
-    async createTravelPlanTransport(travel_plan_id: string, transport_id: number): Promise<void> {
-        await db('travel_plans').insert({
+    async createTravelPlanTransport(travel_plan_id: string, transport_id: string): Promise<void> {
+        await db('travel_plan_transports').insert({
             travel_plan_id: travel_plan_id,
             transport_id: transport_id,
         });
     }
 
     async getById(travel_plan_id: string): Promise<any[]> {
-        const data: any[] = await db('travel_plans').where({ travel_plan_id: travel_plan_id }) 
+        const data: any[] = await db('travel_plan_transports').where({ travel_plan_id: travel_plan_id }) 
         return data
     }
 
     // update mane delete kore new ta rakha
-    async updateTravelPlanTransport(travel_plan_id: string, transport_id: number): Promise<any> {
-        await db('travel_plans').where({travel_plan_id: travel_plan_id, transport_id: transport_id}).update({
+    async updateTravelPlanTransport(travel_plan_id: string, transport_id: string): Promise<any> {
+        await db('travel_plan_transports').where({travel_plan_id: travel_plan_id, transport_id: transport_id}).update({
                     
         })
     }

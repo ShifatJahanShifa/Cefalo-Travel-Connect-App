@@ -6,7 +6,7 @@ const db: Knex = dbClient.getConnection();
 
 
 class TravelPlanAccommodationDao implements ITravelPlanAccommodation {
-    async createTravelPlanAccommodation(travel_plan_id: string, accommodation_id: number): Promise<void> {
+    async createTravelPlanAccommodation(travel_plan_id: string, accommodation_id: string): Promise<void> {
         await db('travel_plan_accommodations').insert({
             travel_plan_id: travel_plan_id,
             accommodation_id: accommodation_id,
@@ -21,7 +21,7 @@ class TravelPlanAccommodationDao implements ITravelPlanAccommodation {
     }
 
     // later
-    async updateTravelPlanAccommodation(travel_plan_id: string, accommodation_id: number): Promise<any> {
+    async updateTravelPlanAccommodation(travel_plan_id: string, accommodation_id: string): Promise<any> {
         await db('travel_plan_accommodations').where({travel_plan_id: travel_plan_id, accommodation_id: accommodation_id}).update({
                     
         })

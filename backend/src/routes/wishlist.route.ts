@@ -4,8 +4,7 @@ import { createWishlist, deleteWishlist, getWishlistById, getWishlists, updateWi
 import { validateWishlistCreationData } from '../validations/validationMiddlewares/wishlist.validation.ts'
 export const wishlistRouter = express.Router()
 
-wishlistRouter.get('/grouped/users', (req: Request, res: Response) => {
-  res.json({ message: 'Route works!' })})
+wishlistRouter.get('/grouped/users', authenticate, groupUsersByWishlistTheme)
 wishlistRouter.post('/', authenticate, validateWishlistCreationData, createWishlist)
 wishlistRouter.get('/', authenticate, getWishlists)
 wishlistRouter.get('/shared/:wishlist_id', getWishlistById)

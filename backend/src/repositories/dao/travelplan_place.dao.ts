@@ -5,8 +5,8 @@ import { dbClient } from "../../db/db.ts";
 const db: Knex = dbClient.getConnection();
 
 class TravePlanPlaceDao implements ITravelPlanPlace {
-    async createTravelPlanPlace(travel_plan_id: string, place_id: number): Promise<void> {
-            await db('post_places').insert({
+    async createTravelPlanPlace(travel_plan_id: string, place_id: string): Promise<void> {
+            await db('travel_plan_places').insert({
             travel_plan_id: travel_plan_id,
             place_id: place_id,
             
@@ -14,13 +14,13 @@ class TravePlanPlaceDao implements ITravelPlanPlace {
     }
 
     async getById(travel_plan_id: string): Promise<any[]> {
-        const data: any[] = await db('post_places').where({ travel_plan_id })
+        const data: any[] = await db('travel_plan_places').where({ travel_plan_id })
         console.log(data)
         return data
     }
 
-    async updateTravelPlanPlace(travel_plan_id: string, place_id: number): Promise<any> {
-        await db('post_places').where({travel_plan_id: travel_plan_id, place_id: place_id}).update({
+    async updateTravelPlanPlace(travel_plan_id: string, place_id: string): Promise<any> {
+        await db('travel_plan_places').where({travel_plan_id: travel_plan_id, place_id: place_id}).update({
                     // rating: rating,
                     // review: review 
         })

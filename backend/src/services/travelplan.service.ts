@@ -8,12 +8,20 @@ import travelPlanTransportDao from "../repositories/dao/travelplan_transport.dao
 import placeDao from "../repositories/dao/place.dao.ts";
 import travelPlanPlaceDao from "../repositories/dao/travelplan_place.dao.ts";
 import { AppError } from "../utils/appError.ts";
+import { accommodationCreation, getAccommodation } from "../types/accommodation.type.ts";
+import { getTransport, transportCreation } from "../types/transport.type.ts";
+import { getPlace, placeCreation } from "../types/place.type.ts";
+import travelPlanMemberdao from "../repositories/dao/travelplanmember.dao.ts";
+
+
+
 
 export const craeteTravelPlan = async(input: travelPlanInput): Promise<string> => {
     // first e core table, then services table 
     const createdPlan: any = await travelPlanDao.craeteTravelPlan(input)
     
-    const travel_plan_id = createdPlan.travel_plan_id
+    const travel_plan_id = createdPlan.travel_plan_id 
+    const creator_id: string = createdPlan.planner_id 
 
     if(input.accommodations?.length) {
     // at first search in accommodations table
@@ -30,6 +38,23 @@ export const craeteTravelPlan = async(input: travelPlanInput): Promise<string> =
                 );
             } else {
                 // nothing
+                 // create  
+               const data: accommodationCreation = {
+               accommodation_name : input.accommodations[index].accommodation_name,
+               accommodation_type : input.accommodations[index].accommodation_type,
+               latitude : input.accommodations[index].latitude,
+               longitude : input.accommodations[index].longitude 
+               }
+               const accommodation: getAccommodation = await accommodationDao.createAccommodation(data) 
+
+               await travelPlanAccommodationDao.createTravelPlanAccommodation(
+                travel_plan_id,
+                accommodation.accommodation_id,
+                // input.accommodations[index].cost,
+                // input.accommodations[index].rating,
+                // input.accommodations[index].review,
+                );
+            
             }
         }
     }
@@ -47,6 +72,20 @@ export const craeteTravelPlan = async(input: travelPlanInput): Promise<string> =
             );
             } else {
                 // nothing
+                 const data: transportCreation = {
+                     transport_type : input.transports[index].transport_type,
+                     transport_name : input.transports[index].transport_name,
+              
+               }
+               const transport: getTransport = await transportDao.createTransport(data) 
+
+               await travelPlanTransportDao.createTravelPlanTransport(
+                travel_plan_id,
+                transport.transport_id
+                // input.transports[index].cost,
+                // input.transports[index].rating,
+                // input.transports[index].review,
+                );
             }
         }   
     }
@@ -64,8 +103,35 @@ export const craeteTravelPlan = async(input: travelPlanInput): Promise<string> =
             );
             } else {
                 // nothing
+                 const data: placeCreation = {
+                place_name : input.places[index].place_name,
+               
+               latitude : input.places[index].latitude,
+               longitude : input.places[index].longitude 
+               }
+               const place: getPlace = await placeDao.createPlace(data) 
+
+               await travelPlanPlaceDao.createTravelPlanPlace(
+                travel_plan_id,
+                place.place_id
+                // input.places[index].cost,
+                // input.places[index].rating,
+                // input.places[index].review,
+                );
             }
         }
+    }
+
+    // now creating creator user in the travel plan member table
+    const result: string = await travelPlanMemberdao.addTravelPlanMember(
+        travel_plan_id,
+        creator_id,
+        "creator"
+    ) 
+
+    if(!result) 
+    {
+        throw new AppError("failed to add creator of the travel plan", 500)
     }
 
     return "travel plan created"

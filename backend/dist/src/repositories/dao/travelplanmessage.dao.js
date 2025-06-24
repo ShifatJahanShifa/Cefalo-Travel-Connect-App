@@ -9,27 +9,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import { dbClient } from "../../db/db.js";
 const db = dbClient.getConnection();
-class TravelPlanTransportDao {
-    createTravelPlanTransport(travel_plan_id, transport_id) {
+class TravelPlanComment {
+    createComment(input) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield db('travel_plan_transports').insert({
-                travel_plan_id: travel_plan_id,
-                transport_id: transport_id,
+            const [result] = yield db("travel_plan_comments").insert({
+                travel_plan_id: input.travel_plan_id,
+                sender_id: input.sender_id,
+                message: input.message
+            })
+                .returning("*");
+            return result;
+        });
+    }
+    getComments(travel_plan_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield db("travel_plan_comments").select("*").where({
+                travel_plan_id: travel_plan_id
             });
-        });
-    }
-    getById(travel_plan_id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const data = yield db('travel_plan_transports').where({ travel_plan_id: travel_plan_id });
-            return data;
-        });
-    }
-    // update mane delete kore new ta rakha
-    updateTravelPlanTransport(travel_plan_id, transport_id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield db('travel_plan_transports').where({ travel_plan_id: travel_plan_id, transport_id: transport_id }).update({});
+            return result;
         });
     }
 }
-const travelPlanTransportDao = new TravelPlanTransportDao();
-export default travelPlanTransportDao;
+const travelPlanCommentDao = new TravelPlanComment();
+export default travelPlanCommentDao;

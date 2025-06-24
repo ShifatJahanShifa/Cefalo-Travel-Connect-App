@@ -12,7 +12,7 @@ const db = dbClient.getConnection();
 class TravePlanPlaceDao {
     createTravelPlanPlace(travel_plan_id, place_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield db('post_places').insert({
+            yield db('travel_plan_places').insert({
                 travel_plan_id: travel_plan_id,
                 place_id: place_id,
             });
@@ -20,14 +20,14 @@ class TravePlanPlaceDao {
     }
     getById(travel_plan_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const data = yield db('post_places').where({ travel_plan_id });
+            const data = yield db('travel_plan_places').where({ travel_plan_id });
             console.log(data);
             return data;
         });
     }
     updateTravelPlanPlace(travel_plan_id, place_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield db('post_places').where({ travel_plan_id: travel_plan_id, place_id: place_id }).update({
+            yield db('travel_plan_places').where({ travel_plan_id: travel_plan_id, place_id: place_id }).update({
             // rating: rating,
             // review: review 
             });

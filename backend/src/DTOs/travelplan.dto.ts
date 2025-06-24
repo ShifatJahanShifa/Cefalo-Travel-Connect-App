@@ -1,6 +1,6 @@
 export class TravelPlanResponseDTO {
     travel_plan_id!: string;
-    user_id!: number;
+    user_id!: string;
     title!: string;
     description!: string;
     start_date!: string; 
@@ -12,8 +12,7 @@ export class TravelPlanResponseDTO {
     accommodations?: any[];
     transports?: any[];
     places?: any[];
-    restaurants?: any[];
-    images?: any[];
+    
     
 
     constructor(data: Partial<TravelPlanResponseDTO>) {

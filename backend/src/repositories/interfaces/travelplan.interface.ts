@@ -1,4 +1,4 @@
-import { travelPlanInput } from "../../types/travelplan.type.ts";
+import { travelPlanInput, travelPlanMember } from "../../types/travelplan.type.ts";
 
 export interface ITravelPlan {
     craeteTravelPlan(input: travelPlanInput): Promise<any>
