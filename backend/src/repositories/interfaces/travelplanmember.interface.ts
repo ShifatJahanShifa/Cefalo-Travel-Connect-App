@@ -1,4 +1,4 @@
-import { travelPlanMember } from "../../types/travelplan.type"
+import { travelPlanMember } from "../../types/travelplan.type.ts"
 
 export interface ITravelPlanMember {
     addTravelPlanMember(travel_plan_id: string, user_id: string, role: string): Promise<string> // frontend theke ids ashbe

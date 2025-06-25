@@ -1,4 +1,4 @@
-import { travelPlanComment } from "../../types/travelplan.type";
+import { travelPlanComment } from "../../types/travelplan.type.ts";
 
 export interface ITravelPlanComment { 
     createComment(input: travelPlanComment): Promise<travelPlanComment>

@@ -12,6 +12,7 @@ import { wishlistRouter } from './src/routes/wishlist.route.ts'
 import { groupRouter } from './src/routes/matchmaker.route.ts'
 import { travelPlanRouter } from './src/routes/travelplan.route.ts'
 import { notificationRouter } from './src/routes/notification.route.ts'
+import { proximityRouter } from './src/routes/proximity.route.ts'
 import { dbClient } from './src/db/db.ts'
 import { globalErrorHandler } from './src/utils/globalErrorHandler.ts'
 import { swaggerUi, swaggerDocument } from './src/utils/swagger.ts'
@@ -40,10 +41,10 @@ app.use('/api/v1/accommodations',accommodationRouter)
 app.use('/api/v1/places',placeRouter)
 app.use('/api/v1/transports',transportRouter)
 app.use('/api/v1/restaurants',resrestaurantRouter)
-// app.get('/api/v1/wishlists/grouped/users', groupUsersByWishlistTheme)
 app.use('/api/v1/wishlists',wishlistRouter)
 app.use('/api/v1/travelplans',travelPlanRouter)
 app.use('/api/v1/notifications',notificationRouter)
+app.use('/api/v1/proximity',proximityRouter)
 
 
 // testing
