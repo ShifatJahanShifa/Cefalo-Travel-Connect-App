@@ -76,3 +76,19 @@ export const deleteTravelPlanById = async(req: ExpressRequest, res: Response, ne
         next(error)
     }
 }
+
+
+export const getTravelPlanByMemberId = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
+    try {
+         // at first getting th eplanner_id 
+        const user: UserDTO = await UserService.getUserByUsername(req.username!) 
+        
+        const results: TravelPlanResponseDTO[] = await TravelPlanService.getTravelPlansByMemberId(user.user_id)
+
+        res.status(200).json(results)
+    }
+    catch(error) 
+    {
+        next(error)
+    }
+}

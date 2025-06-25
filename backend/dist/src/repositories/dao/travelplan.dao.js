@@ -55,6 +55,15 @@ class TravelPlanDao {
             return "deleted travel plan";
         });
     }
+    getTravelPlanByMemberId(user_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const travelplans = yield db('travel_plans as tp')
+                .join('travel_plan_members as tpm', 'tp.travel_plan_id', 'tpm.travel_plan_id')
+                .where('tpm.user_id', user_id)
+                .select('tp.*');
+            return travelplans;
+        });
+    }
 }
 const travelPlanDao = new TravelPlanDao();
 export default travelPlanDao;

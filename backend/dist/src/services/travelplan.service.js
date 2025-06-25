@@ -88,7 +88,12 @@ export const craeteTravelPlan = (input) => __awaiter(void 0, void 0, void 0, fun
         }
     }
     // now creating creator user in the travel plan member table
-    const result = yield travelPlanMemberdao.addTravelPlanMember(travel_plan_id, creator_id, "creator");
+    const data = {
+        travel_plan_id: travel_plan_id,
+        user_id: creator_id,
+        role: "creator"
+    };
+    const result = yield travelPlanMemberdao.addTravelPlanMember(data);
     if (!result) {
         throw new AppError("failed to add creator of the travel plan", 500);
     }
@@ -201,51 +206,38 @@ export const deleteTravelPlan = (travel_plan_id) => __awaiter(void 0, void 0, vo
     const status = yield travelPlanDao.deleteTravelPlanById(travel_plan_id);
     return status;
 });
-// export const getTravelPlansByUserId = async(user_id: number): Promise<TravelPlanResponseDTO[]> => {
-//     const travelPlans = await travelPlanDao.getTravelPlanByUser(user_id); 
-//     const enrichedTravelPlans: travelPlanOutput[] = await Promise.all(
-//             travelPlans.map(async (travelPlan) => {
-//             const travel_plan_id = travelPlan.travel_plan_id
-//             const [
-//                 travelPlanTransports,
-//                 travelPlanPlaces,
-//                 travelPlanAccommodations,
-//             ] = await Promise.all([
-//                 travelPlanTransportDao.getById(travel_plan_id),
-//                 travelPlanPlaceDao.getById(travel_plan_id),
-//                 travelPlanAccommodationDao.getById(travel_plan_id),
-//             ]);
-//             const transportIds = travelPlanTransports.map((t: any) => t.transport_id).filter(Boolean);
-//             const placeIds = travelPlanPlaces.map((p: any) => p.place_id).filter(Boolean);
-//             const accommodationIds = travelPlanAccommodations.map(a => a.accommodation_id).filter(Boolean);
-//             const [
-//                 transportsData,
-//                 placesData,
-//                 accommodationsData
-//             ] = await Promise.all([
-//                 transportIds.length ? transportDao.getById(transportIds) : [],
-//                 placeIds.length ? placeDao.getById(placeIds) : [],
-//                 accommodationIds.length ? accommodationDao.getById(accommodationIds) : [],
-//             ]);
-//             const transports = travelPlanTransports.map((TravelPlanItem: any) => {
-//                 const core = transportsData.find(t => t.transport_id === TravelPlanItem.transport_id);
-//                 return { ...(core ?? {}), ...TravelPlanItem };
-//             });
-//             const places = travelPlanPlaces.map((TravelPlanItem: any) => {
-//                 const core = placesData.find(p => p.place_id === TravelPlanItem.place_id);
-//                 return { ...(core ?? {}), ...TravelPlanItem };
-//             });
-//             const accommodations = travelPlanAccommodations.map(TravelPlanItem => {
-//                 const core = accommodationsData.find(a => a.accommodation_id === TravelPlanItem.accommodation_id);
-//                 return { ...(core ?? {}), ...TravelPlanItem };
-//             });
-//             return {
-//                 ...travelPlan,
-//                 transports,
-//                 places,
-//                 accommodations
-//             };
-//             })
-//         );
-//     return enrichedTravelPlans.map((TravelPlan) => new TravelPlanResponseDTO(TravelPlan));   
-// }
+export const getTravelPlansByMemberId = (user_id) => __awaiter(void 0, void 0, void 0, function* () {
+    const travelPlans = yield travelPlanDao.getTravelPlanByMemberId(user_id);
+    const enrichedTravelPlans = yield Promise.all(travelPlans.map((travelPlan) => __awaiter(void 0, void 0, void 0, function* () {
+        const travel_plan_id = travelPlan.travel_plan_id;
+        const [travelPlanTransports, travelPlanPlaces, travelPlanAccommodations,] = yield Promise.all([
+            travelPlanTransportDao.getById(travel_plan_id),
+            travelPlanPlaceDao.getById(travel_plan_id),
+            travelPlanAccommodationDao.getById(travel_plan_id),
+        ]);
+        const transportIds = travelPlanTransports.map((t) => t.transport_id).filter(Boolean);
+        const placeIds = travelPlanPlaces.map((p) => p.place_id).filter(Boolean);
+        const accommodationIds = travelPlanAccommodations.map(a => a.accommodation_id).filter(Boolean);
+        const [transportsData, placesData, accommodationsData] = yield Promise.all([
+            transportIds.length ? transportDao.getById(transportIds) : [],
+            placeIds.length ? placeDao.getById(placeIds) : [],
+            accommodationIds.length ? accommodationDao.getById(accommodationIds) : [],
+        ]);
+        const transports = travelPlanTransports.map((TravelPlanItem) => {
+            const core = transportsData.find(t => t.transport_id === TravelPlanItem.transport_id);
+            return Object.assign(Object.assign({}, (core !== null && core !== void 0 ? core : {})), TravelPlanItem);
+        });
+        const places = travelPlanPlaces.map((TravelPlanItem) => {
+            const core = placesData.find(p => p.place_id === TravelPlanItem.place_id);
+            return Object.assign(Object.assign({}, (core !== null && core !== void 0 ? core : {})), TravelPlanItem);
+        });
+        const accommodations = travelPlanAccommodations.map(TravelPlanItem => {
+            const core = accommodationsData.find(a => a.accommodation_id === TravelPlanItem.accommodation_id);
+            return Object.assign(Object.assign({}, (core !== null && core !== void 0 ? core : {})), TravelPlanItem);
+        });
+        return Object.assign(Object.assign({}, travelPlan), { transports,
+            places,
+            accommodations });
+    })));
+    return enrichedTravelPlans.map((TravelPlan) => new TravelPlanResponseDTO(TravelPlan));
+});

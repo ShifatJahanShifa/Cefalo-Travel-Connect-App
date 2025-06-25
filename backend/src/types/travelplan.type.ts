@@ -59,7 +59,7 @@ export type travelPlanUpdation = {
     start_date: string 
     end_data: string 
     note: string 
-    estimated__cost: number
+    estimated_cost: number
 
     accommodations?: Array<{
         accommodation_type: string
@@ -119,4 +119,10 @@ export type travelPlanComment = {
     travel_plan_id: string 
     sender_id: string 
     message: string 
+}
+
+export type travelPlanMemberAdd = {
+    travel_plan_id: string 
+    user_id: string
+    role?: string
 }

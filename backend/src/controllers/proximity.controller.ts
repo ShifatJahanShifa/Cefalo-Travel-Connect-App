@@ -7,6 +7,7 @@ import * as UserService from '../services/user.service.ts'
 import { ProximityDTO } from '../DTOs/proximity.dto.ts'
 import * as WishlistService from '../services/wishlist.service.ts'
 import { WishlistDTO } from '../DTOs/wishlist.dto.ts'
+import { getDistanceInKm } from '../utils/getDistance.ts'
 
 
 export const createProximity = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {

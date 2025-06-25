@@ -13,8 +13,8 @@ export const updateUserSchema = z.object({
     .optional(),
 
   role: z
-    .enum(['explorer', 'traveler', 'admin'], {
-      errorMap: () => ({ message: 'Role must be either explorer, traveler, or admin' }),
+    .enum(['explorer', 'traveller', 'admin'], {
+      errorMap: () => ({ message: 'Role must be either explorer, traveller, or admin' }),
     })
     .optional(),
 

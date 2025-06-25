@@ -4,20 +4,21 @@ import { dbClient } from '../../db/db.ts';
 import { IUser } from '../interfaces/user.interface.ts';
 import { updateUserInfo } from '../../types/user.tpye.ts';
 import { Role } from '../../enums/role.ts';
-import { travelPlanMember } from "../../types/travelplan.type.ts";
+import { travelPlanMember, travelPlanMemberAdd } from "../../types/travelplan.type.ts";
 const db: Knex = dbClient.getConnection();
 
 
 class TravelPlanMember implements ITravelPlanMember {
     
-    async addTravelPlanMember(travel_plan_id: string, user_id: string, role: string): Promise<string> {
-        await db("travel_plan_members").insert({
-            travel_plan_id: travel_plan_id,
-            user_id: user_id,
-            role: role
+    async addTravelPlanMember(data: travelPlanMemberAdd): Promise<travelPlanMember> {
+        const [result] = await db("travel_plan_members").insert({
+            travel_plan_id: data.travel_plan_id,
+            user_id: data.user_id,
+            role: data.role as string
         }) 
+        .returning("*")
 
-        return "add member"
+        return result
     }
 
     async getTravelPlanMemmebrs(travel_plan_id: string): Promise<travelPlanMember[]> {
@@ -27,15 +28,17 @@ class TravelPlanMember implements ITravelPlanMember {
         return travelPlanMembers
     }
 
-    async updateTravelPlanMemberRole(travel_plan_id: string, user_id: string, role: string): Promise<string> {
-        await db("travel_plan_members").update({
-            travel_plan_id: travel_plan_id,
-            user_id: user_id })
+    async updateTravelPlanMemberRole(data: travelPlanMemberAdd): Promise<travelPlanMember> {
+        const [result] = await db("travel_plan_members").where({
+            travel_plan_id: data.travel_plan_id,
+            user_id: data.user_id
+            })
             .update({
-            role: role
+            role: data.role as string
             })  
+            .returning("*")
         
-            return "role updated"
+            return result
     }
 }
 

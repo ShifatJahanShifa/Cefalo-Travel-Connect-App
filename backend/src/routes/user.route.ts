@@ -8,12 +8,15 @@ import { validateUpdateUser } from '../validations/validationMiddlewares/user.va
 import { getPostsByUserID } from '../controllers/post.controller.ts'
 import { getWishlistByUserid } from '../controllers/wishlist.controller.ts'
 import { getNotificationByUserId } from '../controllers/notification.controller.ts'
+import { getTravelPlanByMemberId } from '../controllers/travelplan.controller.ts'
 export const userRouter=express.Router()
 
 userRouter.get('/', authenticate, validatePagination, getAllUsers)   // done
+// add getme 
 userRouter.get('/:username', authenticate, getUserByUsername)  // done
 userRouter.patch('/:username', authenticate, authorize, validateUpdateUser, updateUserByUsername) // done
 userRouter.delete('/:username', authenticate, authorizeAdmin, deleteUserByUsername)  // done
 userRouter.get('/:username/posts', authenticate, getPostsByUserID)
 userRouter.get('/:username/wishlists', authenticate, getWishlistByUserid)
+userRouter.get('/:username/travelplans', authenticate, getTravelPlanByMemberId)
 userRouter.get('/:username/notifications', authenticate, getNotificationByUserId)

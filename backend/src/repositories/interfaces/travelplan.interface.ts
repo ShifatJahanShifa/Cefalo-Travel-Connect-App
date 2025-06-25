@@ -6,4 +6,5 @@ export interface ITravelPlan {
     getTravelPlanById(travel_plan_id: string): Promise<any> 
     updateTravelPlanById(travel_plan_id: string, updatePayload: travelPlanInput): Promise<string> 
     deleteTravelPlanById(travel_plan_id: string): Promise<string> 
+    getTravelPlanByMemberId(user_id: string): Promise<any[]>
 }

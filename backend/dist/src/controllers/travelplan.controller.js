@@ -63,3 +63,14 @@ export const deleteTravelPlanById = (req, res, next) => __awaiter(void 0, void 0
         next(error);
     }
 });
+export const getTravelPlanByMemberId = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // at first getting th eplanner_id 
+        const user = yield UserService.getUserByUsername(req.username);
+        const results = yield TravelPlanService.getTravelPlansByMemberId(user.user_id);
+        res.status(200).json(results);
+    }
+    catch (error) {
+        next(error);
+    }
+});

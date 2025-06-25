@@ -14,13 +14,14 @@ export const getPlaces = async (): Promise<placeDTO[]> => {
     return places.map((place) => new placeDTO(place))
 }
 
-export const getPlaceByName = async (name: string): Promise<placeDTO> => {
+export const getPlaceByName = async (name: string): Promise<placeDTO|undefined> => {
     const place: getPlace = await placeDao.getPlaceByName(name)
     
-    if(!place) 
-    {
-        throw new AppError("place not found", 404)
-    }
+    // if(!place) 
+    // {
+    //     throw new AppError("place not found", 404)
+    // }
+    if(!place) return undefined 
     return new placeDTO(place)
 }
 

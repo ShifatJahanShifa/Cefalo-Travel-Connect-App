@@ -19,6 +19,8 @@ import { transportRouter } from "./src/routes/transport.route.js";
 import { resrestaurantRouter } from "./src/routes/restaurant.route.js";
 import { wishlistRouter } from "./src/routes/wishlist.route.js";
 import { travelPlanRouter } from "./src/routes/travelplan.route.js";
+import { notificationRouter } from "./src/routes/notification.route.js";
+import { proximityRouter } from "./src/routes/proximity.route.js";
 import { dbClient } from "./src/db/db.js";
 import { globalErrorHandler } from "./src/utils/globalErrorHandler.js";
 import { swaggerUi, swaggerDocument } from "./src/utils/swagger.js";
@@ -41,9 +43,10 @@ app.use('/api/v1/accommodations', accommodationRouter);
 app.use('/api/v1/places', placeRouter);
 app.use('/api/v1/transports', transportRouter);
 app.use('/api/v1/restaurants', resrestaurantRouter);
-// app.get('/api/v1/wishlists/grouped/users', groupUsersByWishlistTheme)
 app.use('/api/v1/wishlists', wishlistRouter);
 app.use('/api/v1/travelplans', travelPlanRouter);
+app.use('/api/v1/notifications', notificationRouter);
+app.use('/api/v1/proximity', proximityRouter);
 // testing
 app.get('/', (req, res) => {
     res.send('hello world');

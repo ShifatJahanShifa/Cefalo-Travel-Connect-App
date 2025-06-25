@@ -10,13 +10,24 @@ import { UserDTO } from "../DTOs/user.dto.ts";
 import { createWishlistType } from "../types/wishlist.type.ts";
 import { placeDTO } from "../DTOs/place.dto.ts";
 import dotenv from 'dotenv'
+import { placeCreation } from "../types/place.type.ts";
 dotenv.config()
 
 export const createWishlist = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const user: UserDTO = await UserService.getUserByUsername(req.username!)
+        console.log(req.username)
         const payload: createWishlistType = req.body
-        const place: placeDTO = await PlaceService.getPlaceByName(req.body.place_name)
+        let place: placeDTO | undefined = await PlaceService.getPlaceByName(req.body.place_name)
+        if(!place) 
+        {
+            const data: placeCreation = {
+                place_name: req.body.place_name,
+                latitude: req.body.latitude,
+                longitude: req.body.longitude
+            }
+            place = await PlaceService.createPlace(data)
+        }
         payload.user_id = user.user_id
         payload.reference_id = place.place_id
 
@@ -65,9 +76,9 @@ export const updateWishlist = async(req: ExpressRequest, res: Response, next: Ne
 
         const user: UserDTO = await UserService.getUserByUsername(req.username!)
         const payload: createWishlistType = req.body
-        const place: placeDTO = await PlaceService.getPlaceByName(req.body.place_name)
+        const place: placeDTO | undefined = await PlaceService.getPlaceByName(req.body.place_name)
         payload.user_id = user.user_id
-        payload.reference_id = place.place_id
+        payload.reference_id = place?.place_id as string 
 
         const wishlist = await WishlistService.updateWishlist(wishlist_id, payload)
 

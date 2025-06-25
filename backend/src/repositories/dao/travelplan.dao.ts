@@ -54,6 +54,15 @@ class TravelPlanDao implements ITravelPlan {
 
         return "deleted travel plan"
     }
+
+    async getTravelPlanByMemberId(user_id: string): Promise<any[]> {
+        const travelplans = await db('travel_plans as tp')
+                .join('travel_plan_members as tpm', 'tp.travel_plan_id', 'tpm.travel_plan_id')
+                .where('tpm.user_id', user_id)
+                .select('tp.*');
+
+        return travelplans
+    }
 }
 
 const travelPlanDao = new TravelPlanDao()

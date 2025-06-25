@@ -2,6 +2,7 @@ import express from 'express'
 import { authenticate } from '../middlewares/auth.middleware.ts'
 import { craeteTravelPlan, deleteTravelPlanById, getTravelPlanById, getTravelPlans, updateTravelPlanById } from '../controllers/travelplan.controller.ts'
 import { createTravelPlanComment, getTravelPlanComments } from '../controllers/travelplanmessage.controller.ts'
+import { addTravelPlanMember, getTravelPlanMemmebrs, updateTravelPlanMemberRole } from '../controllers/travelplanmember.controller.ts'
 export const travelPlanRouter = express.Router() 
 
 travelPlanRouter.post('/', authenticate, craeteTravelPlan)
@@ -11,9 +12,10 @@ travelPlanRouter.patch('/:travel_plan_id', authenticate, updateTravelPlanById)
 travelPlanRouter.delete('/:travel_plan_id', authenticate, deleteTravelPlanById) 
 
 // // member related routes 
-// travelPlanRouter.post('/:travel_plan_id/members')
-// travelPlanRouter.get('/:travel_plan_id/members',) 
-// travelPlanRouter.patch('/:travel_plan_id/members/:user_id/role')
+travelPlanRouter.post('/:travel_plan_id/members', authenticate, addTravelPlanMember)
+travelPlanRouter.get('/:travel_plan_id/members', authenticate, getTravelPlanMemmebrs) 
+// add authrization here
+travelPlanRouter.patch('/:travel_plan_id/members/:user_id/role', authenticate, updateTravelPlanMemberRole)
 
 
 // // plan comments related 

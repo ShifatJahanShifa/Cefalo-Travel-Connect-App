@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import placeDao from "../repositories/dao/place.dao.js";
 import { placeDTO } from "../DTOs/place.dto.js";
-import { AppError } from "../utils/appError.js";
 export const createPlace = (data) => __awaiter(void 0, void 0, void 0, function* () {
     const place = yield placeDao.createPlace(data);
     return new placeDTO(place);
@@ -20,9 +19,12 @@ export const getPlaces = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 export const getPlaceByName = (name) => __awaiter(void 0, void 0, void 0, function* () {
     const place = yield placeDao.getPlaceByName(name);
-    if (!place) {
-        throw new AppError("place not found", 404);
-    }
+    // if(!place) 
+    // {
+    //     throw new AppError("place not found", 404)
+    // }
+    if (!place)
+        return undefined;
     return new placeDTO(place);
 });
 export const updatePlace = (place_id, data) => __awaiter(void 0, void 0, void 0, function* () {

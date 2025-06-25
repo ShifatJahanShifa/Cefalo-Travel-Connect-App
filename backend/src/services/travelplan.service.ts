@@ -1,6 +1,6 @@
 import { TravelPlanResponseDTO } from "../DTOs/travelplan.dto.ts";
 import travelPlanDao from "../repositories/dao/travelplan.dao.ts";
-import { travelPlanInput, travelPlanOutput } from "../types/travelplan.type.ts";
+import { travelPlanInput, travelPlanMember, travelPlanMemberAdd, travelPlanOutput } from "../types/travelplan.type.ts";
 import accommodationDao from "../repositories/dao/accommodation.dao.ts";
 import travelPlanAccommodationDao from "../repositories/dao/travelplan_accommodation.dao.ts";
 import transportDao from "../repositories/dao/transport.dao.ts";
@@ -123,11 +123,12 @@ export const craeteTravelPlan = async(input: travelPlanInput): Promise<string> =
     }
 
     // now creating creator user in the travel plan member table
-    const result: string = await travelPlanMemberdao.addTravelPlanMember(
-        travel_plan_id,
-        creator_id,
-        "creator"
-    ) 
+    const data: travelPlanMemberAdd = {
+        travel_plan_id: travel_plan_id,
+        user_id: creator_id,
+        role: "creator"
+    }
+    const result: travelPlanMember = await travelPlanMemberdao.addTravelPlanMember(data) 
 
     if(!result) 
     {
@@ -339,68 +340,68 @@ export const deleteTravelPlan = async(travel_plan_id: string): Promise<string> =
 }
 
 
-// export const getTravelPlansByUserId = async(user_id: number): Promise<TravelPlanResponseDTO[]> => {
-//     const travelPlans = await travelPlanDao.getTravelPlanByUser(user_id); 
+export const getTravelPlansByMemberId = async(user_id: string): Promise<TravelPlanResponseDTO[]> => {
+    const travelPlans = await travelPlanDao.getTravelPlanByMemberId(user_id); 
 
-//     const enrichedTravelPlans: travelPlanOutput[] = await Promise.all(
-//             travelPlans.map(async (travelPlan) => {
-//             const travel_plan_id = travelPlan.travel_plan_id
+    const enrichedTravelPlans: travelPlanOutput[] = await Promise.all(
+            travelPlans.map(async (travelPlan) => {
+            const travel_plan_id = travelPlan.travel_plan_id
         
-//             const [
-//                 travelPlanTransports,
-//                 travelPlanPlaces,
-//                 travelPlanAccommodations,
+            const [
+                travelPlanTransports,
+                travelPlanPlaces,
+                travelPlanAccommodations,
                 
-//             ] = await Promise.all([
-//                 travelPlanTransportDao.getById(travel_plan_id),
-//                 travelPlanPlaceDao.getById(travel_plan_id),
-//                 travelPlanAccommodationDao.getById(travel_plan_id),
+            ] = await Promise.all([
+                travelPlanTransportDao.getById(travel_plan_id),
+                travelPlanPlaceDao.getById(travel_plan_id),
+                travelPlanAccommodationDao.getById(travel_plan_id),
                 
-//             ]);
+            ]);
 
         
-//             const transportIds = travelPlanTransports.map((t: any) => t.transport_id).filter(Boolean);
-//             const placeIds = travelPlanPlaces.map((p: any) => p.place_id).filter(Boolean);
-//             const accommodationIds = travelPlanAccommodations.map(a => a.accommodation_id).filter(Boolean);
+            const transportIds = travelPlanTransports.map((t: any) => t.transport_id).filter(Boolean);
+            const placeIds = travelPlanPlaces.map((p: any) => p.place_id).filter(Boolean);
+            const accommodationIds = travelPlanAccommodations.map(a => a.accommodation_id).filter(Boolean);
 
             
-//             const [
-//                 transportsData,
-//                 placesData,
-//                 accommodationsData
+            const [
+                transportsData,
+                placesData,
+                accommodationsData
                
-//             ] = await Promise.all([
-//                 transportIds.length ? transportDao.getById(transportIds) : [],
-//                 placeIds.length ? placeDao.getById(placeIds) : [],
-//                 accommodationIds.length ? accommodationDao.getById(accommodationIds) : [],
+            ] = await Promise.all([
+                transportIds.length ? transportDao.getById(transportIds) : [],
+                placeIds.length ? placeDao.getById(placeIds) : [],
+                accommodationIds.length ? accommodationDao.getById(accommodationIds) : [],
         
-//             ]);
+            ]);
 
         
-//             const transports = travelPlanTransports.map((TravelPlanItem: any) => {
-//                 const core = transportsData.find(t => t.transport_id === TravelPlanItem.transport_id);
-//                 return { ...(core ?? {}), ...TravelPlanItem };
-//             });
+            const transports = travelPlanTransports.map((TravelPlanItem: any) => {
+                const core = transportsData.find(t => t.transport_id === TravelPlanItem.transport_id);
+                return { ...(core ?? {}), ...TravelPlanItem };
+            });
 
-//             const places = travelPlanPlaces.map((TravelPlanItem: any) => {
-//                 const core = placesData.find(p => p.place_id === TravelPlanItem.place_id);
-//                 return { ...(core ?? {}), ...TravelPlanItem };
-//             });
+            const places = travelPlanPlaces.map((TravelPlanItem: any) => {
+                const core = placesData.find(p => p.place_id === TravelPlanItem.place_id);
+                return { ...(core ?? {}), ...TravelPlanItem };
+            });
 
-//             const accommodations = travelPlanAccommodations.map(TravelPlanItem => {
-//                 const core = accommodationsData.find(a => a.accommodation_id === TravelPlanItem.accommodation_id);
-//                 return { ...(core ?? {}), ...TravelPlanItem };
-//             });
+            const accommodations = travelPlanAccommodations.map(TravelPlanItem => {
+                const core = accommodationsData.find(a => a.accommodation_id === TravelPlanItem.accommodation_id);
+                return { ...(core ?? {}), ...TravelPlanItem };
+            });
 
            
-//             return {
-//                 ...travelPlan,
-//                 transports,
-//                 places,
-//                 accommodations
-//             };
-//             })
-//         );
+            return {
+                ...travelPlan,
+                transports,
+                places,
+                accommodations
+            };
+            })
+        );
 
-//     return enrichedTravelPlans.map((TravelPlan) => new TravelPlanResponseDTO(TravelPlan));   
-// }
+    return enrichedTravelPlans.map((TravelPlan) => new TravelPlanResponseDTO(TravelPlan));   
+}

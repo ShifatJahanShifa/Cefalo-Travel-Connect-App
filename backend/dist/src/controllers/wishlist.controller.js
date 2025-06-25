@@ -15,8 +15,17 @@ dotenv.config();
 export const createWishlist = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield UserService.getUserByUsername(req.username);
+        console.log(req.username);
         const payload = req.body;
-        const place = yield PlaceService.getPlaceByName(req.body.place_name);
+        let place = yield PlaceService.getPlaceByName(req.body.place_name);
+        if (!place) {
+            const data = {
+                place_name: req.body.place_name,
+                latitude: req.body.latitude,
+                longitude: req.body.longitude
+            };
+            place = yield PlaceService.createPlace(data);
+        }
         payload.user_id = user.user_id;
         payload.reference_id = place.place_id;
         const wishlist = yield WishlistService.createWishlist(payload);
@@ -54,7 +63,7 @@ export const updateWishlist = (req, res, next) => __awaiter(void 0, void 0, void
         const payload = req.body;
         const place = yield PlaceService.getPlaceByName(req.body.place_name);
         payload.user_id = user.user_id;
-        payload.reference_id = place.place_id;
+        payload.reference_id = place === null || place === void 0 ? void 0 : place.place_id;
         const wishlist = yield WishlistService.updateWishlist(wishlist_id, payload);
         res.status(200).json(wishlist);
     }

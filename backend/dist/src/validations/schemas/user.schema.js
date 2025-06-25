@@ -10,8 +10,8 @@ export const updateUserSchema = z.object({
         .max(10000, 'Bio is too long') // PostgreSQL text supports large input, but you can set your own limit
         .optional(),
     role: z
-        .enum(['explorer', 'traveler', 'admin'], {
-        errorMap: () => ({ message: 'Role must be either explorer, traveler, or admin' }),
+        .enum(['explorer', 'traveller', 'admin'], {
+        errorMap: () => ({ message: 'Role must be either explorer, traveller, or admin' }),
     })
         .optional(),
     hashed_password: z

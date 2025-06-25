@@ -1,4 +1,4 @@
-import { ProximityDTO } from "../DTOs/proximity.dto";
+import { ProximityDTO } from "../DTOs/proximity.dto.ts";
 import proximityDao from "../repositories/dao/proximity.dao.ts";
 import { proximity } from "../types/proximity.type.ts";
 

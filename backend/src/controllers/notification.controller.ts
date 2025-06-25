@@ -3,6 +3,8 @@ import { ExpressRequest } from "../middlewares/auth.middleware.ts"
 import * as NotificationService from "../services/notification.service.ts" 
 import { notification } from "../types/notifcation.type.ts"
 import { notificationDTO } from "../DTOs/notification.dto.ts"
+import { UserDTO } from "../DTOs/user.dto.ts"
+import * as UserService from '../services/user.service.ts'
 
 export const createNotification = async( req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -19,8 +21,9 @@ export const createNotification = async( req: ExpressRequest, res: Response, nex
 
 export const getNotificationByUserId = async( req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const user_id: string = req.params.user_id
-        const result: notificationDTO[] = await NotificationService.getNotificationByUserId(user_id)
+        const user_name: string = req.params.username 
+        const user: UserDTO = await UserService.getUserByUsername(user_name)
+        const result: notificationDTO[] = await NotificationService.getNotificationByUserId(user.user_id)
 
         res.status(200).json(result)
     }

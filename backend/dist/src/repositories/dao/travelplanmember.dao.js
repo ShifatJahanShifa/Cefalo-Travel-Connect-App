@@ -10,14 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import { dbClient } from "../../db/db.js";
 const db = dbClient.getConnection();
 class TravelPlanMember {
-    addTravelPlanMember(travel_plan_id, user_id, role) {
+    addTravelPlanMember(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield db("travel_plan_members").insert({
-                travel_plan_id: travel_plan_id,
-                user_id: user_id,
-                role: role
-            });
-            return "add member";
+            const [result] = yield db("travel_plan_members").insert({
+                travel_plan_id: data.travel_plan_id,
+                user_id: data.user_id,
+                role: data.role
+            })
+                .returning("*");
+            return result;
         });
     }
     getTravelPlanMemmebrs(travel_plan_id) {
@@ -28,16 +29,17 @@ class TravelPlanMember {
             return travelPlanMembers;
         });
     }
-    updateTravelPlanMemberRole(travel_plan_id, user_id, role) {
+    updateTravelPlanMemberRole(data) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield db("travel_plan_members").update({
-                travel_plan_id: travel_plan_id,
-                user_id: user_id
+            const [result] = yield db("travel_plan_members").where({
+                travel_plan_id: data.travel_plan_id,
+                user_id: data.user_id
             })
                 .update({
-                role: role
-            });
-            return "role updated";
+                role: data.role
+            })
+                .returning("*");
+            return result;
         });
     }
 }

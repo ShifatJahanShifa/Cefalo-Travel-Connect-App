@@ -8,6 +8,8 @@ export type createWishlistType = {
     region: string 
     note: string 
     is_public: boolean 
+    latitude?: number 
+    longitude?: number
 }
 
 // i will add travel plan to wishlist later 
