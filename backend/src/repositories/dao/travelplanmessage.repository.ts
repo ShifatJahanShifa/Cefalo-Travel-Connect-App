@@ -1,5 +1,5 @@
-import { travelPlanComment } from "../../types/travelplan.type";
-import { ITravelPlanComment } from "../interfaces/travelplanmessage.interface";
+import { travelPlanComment } from "../../types/travelplan.type.ts";
+import { ITravelPlanComment } from "../interfaces/travelplanmessage.interface.ts";
 import { dbClient } from '../../db/db.ts';
 import { Knex } from 'knex';
 import { IUser } from '../interfaces/user.interface.ts';

@@ -1,5 +1,5 @@
 import { ExpressRequest } from "../middlewares/auth.middleware";
-import restaurantDao from "../repositories/dao/restaurant.dao.ts";
+import restaurantDao from "../repositories/dao/restaurant.repository.ts";
 import { restaurantDTO } from "../DTOs/restaurant.dto.ts"
 import { restaurantCreation, restaurantUpdation, getRestaurant } from "../types/restaurant.type.ts";
 

@@ -1,5 +1,5 @@
 import { ProximityDTO } from "../DTOs/proximity.dto.ts";
-import proximityDao from "../repositories/dao/proximity.dao.ts";
+import proximityDao from "../repositories/dao/proximity.repository.ts";
 import { proximity } from "../types/proximity.type.ts";
 
 

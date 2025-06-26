@@ -8,7 +8,7 @@ export const accommodationCreationSchema = z.object({
     cost_per_night: z
     .number()
     .min(0)
-    .transform((val) => Number(val.toFixed(2)))   // i am doing auto correction here rather than throwing error
+    .transform((val) => Number(val.toFixed(2))).optional()   // i am doing auto correction here rather than throwing error
 
 });
 

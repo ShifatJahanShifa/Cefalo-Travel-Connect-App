@@ -1,17 +1,17 @@
 import { TravelPlanResponseDTO } from "../DTOs/travelplan.dto.ts";
-import travelPlanDao from "../repositories/dao/travelplan.dao.ts";
+import travelPlanDao from "../repositories/dao/travelplan.repository.ts";
 import { travelPlanInput, travelPlanMember, travelPlanMemberAdd, travelPlanOutput } from "../types/travelplan.type.ts";
-import accommodationDao from "../repositories/dao/accommodation.dao.ts";
-import travelPlanAccommodationDao from "../repositories/dao/travelplan_accommodation.dao.ts";
-import transportDao from "../repositories/dao/transport.dao.ts";
-import travelPlanTransportDao from "../repositories/dao/travelplan_transport.dao.ts";
-import placeDao from "../repositories/dao/place.dao.ts";
-import travelPlanPlaceDao from "../repositories/dao/travelplan_place.dao.ts";
+import accommodationDao from "../repositories/dao/accommodation.repository.ts";
+import travelPlanAccommodationDao from "../repositories/dao/travelplan_accommodation.repository.ts";
+import transportDao from "../repositories/dao/transport.repository.ts";
+import travelPlanTransportDao from "../repositories/dao/travelplan_transport.repository.ts";
+import placeDao from "../repositories/dao/place.repository.ts";
+import travelPlanPlaceDao from "../repositories/dao/travelplan_place.repository.ts";
 import { AppError } from "../utils/appError.ts";
 import { accommodationCreation, getAccommodation } from "../types/accommodation.type.ts";
 import { getTransport, transportCreation } from "../types/transport.type.ts";
 import { getPlace, placeCreation } from "../types/place.type.ts";
-import travelPlanMemberdao from "../repositories/dao/travelplanmember.dao.ts";
+import travelPlanMemberdao from "../repositories/dao/travelplanmember.repository.ts";
 
 
 
@@ -37,8 +37,7 @@ export const craeteTravelPlan = async(input: travelPlanInput): Promise<string> =
                 accommodationRecord.accommodation_id
                 );
             } else {
-                // nothing
-                 // create  
+               
                const data: accommodationCreation = {
                accommodation_name : input.accommodations[index].accommodation_name,
                accommodation_type : input.accommodations[index].accommodation_type,
@@ -50,9 +49,7 @@ export const craeteTravelPlan = async(input: travelPlanInput): Promise<string> =
                await travelPlanAccommodationDao.createTravelPlanAccommodation(
                 travel_plan_id,
                 accommodation.accommodation_id,
-                // input.accommodations[index].cost,
-                // input.accommodations[index].rating,
-                // input.accommodations[index].review,
+                
                 );
             
             }
@@ -71,7 +68,7 @@ export const craeteTravelPlan = async(input: travelPlanInput): Promise<string> =
                 transportRecord.transport_id
             );
             } else {
-                // nothing
+               
                  const data: transportCreation = {
                      transport_type : input.transports[index].transport_type,
                      transport_name : input.transports[index].transport_name,
@@ -82,9 +79,7 @@ export const craeteTravelPlan = async(input: travelPlanInput): Promise<string> =
                await travelPlanTransportDao.createTravelPlanTransport(
                 travel_plan_id,
                 transport.transport_id
-                // input.transports[index].cost,
-                // input.transports[index].rating,
-                // input.transports[index].review,
+         
                 );
             }
         }   
@@ -102,7 +97,7 @@ export const craeteTravelPlan = async(input: travelPlanInput): Promise<string> =
                
             );
             } else {
-                // nothing
+                
                  const data: placeCreation = {
                 place_name : input.places[index].place_name,
                
@@ -114,9 +109,7 @@ export const craeteTravelPlan = async(input: travelPlanInput): Promise<string> =
                await travelPlanPlaceDao.createTravelPlanPlace(
                 travel_plan_id,
                 place.place_id
-                // input.places[index].cost,
-                // input.places[index].rating,
-                // input.places[index].review,
+                
                 );
             }
         }
@@ -213,7 +206,7 @@ export const getTravelPlanById = async(travel_plan_id: string): Promise<TravelPl
    
     if(!travelPlan) 
     {
-        throw new AppError('post not found', 404)
+        throw new AppError('travel plan not found', 404)
     }
         
     const [
@@ -275,13 +268,21 @@ export const getTravelPlanById = async(travel_plan_id: string): Promise<TravelPl
 
 
 export const updateTravelPlan = async (travel_plan_id: string, input: travelPlanInput): Promise<string> => {
-    const existingTravelPlan = await travelPlanDao.updateTravelPlanById(travel_plan_id, input)
-    if (!existingTravelPlan) 
+    const travelPlan = await travelPlanDao.getTravelPlanById(travel_plan_id)
+
+    if(travelPlan) 
     {
         throw new AppError("travel not found", 404);
     }
 
-
+    // will add authorization later
+    const isExist = await travelPlanMemberdao.memberExists(input.planner_id!, travel_plan_id) 
+    if(isExist && isExist.role === "member") 
+    {
+        throw new AppError("you are not allowed to update the travelplan", 403)
+    }
+    const existingTravelPlan = await travelPlanDao.updateTravelPlanById(travel_plan_id, input)
+   
     if (input.accommodations?.length) {
         for (const acc of input.accommodations) {
         const accommodationRecord = await accommodationDao.getAccommodationByTypeAndName(
@@ -331,10 +332,22 @@ export const updateTravelPlan = async (travel_plan_id: string, input: travelPlan
         }
     }
 
-    return "Post updated successfully";
+    return "travel plan updated successfully";
 };
 
-export const deleteTravelPlan = async(travel_plan_id: string): Promise<string> => {
+export const deleteTravelPlan = async(travel_plan_id: string, user_id: string): Promise<string> => {
+    const travelPlan = await travelPlanDao.getTravelPlanById(travel_plan_id)
+
+    if(travelPlan) 
+    {
+        throw new AppError("travel plan not found", 404);
+    }
+
+    const isExist = await travelPlanMemberdao.memberExists(user_id, travel_plan_id) 
+    if(isExist && isExist.role !== "creator") 
+    {
+        throw new AppError("you are not allowed to delete the travelplan", 403)
+    }
     const status: string = await travelPlanDao.deleteTravelPlanById(travel_plan_id)
     return status
 }

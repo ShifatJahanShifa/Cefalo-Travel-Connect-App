@@ -60,3 +60,13 @@ export const getUserByUserId = (req, res, next) => __awaiter(void 0, void 0, voi
         next(err);
     }
 });
+export const getMe = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const username = req.username;
+        const data = yield userService.getUserByUsername(username);
+        res.status(200).json(data);
+    }
+    catch (error) {
+        next(error);
+    }
+});

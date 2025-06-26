@@ -1,5 +1,5 @@
 export function getDistanceInKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const radius = 6371; // Earth radius in km
+  const radius = 6371; // earth radius in km
   const toRad = (degree: number) => (degree * Math.PI) / 180;
 
   const dLat = toRad(lat2 - lat1);
@@ -12,5 +12,5 @@ export function getDistanceInKm(lat1: number, lon1: number, lat2: number, lon2: 
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-  return radius * c; // Distance in km
+  return radius * c; // distance in km
 }

@@ -1,4 +1,4 @@
-import { IPostFood } from "../interfaces/post_food.interface";
+import { IPostFood } from "../interfaces/post_food.interface.ts";
 import { Knex } from "knex";
 import { dbClient } from "../../db/db.ts";
 import { AppError } from "../../utils/appError.ts";

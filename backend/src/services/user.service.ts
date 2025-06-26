@@ -1,8 +1,8 @@
 import { compare, hash } from 'bcrypt';
 import { createdUser } from '../types/auth.type';
 // import authDAO from '../repositories/dao/auth.dao.ts';
-import authDAO from '../repositories/dao/auth.dao.ts';
-import userDAO from '../repositories/dao/user.dao.ts';
+import authDAO from '../repositories/dao/auth.repository.ts';
+import userDAO from '../repositories/dao/user.respository.ts';
 import { Request, Response } from 'express';
 import { ExpressRequest } from '../middlewares/auth.middleware.ts';
 import { UserDTO } from '../DTOs/user.dto.ts';

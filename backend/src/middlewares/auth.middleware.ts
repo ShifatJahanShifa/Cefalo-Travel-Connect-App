@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express"
 import jwt from 'jsonwebtoken';
-import userDAO from '../repositories/dao/auth.dao.ts'
+import userDAO from '../repositories/dao/auth.repository.ts'
 import { Role } from "../enums/role.ts";
 import { DecodedUser, verifyAccessToken } from "../utils/jwt.ts";
 import dotenv from "dotenv"
@@ -48,9 +48,14 @@ export const authorize = async (req: ExpressRequest, res: Response, next: NextFu
         const loggedInUsername = req.username!;
         const isAdmin = req.role === Role.ADMIN;
         const targetUsername = req.params.username;
+        const requesterRole = req.role;
 
-        if (req.body.role && req.body.role === Role.ADMIN && !isAdmin) {
-            res.status(403).json({ message: "Only admin can set admin role." });
+        // if(req.body.role && req.body.role === Role.ADMIN && !isAdmin) {
+
+        // }
+        // else 
+        if (req.body.role && !isAdmin) {
+            res.status(403).json({ message: "Only admin can set user's role." });
             return;
         }
         // Check if attempting to update someone else's profile info except role

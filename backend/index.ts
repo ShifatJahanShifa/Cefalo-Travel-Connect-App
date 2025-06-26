@@ -9,7 +9,6 @@ import { placeRouter } from './src/routes/place.route.ts'
 import { transportRouter } from './src/routes/transport.route.ts'
 import { resrestaurantRouter } from './src/routes/restaurant.route.ts'
 import { wishlistRouter } from './src/routes/wishlist.route.ts'
-import { groupRouter } from './src/routes/matchmaker.route.ts'
 import { travelPlanRouter } from './src/routes/travelplan.route.ts'
 import { notificationRouter } from './src/routes/notification.route.ts'
 import { proximityRouter } from './src/routes/proximity.route.ts'
@@ -17,8 +16,8 @@ import { dbClient } from './src/db/db.ts'
 import { globalErrorHandler } from './src/utils/globalErrorHandler.ts'
 import { swaggerUi, swaggerDocument } from './src/utils/swagger.ts'
 import dotenv from 'dotenv'
-import { groupUsersByWishlistTheme } from './src/controllers/wishlist.controller.ts'
-// import { travelPlan } from './src/routes/travelplan.route.ts'
+
+
 dotenv.config()
 
 const app = express()

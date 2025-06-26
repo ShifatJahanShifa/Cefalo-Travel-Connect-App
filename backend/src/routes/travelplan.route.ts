@@ -14,13 +14,9 @@ travelPlanRouter.delete('/:travel_plan_id', authenticate, deleteTravelPlanById)
 // // member related routes 
 travelPlanRouter.post('/:travel_plan_id/members', authenticate, addTravelPlanMember)
 travelPlanRouter.get('/:travel_plan_id/members', authenticate, getTravelPlanMemmebrs) 
-// add authrization here
 travelPlanRouter.patch('/:travel_plan_id/members/:user_id/role', authenticate, updateTravelPlanMemberRole)
 
 
 // // plan comments related 
-// add a middleware
 travelPlanRouter.post('/:travel_plan_id/comments', authenticate, createTravelPlanComment )
 travelPlanRouter.get('/:travel_plan_id/comments', authenticate, getTravelPlanComments )
-// travelPlanRouter.patch('/:travel_plan_id/comments',)
-// travelPlanRouter.delete('/:travel_plan_id/comments',)

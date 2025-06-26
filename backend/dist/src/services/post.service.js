@@ -20,6 +20,7 @@ import { dbClient } from "../db/db.js";
 import { AppError } from "../utils/appError.js";
 import postInteractionDao from "../repositories/dao/post_interaction.dao.js";
 import postFoodDao from "../repositories/dao/post_food.dao.js";
+import userDAO from "../repositories/dao/user.dao.js";
 // import { AppError } from "../../utils/appError.ts";
 const db = dbClient.getConnection();
 export const createPost = (input) => __awaiter(void 0, void 0, void 0, function* () {
@@ -91,7 +92,13 @@ export const createPost = (input) => __awaiter(void 0, void 0, void 0, function*
             yield postImageDao.createPostImage(post_id, input.images[index].image_url, input.images[index].caption);
         }
     }
-    return "post created";
+    // update role 
+    const user = yield userDAO.getUserByID(createdPost.user_id);
+    const data = {
+        role: "traveller"
+    };
+    yield userDAO.updateUser(user.username, data);
+    return true;
 });
 export const getAllPosts = (page, limit) => __awaiter(void 0, void 0, void 0, function* () {
     const offset = (page - 1) * limit;

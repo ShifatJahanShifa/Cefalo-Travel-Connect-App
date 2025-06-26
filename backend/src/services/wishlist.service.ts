@@ -1,7 +1,7 @@
 import { placeDTO } from "../DTOs/place.dto.ts";
 import { WishlistDTO } from "../DTOs/wishlist.dto.ts";
-import placeDao from "../repositories/dao/place.dao.ts";
-import wishlistDao from "../repositories/dao/wishlist.dao.ts";
+import placeDao from "../repositories/dao/place.repository.ts";
+import wishlistDao from "../repositories/dao/wishlist.repository.ts";
 import { getPlace } from "../types/place.type.ts";
 import { createWishlistType, getWishlistType, groupedUsers } from "../types/wishlist.type.ts";
 import { AppError } from "../utils/appError.ts";
@@ -89,12 +89,33 @@ export const getWishlistById = async(wishlist_id: string): Promise<WishlistDTO> 
 }
 
 export const updateWishlist = async(wishlist_id: string, payload: createWishlistType): Promise<string> => {
+    const wishlist: getWishlistType = await wishlistDao.getWishlistById(wishlist_id)
+    if(!wishlist) 
+    {
+        throw new AppError("wishlist is not found", 404)
+    }
+    
+    if(wishlist.user_id !== payload.user_id) 
+    {
+        throw new AppError("You are not authorized to update wishlist", 403)
+    }
     const result: string = await wishlistDao.updateWishlist(wishlist_id, payload)
 
     return result
 }
 
-export const deleteWishlist = async(wishlist_id: string): Promise<string> => {
+export const deleteWishlist = async(wishlist_id: string, user_id: string): Promise<string> => {
+    const wishlist: getWishlistType = await wishlistDao.getWishlistById(wishlist_id)
+    if(!wishlist) 
+    {
+        throw new AppError("wishlist is not found", 404)
+    }
+    
+    if(wishlist.user_id !== user_id) 
+    {
+        throw new AppError("You are not authorized to update wishlist", 403)
+    }
+
     const result: string = await wishlistDao.deleteWishlist(wishlist_id)
 
     return result

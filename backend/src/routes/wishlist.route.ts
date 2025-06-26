@@ -13,4 +13,4 @@ wishlistRouter.get('/:wishlist_id', authenticate, getWishlistById)
 wishlistRouter.patch('/:wishlist_id', authenticate, validateWishlistCreationData, updateWishlist)
 wishlistRouter.delete('/:wishlist_id', authenticate, deleteWishlist)
 wishlistRouter.get('/:wishlist_id/share', authenticate, shareWishlist)
-wishlistRouter.patch('/:wishlist_id/visibility', authenticate, toggleVisibility);
+wishlistRouter.patch('/:wishlist_id/visibility', authenticate, toggleVisibility)

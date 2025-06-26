@@ -60,6 +60,8 @@ class UserDAO implements IUser{
 
         return result;
     }
+
+    
 }
 
 const userDAO = new UserDAO();

@@ -8,7 +8,8 @@ import * as UserService from '../services/user.service.ts'
 
 export const createPost = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try { 
-        const post: string = await PostService.createPost(req.body)
+        const post: boolean = await PostService.createPost(req.body)
+
         res.status(201).send(post)
     }
     catch(error)
@@ -50,6 +51,7 @@ export const getPostByPostID = async (req: ExpressRequest, res: Response, next: 
 export const updatePost = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const post_id: string = (req.params.post_id)
+        // const user: UserDTO = await UserService.getUserByUsername()
         const updatedPostData: UpdatePostInput = req.body
         const status: string = await PostService.updatePost(post_id, updatedPostData)
 
@@ -65,7 +67,9 @@ export const updatePost = async (req: ExpressRequest, res: Response, next: NextF
 export const deletePost = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const post_id: string = (req.params.post_id)
-        const status: string = await PostService.deletePost(post_id)
+        const user: UserDTO = await UserService.getUserByUsername(req.username!) 
+
+        const status: string = await PostService.deletePost(post_id, user.user_id)
 
         res.status(204).send(status)
     }

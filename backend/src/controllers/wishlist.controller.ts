@@ -5,7 +5,7 @@ import * as PlaceService from "../services/place.service.ts"
 import { ExpressRequest } from "../middlewares/auth.middleware.ts";
 import { NextFunction, Request, Response } from "express";
 import { createdUser } from "../types/auth.type.ts";
-import userDAO from "../repositories/dao/user.dao.ts";
+import userDAO from "../repositories/dao/user.respository.ts";
 import { UserDTO } from "../DTOs/user.dto.ts";
 import { createWishlistType } from "../types/wishlist.type.ts";
 import { placeDTO } from "../DTOs/place.dto.ts";
@@ -93,10 +93,9 @@ export const updateWishlist = async(req: ExpressRequest, res: Response, next: Ne
 export const deleteWishlist = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const wishlist_id: string = (req.params.wishlist_id)  
-        
-        const wishlist = await WishlistService.deleteWishlist(wishlist_id)
-        
-        console.log("heeee")
+         const user: UserDTO = await UserService.getUserByUsername(req.username!) 
+        const wishlist = await WishlistService.deleteWishlist(wishlist_id, user.user_id)
+   
         res.status(204).json(wishlist)
     }
     catch(err)

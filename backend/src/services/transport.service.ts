@@ -1,5 +1,5 @@
 import { ExpressRequest } from "../middlewares/auth.middleware";
-import transportDao from "../repositories/dao/transport.dao.ts";
+import transportDao from "../repositories/dao/transport.repository.ts";
 import { transportDTO } from "../DTOs/transport.dto.ts";
 import { transportCreation, transportUpdation, getTransport } from "../types/transport.type.ts";
 

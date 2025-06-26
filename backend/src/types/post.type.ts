@@ -102,6 +102,7 @@ export type getPost = {
 }
 
 export type UpdatePostInput = {
+    user_id?: string
     title: string;
     description: string;
     total_cost: number;

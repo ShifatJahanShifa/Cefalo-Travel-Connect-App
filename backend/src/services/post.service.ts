@@ -4,16 +4,16 @@ import { ExpressRequest } from "../middlewares/auth.middleware.ts";
 import { CreatedPost, CreatePostInput, UpdatePostInput } from "../types/post.type.ts";
 import { PostResponseDTO } from "../DTOs/post.dto.ts";
 import { getPost } from "../types/post.type.ts";
-import accommodationDao from "../repositories/dao/accommodation.dao.ts";
-import postAccommodationDao from "../repositories/dao/post_accommodation.dao.ts";
-import transportDao from "../repositories/dao/transport.dao.ts";
-import postTransportDao from "../repositories/dao/post_transport.dao.ts";
-import placeDao from "../repositories/dao/place.dao.ts";
-import postPlaceDao from "../repositories/dao/post_place.dao.ts";
-import restaurantDao from "../repositories/dao/restaurant.dao.ts";
-import postRestaurantDao from "../repositories/dao/post_restaurant.dao.ts";
-import postImageDao from "../repositories/dao/post_image.dao.ts";
-import posttDAO from "../repositories/dao/postt.dao.ts";
+import accommodationDao from "../repositories/dao/accommodation.repository.ts";
+import postAccommodationDao from "../repositories/dao/post_accommodation.repository.ts";
+import transportDao from "../repositories/dao/transport.repository.ts";
+import postTransportDao from "../repositories/dao/post_transport.repository.ts";
+import placeDao from "../repositories/dao/place.repository.ts";
+import postPlaceDao from "../repositories/dao/post_place.repository.ts";
+import restaurantDao from "../repositories/dao/restaurant.repository.ts";
+import postRestaurantDao from "../repositories/dao/post_restaurant.repository.ts";
+import postImageDao from "../repositories/dao/post_image.repository.ts";
+import posttDAO from "../repositories/dao/postt.repository.ts";
 import { getTransport, transportCreation } from "../types/transport.type.ts";
 import { accommodationCreation, getAccommodation } from "../types/accommodation.type.ts";
 import { SearchFilters } from "../types/post.type.ts";
@@ -22,17 +22,20 @@ import { Knex } from "knex";
 import { dbClient } from "../db/db.ts";
 import { Console } from "console";
 import { AppError } from "../utils/appError.ts";
-import postInteractionDao from "../repositories/dao/post_interaction.dao.ts";
-import postFoodDao from "../repositories/dao/post_food.dao.ts";
+import postInteractionDao from "../repositories/dao/post_interaction.repository.ts";
+import postFoodDao from "../repositories/dao/post_food.repository.ts";
 import { AccommodationDTO } from "../DTOs/accommodation.dto.ts";
 import { getPlace, placeCreation } from "../types/place.type.ts";
+import { UserDTO } from "../DTOs/user.dto.ts";
+import userDAO from "../repositories/dao/user.respository.ts";
+import { updateUserInfo } from "../types/user.tpye.ts";
 // import { AppError } from "../../utils/appError.ts";
 const db: Knex = dbClient.getConnection();
 
 
 
 
-export const createPost = async(input: CreatePostInput): Promise<string> => {
+export const createPost = async(input: CreatePostInput): Promise<boolean> => {
     const createdPost: any = await posttDAO.createPost(input)
     
     const post_id = createdPost.post_id 
@@ -165,8 +168,19 @@ export const createPost = async(input: CreatePostInput): Promise<string> => {
             input.images[index].caption
         )}
     }
+
     
-    return "post created"
+    // update role 
+    const user: UserDTO = await userDAO.getUserByID(createdPost.user_id)
+    if(user.role === "explorer") 
+    {
+        const data: updateUserInfo = {
+            role: "traveller"
+        }
+
+        await userDAO.updateUser(user.username, data)
+    }
+    return true
 }
 
 export const getAllPosts = async (page: number, limit: number): Promise<PostResponseDTO[]> => {
@@ -322,12 +336,18 @@ export const getPostByPostID = async(post_id: string): Promise<PostResponseDTO> 
 
 
 export const updatePost = async (post_id: string, input: UpdatePostInput): Promise<string> => {
-  const existingPost = await posttDAO.updatePost(post_id, input);
-    if (!existingPost) 
+    
+    const post: CreatedPost = await posttDAO.getPostByPostID(post_id);
+    if (!post) 
     {
         throw new AppError("Post not found", 404);
     }
-
+    
+    if(post.user_id !== (input.user_id as string)) 
+    {
+        throw new AppError("you are not authorized to update the post", 403)
+    }
+    const updatedPost = await posttDAO.updatePost(post_id, input);
 
     if (input.accommodations?.length) {
         for (const acc of input.accommodations) {
@@ -414,7 +434,17 @@ export const updatePost = async (post_id: string, input: UpdatePostInput): Promi
 
 
 
-export const deletePost = async(post_id: string): Promise<string> => {
+export const deletePost = async(post_id: string, user_id: string): Promise<string> => {
+    const post: CreatedPost = await posttDAO.getPostByPostID(post_id);
+    if (!post) 
+    {
+        throw new AppError("Post not found", 404);
+    }
+    
+    if(post.user_id !== user_id) 
+    {
+        throw new AppError("you are not authorized to delete the post", 403)
+    }
     const status: string = await posttDAO.deletePost(post_id)
     return status
 }
@@ -505,12 +535,12 @@ export const searchPosts = async (filters: SearchFilters): Promise<PostResponseD
 
 
 export const togglePostLike = async (post_id: string, user_id: string): Promise<string> => {
-    // at first check whether the entry is in the post interaction tablke or not 
+    // at first check whether the entry is in the post interaction table or not 
     const data = await postInteractionDao.getPostInteraction(post_id, user_id, "like")
     let status
     if(data) 
     {
-        // dele 
+        // delete 
         await postInteractionDao.deletePostInteraction(post_id, user_id, "like")
         status = await posttDAO.togglePostLike(post_id, false) 
     }

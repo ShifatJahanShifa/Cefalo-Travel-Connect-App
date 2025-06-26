@@ -1,5 +1,5 @@
 import { ExpressRequest } from "../middlewares/auth.middleware";
-import placeDao from "../repositories/dao/place.dao.ts";
+import placeDao from "../repositories/dao/place.repository.ts";
 import { placeDTO } from "../DTOs/place.dto.ts";
 import { placeCreation, placeUpdation, getPlace } from "../types/place.type.ts";
 import { AppError } from "../utils/appError.ts";

@@ -1,4 +1,4 @@
-import { travelPlanInput } from "../../types/travelplan.type.ts";
+import { travelPlanInput, travelPlanOutput } from "../../types/travelplan.type.ts";
 import { ITravelPlan } from "../interfaces/travelplan.interface.ts";
 import { Knex } from 'knex';
 import { dbClient } from '../../db/db.ts';
@@ -30,8 +30,8 @@ class TravelPlanDao implements ITravelPlan {
         return travelplans
     }
 
-    async getTravelPlanById(travel_plan_id: string): Promise<any> {
-        const travelplan = await db("travel_plans").where({travel_plan_id: travel_plan_id})
+    async getTravelPlanById(travel_plan_id: string): Promise<travelPlanOutput> {
+        const travelplan = await db("travel_plans").where({travel_plan_id: travel_plan_id}).first()
 
         return travelplan
     }
@@ -63,6 +63,7 @@ class TravelPlanDao implements ITravelPlan {
 
         return travelplans
     }
+
 }
 
 const travelPlanDao = new TravelPlanDao()

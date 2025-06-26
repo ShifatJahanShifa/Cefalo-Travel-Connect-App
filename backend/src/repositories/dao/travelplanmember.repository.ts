@@ -1,4 +1,4 @@
-import { ITravelPlanMember } from "../interfaces/travelplanmember.interface";
+import { ITravelPlanMember } from "../interfaces/travelplanmember.interface.ts";
 import { Knex } from 'knex';
 import { dbClient } from '../../db/db.ts';
 import { IUser } from '../interfaces/user.interface.ts';
@@ -39,6 +39,14 @@ class TravelPlanMember implements ITravelPlanMember {
             .returning("*")
         
             return result
+    }
+
+    async memberExists(user_id: string, travel_plan_id: string): Promise<any> {
+        const isMember = await db('travel_plan_members')
+            .where({ travel_plan_id: travel_plan_id, user_id: user_id })
+            .first();
+
+        return isMember
     }
 }
 

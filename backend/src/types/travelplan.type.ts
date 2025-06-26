@@ -55,7 +55,7 @@ export type travelPlanOutput = {
 
 export type travelPlanUpdation = {
     travel_plan_id: string;         
-    planner_id: string;     
+    planner_id?: string;     
     start_date: string 
     end_data: string 
     note: string 
@@ -110,7 +110,7 @@ export type travelPlanMember = {
     user_id: string 
     username: string
     email: string 
-    travel_plan_role: string 
+    role: string 
 }
 
 

@@ -2,13 +2,13 @@ import { compare, hash } from 'bcrypt'
 import { generateAccessToken, generateRefreshToken, verifyAccessToken, verifyRefreshToken, DecodedUser } from '../utils/jwt.ts'
 import { createdUser, signupUser, signinUser } from '../types/auth.type.ts'
 // import AuthDAO from '../repositories/dao/auth.dao.ts' 
-import authDAO from '../repositories/dao/auth.dao.ts'
+import authDAO from '../repositories/dao/auth.repository.ts'
 import { Request, Response } from 'express'
 import { ExpressRequest } from '../middlewares/auth.middleware.ts'
 import { AuthDTO } from '../DTOs/auth.dto.ts'
 import { Role } from '../enums/role.ts'
 import { AppError } from '../utils/appError.ts'
-import userDAO from '../repositories/dao/user.dao.ts';
+import userDAO from '../repositories/dao/user.respository.ts';
 import dotenv from 'dotenv'
 import { UserDTO } from '../DTOs/user.dto.ts'
 dotenv.config()

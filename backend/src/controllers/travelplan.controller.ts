@@ -8,7 +8,7 @@ import { UserDTO } from "../DTOs/user.dto.ts";
 
 export const craeteTravelPlan = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        // at first getting th eplanner_id 
+        // at first getting the planner_id 
         const user: UserDTO = await UserService.getUserByUsername(req.username!) 
         const payload: travelPlanInput = req.body 
         payload.planner_id = user.user_id 
@@ -67,7 +67,8 @@ export const updateTravelPlanById = async(req: ExpressRequest, res: Response, ne
 
 export const deleteTravelPlanById = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const result: string = await TravelPlanService.deleteTravelPlan(req.params.travel_plan_id)
+        const user: UserDTO = await UserService.getUserByUsername(req.username!) 
+        const result: string = await TravelPlanService.deleteTravelPlan(req.params.travel_plan_id, user.user_id)
 
         res.status(200).json(result)
     }

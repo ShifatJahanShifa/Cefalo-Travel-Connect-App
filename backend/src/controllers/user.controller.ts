@@ -69,3 +69,16 @@ export const getUserByUserId = async (req: ExpressRequest, res: Response, next: 
         next(err);
     }
 }
+
+export const getMe = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
+  try{
+    const username: string = req.username! 
+    const data: UserDTO = await userService.getUserByUsername(username);
+   
+    res.status(200).json(data);
+  }
+  catch(error)
+  {
+    next(error)
+  }
+}

@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllUsers, getUserByUsername, updateUserByUsername, deleteUserByUsername } from "../controllers/user.controller.js";
+import { getAllUsers, getUserByUsername, updateUserByUsername, deleteUserByUsername, getMe } from "../controllers/user.controller.js";
 import { authenticate, authorizeAdmin, authorize } from "../middlewares/auth.middleware.js";
 import { validatePagination } from "../validations/validationMiddlewares/pagination.validation.js";
 import { validateUpdateUser } from "../validations/validationMiddlewares/user.validation.js";
@@ -9,7 +9,7 @@ import { getNotificationByUserId } from "../controllers/notification.controller.
 import { getTravelPlanByMemberId } from "../controllers/travelplan.controller.js";
 export const userRouter = express.Router();
 userRouter.get('/', authenticate, validatePagination, getAllUsers); // done
-// add getme 
+userRouter.get('/me', authenticate, getMe);
 userRouter.get('/:username', authenticate, getUserByUsername); // done
 userRouter.patch('/:username', authenticate, authorize, validateUpdateUser, updateUserByUsername); // done
 userRouter.delete('/:username', authenticate, authorizeAdmin, deleteUserByUsername); // done
