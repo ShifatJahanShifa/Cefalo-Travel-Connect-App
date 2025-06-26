@@ -13,6 +13,6 @@ postRouter.get('/search/', authenticate, searchPosts)
 postRouter.get('/:post_id', authenticate, getPostByPostID)
 postRouter.post("/:postId/like", authenticate, togglePostLike)
 
-// // i will handle authorization later
+
 postRouter.patch('/:post_id', authenticate, validateUpdatePostData, updatePost)
 postRouter.delete('/:post_id', authenticate, deletePost)
