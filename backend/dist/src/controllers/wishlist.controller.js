@@ -1,124 +1,115 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import * as WishlistService from "../services/wishlist.service.js";
 import * as UserService from "../services/user.service.js";
 import * as PlaceService from "../services/place.service.js";
 import dotenv from 'dotenv';
 dotenv.config();
-export const createWishlist = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+export const createWishlist = async (req, res, next) => {
     try {
-        const user = yield UserService.getUserByUsername(req.username);
+        const user = await UserService.getUserByUsername(req.username);
         console.log(req.username);
         const payload = req.body;
-        let place = yield PlaceService.getPlaceByName(req.body.place_name);
+        let place = await PlaceService.getPlaceByName(req.body.place_name);
         if (!place) {
             const data = {
                 place_name: req.body.place_name,
                 latitude: req.body.latitude,
                 longitude: req.body.longitude
             };
-            place = yield PlaceService.createPlace(data);
+            place = await PlaceService.createPlace(data);
         }
         payload.user_id = user.user_id;
         payload.reference_id = place.place_id;
-        const wishlist = yield WishlistService.createWishlist(payload);
+        const wishlist = await WishlistService.createWishlist(payload);
         res.status(201).json(wishlist);
     }
     catch (error) {
         next(error);
     }
-});
-export const getWishlists = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const getWishlists = async (req, res, next) => {
     try {
         const page = parseInt(req.query.page);
         const limit = parseInt(req.query.limit);
-        const wishlists = yield WishlistService.getWishlists(page, limit);
+        const wishlists = await WishlistService.getWishlists(page, limit);
         res.status(200).json(wishlists);
     }
     catch (err) {
         next(err);
     }
-});
-export const getWishlistById = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const getWishlistById = async (req, res, next) => {
     try {
         const wishlist_id = (req.params.wishlist_id);
-        const wishlist = yield WishlistService.getWishlistById(wishlist_id);
+        const wishlist = await WishlistService.getWishlistById(wishlist_id);
         res.status(200).json(wishlist);
     }
     catch (err) {
         next(err);
     }
-});
-export const updateWishlist = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const updateWishlist = async (req, res, next) => {
     try {
         const wishlist_id = (req.params.wishlist_id);
-        const user = yield UserService.getUserByUsername(req.username);
+        const user = await UserService.getUserByUsername(req.username);
         const payload = req.body;
-        const place = yield PlaceService.getPlaceByName(req.body.place_name);
+        const place = await PlaceService.getPlaceByName(req.body.place_name);
         payload.user_id = user.user_id;
-        payload.reference_id = place === null || place === void 0 ? void 0 : place.place_id;
-        const wishlist = yield WishlistService.updateWishlist(wishlist_id, payload);
+        payload.reference_id = place?.place_id;
+        const wishlist = await WishlistService.updateWishlist(wishlist_id, payload);
         res.status(200).json(wishlist);
     }
     catch (err) {
         next(err);
     }
-});
-export const deleteWishlist = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const deleteWishlist = async (req, res, next) => {
     try {
         const wishlist_id = (req.params.wishlist_id);
-        const wishlist = yield WishlistService.deleteWishlist(wishlist_id);
-        console.log("heeee");
+        const user = await UserService.getUserByUsername(req.username);
+        const wishlist = await WishlistService.deleteWishlist(wishlist_id, user.user_id);
         res.status(204).json(wishlist);
     }
     catch (err) {
         next(err);
     }
-});
-export const getWishlistByUserid = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const getWishlistByUserid = async (req, res, next) => {
     try {
         // at first i will get user_id from user table
         const username = req.params.username;
-        const user = yield UserService.getUserByUsername(username);
+        const user = await UserService.getUserByUsername(username);
         const page = parseInt(req.query.page);
         const limit = parseInt(req.query.limit);
         // call the post service 
-        const wishlists = yield WishlistService.getWishlistByUserid(user.user_id, page, limit);
+        const wishlists = await WishlistService.getWishlistByUserid(user.user_id, page, limit);
         res.status(200).json(wishlists);
     }
     catch (error) {
         next(error);
     }
-});
-export const shareWishlist = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const shareWishlist = async (req, res) => {
     const wishlist_id = (req.params.wishlist_id);
     const shareURL = `${process.env.BASE_URL}/shared/${wishlist_id}`;
     res.status(200).json(shareURL);
-});
-export const toggleVisibility = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const toggleVisibility = async (req, res, next) => {
     try {
         const wishlist_id = req.params.wishlist_id;
-        const result = yield WishlistService.toggleVisibility(wishlist_id);
+        const result = await WishlistService.toggleVisibility(wishlist_id);
         res.status(200).json(result);
     }
     catch (err) {
         next(err);
     }
-});
-export const groupUsersByWishlistTheme = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const groupUsersByWishlistTheme = async (req, res, next) => {
     try {
         const theme = req.body.theme;
-        const results = yield WishlistService.groupUsersByWishlistTheme(theme);
+        const results = await WishlistService.groupUsersByWishlistTheme(theme);
         res.status(200).json(results);
     }
     catch (error) {
         next(error);
     }
-});
+};

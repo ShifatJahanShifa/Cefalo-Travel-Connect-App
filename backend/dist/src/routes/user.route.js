@@ -8,11 +8,11 @@ import { getWishlistByUserid } from "../controllers/wishlist.controller.js";
 import { getNotificationByUserId } from "../controllers/notification.controller.js";
 import { getTravelPlanByMemberId } from "../controllers/travelplan.controller.js";
 export const userRouter = express.Router();
-userRouter.get('/', authenticate, validatePagination, getAllUsers); // done
+userRouter.get('/', authenticate, validatePagination, getAllUsers);
 userRouter.get('/me', authenticate, getMe);
-userRouter.get('/:username', authenticate, getUserByUsername); // done
-userRouter.patch('/:username', authenticate, authorize, validateUpdateUser, updateUserByUsername); // done
-userRouter.delete('/:username', authenticate, authorizeAdmin, deleteUserByUsername); // done
+userRouter.get('/:username', authenticate, getUserByUsername);
+userRouter.patch('/:username', authenticate, authorize, validateUpdateUser, updateUserByUsername);
+userRouter.delete('/:username', authenticate, authorizeAdmin, deleteUserByUsername);
 userRouter.get('/:username/posts', authenticate, getPostsByUserID);
 userRouter.get('/:username/wishlists', authenticate, getWishlistByUserid);
 userRouter.get('/:username/travelplans', authenticate, getTravelPlanByMemberId);

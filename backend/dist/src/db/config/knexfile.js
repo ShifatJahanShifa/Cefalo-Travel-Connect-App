@@ -1,9 +1,11 @@
 import dotenv from 'dotenv';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-dotenv.config({ path: resolve(__dirname, '../../../.env') });
+// import { fileURLToPath } from 'url';
+import { resolve } from 'path';
+// const __filename_file = fileURLToPath(import.meta.url);
+// const __dirname_dir = dirname(__filename_file); 
+// import { __filename_file, __dirname_dir } from '../../utils/esm-path.js' 
+const __dirname_dir = "C:\\Users\\cefalo\\Desktop\\Cefalo-Travel-Connect-App\\backend\\src\\db\\config";
+dotenv.config({ path: resolve(__dirname_dir, '../../../.env') });
 // for checking
 // console.log(typeof process.env.DB_TYPE);
 // console.log(typeof process.env.DB_PASSWORD);

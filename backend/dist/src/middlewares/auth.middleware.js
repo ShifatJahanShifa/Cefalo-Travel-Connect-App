@@ -1,12 +1,3 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import jwt from 'jsonwebtoken';
 import { Role } from "../enums/role.js";
 import { verifyAccessToken } from "../utils/jwt.js";
@@ -15,7 +6,7 @@ dotenv.config();
 const { sign, verify } = jwt;
 // define the return type
 // the goal of this function is to call the next function when everything is ok. so the return type will be void
-export const authenticate = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+export const authenticate = async (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
         const accessToken = authHeader && authHeader.split(' ')[1];
@@ -32,8 +23,8 @@ export const authenticate = (req, res, next) => __awaiter(void 0, void 0, void 0
     catch (error) {
         res.status(401).send("Unauthorized User");
     }
-});
-export const authorize = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const authorize = async (req, res, next) => {
     try {
         const loggedInUsername = req.username;
         const isAdmin = req.role === Role.ADMIN;
@@ -56,8 +47,8 @@ export const authorize = (req, res, next) => __awaiter(void 0, void 0, void 0, f
     catch (err) {
         res.status(403).json({ message: "access forbidden" });
     }
-});
-export const authorizeAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const authorizeAdmin = async (req, res, next) => {
     try {
         if (req.role !== Role.ADMIN) {
             res.status(403).json({ message: "Unauthorized to perform the action" });
@@ -68,4 +59,4 @@ export const authorizeAdmin = (req, res, next) => __awaiter(void 0, void 0, void
     catch (err) {
         res.status(403).json({ message: "access forbidden" });
     }
-});
+};

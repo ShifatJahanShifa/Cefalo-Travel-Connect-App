@@ -1,12 +1,15 @@
 import dotenv from 'dotenv';
 import type { Knex }    from 'knex';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+// import { fileURLToPath } from 'url';
+import { resolve } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// const __filename_file = fileURLToPath(import.meta.url);
+// const __dirname_dir = dirname(__filename_file); 
 
-dotenv.config({ path: resolve(__dirname, '../../../.env') });
+// import { __filename_file, __dirname_dir } from '../../utils/esm-path.js' 
+const __dirname_dir = "C:\\Users\\cefalo\\Desktop\\Cefalo-Travel-Connect-App\\backend\\src\\db\\config"
+
+dotenv.config({ path: resolve(__dirname_dir, '../../../.env') });
 
 // for checking
 // console.log(typeof process.env.DB_TYPE);

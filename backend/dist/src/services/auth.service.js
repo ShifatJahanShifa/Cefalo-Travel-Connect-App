@@ -1,76 +1,67 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import { compare, hash } from 'bcrypt';
 import { generateAccessToken, generateRefreshToken, verifyRefreshToken } from "../utils/jwt.js";
 // import AuthDAO from '../repositories/dao/auth.dao.ts' 
-import authDAO from "../repositories/dao/auth.dao.js";
+import authDAO from "../repositories/dao/auth.repository.js";
 import { AuthDTO } from "../DTOs/auth.dto.js";
 import { AppError } from "../utils/appError.js";
-import userDAO from "../repositories/dao/user.dao.js";
+import userDAO from "../repositories/dao/user.respository.js";
 import dotenv from 'dotenv';
 dotenv.config();
-export const signup = (userData) => __awaiter(void 0, void 0, void 0, function* () {
+export const signup = async (userData) => {
     const { username, email, password } = userData;
-    const userFoundByEmail = yield authDAO.findUserByEmail(email);
+    const userFoundByEmail = await authDAO.findUserByEmail(email);
     if (userFoundByEmail) {
         throw new AppError("email is already taken", 400);
     }
-    const userFoundByUsername = yield authDAO.findUserByUsername(username);
+    const userFoundByUsername = await authDAO.findUserByUsername(username);
     if (userFoundByUsername) {
         throw new AppError("username is already taken", 400);
     }
-    const hashedPassword = yield hash(password, 10);
-    const user = yield authDAO.insertUser(username, email, hashedPassword);
+    const hashedPassword = await hash(password, 10);
+    const user = await authDAO.insertUser(username, email, hashedPassword);
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
     const refreshTokenExpiry = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
-    yield authDAO.insertRefreshToken(user.user_id, refreshToken, refreshTokenExpiry);
+    await authDAO.insertRefreshToken(user.user_id, refreshToken, refreshTokenExpiry);
     return new AuthDTO(user, accessToken, refreshToken);
-});
-export const signin = (userData) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield authDAO.findUserByEmail(userData.email);
+};
+export const signin = async (userData) => {
+    const user = await authDAO.findUserByEmail(userData.email);
     if (!user) {
         throw new AppError("invalid credential", 401);
     }
-    const isPasswordCorrect = yield compare(userData.password, user.hashed_password);
+    const isPasswordCorrect = await compare(userData.password, user.hashed_password);
     if (!isPasswordCorrect) {
         throw new AppError("invalid credential", 401);
     }
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
     const refreshTokenExpiry = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
-    const token = yield authDAO.findRefreshToken(user.user_id); // if not, then null string 
+    const token = await authDAO.findRefreshToken(user.user_id); // if not, then null string 
     if (token) {
-        yield authDAO.updateRefreshToken(user.user_id, refreshToken, refreshTokenExpiry);
+        await authDAO.updateRefreshToken(user.user_id, refreshToken, refreshTokenExpiry);
     }
     else {
-        yield authDAO.insertRefreshToken(user.user_id, refreshToken, refreshTokenExpiry);
+        await authDAO.insertRefreshToken(user.user_id, refreshToken, refreshTokenExpiry);
     }
     return new AuthDTO(user, accessToken, refreshToken);
-});
-export const signout = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield userDAO.getUserByUsername(req.username);
-    yield authDAO.deleteRefreshToken(user.user_id);
+};
+export const signout = async (req, res) => {
+    const user = await userDAO.getUserByUsername(req.username);
+    await authDAO.deleteRefreshToken(user.user_id);
     res.clearCookie('refreshToken');
     res.status(200).json({ message: "signed out successfully" });
-});
-export const refreshAccessToken = (refreshToken) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const refreshAccessToken = async (refreshToken) => {
     const decoded = verifyRefreshToken(refreshToken);
-    const user = yield authDAO.findUserByEmail(decoded.email);
+    const user = await authDAO.findUserByEmail(decoded.email);
     if (!user) {
         throw new AppError("Invalid refresh token", 401);
     }
-    const token = yield authDAO.findRefreshToken(user.user_id);
+    const token = await authDAO.findRefreshToken(user.user_id);
     if (!token) {
         throw new AppError("Invalid refresh token", 401);
     }
     const newAccessToken = generateAccessToken(user);
     return newAccessToken;
-});
+};

@@ -1,14 +1,6 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import * as TravelPlanMemberService from "../services/travelplanmember.service.js";
-export const addTravelPlanMember = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+import * as UserService from "../services/user.service.js";
+export const addTravelPlanMember = async (req, res, next) => {
     try {
         // getting from userserice
         // const user: UserDTO = await UserService.getUserByUsername(req.username!) 
@@ -17,33 +9,34 @@ export const addTravelPlanMember = (req, res, next) => __awaiter(void 0, void 0,
         //     travel_plan_id: req.params.travel_plan_id, 
         //     role: "member"
         // }
-        const result = yield TravelPlanMemberService.addTravelPlanMember(req.body);
+        const result = await TravelPlanMemberService.addTravelPlanMember(req.body);
         res.status(201).json(result);
     }
     catch (error) {
         next(error);
     }
-});
-export const getTravelPlanMemmebrs = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const getTravelPlanMemmebrs = async (req, res, next) => {
     try {
-        const result = yield TravelPlanMemberService.getTravelPlanMemmebrs(req.params.travel_plan_id);
+        const result = await TravelPlanMemberService.getTravelPlanMemmebrs(req.params.travel_plan_id);
         res.status(200).json(result);
     }
     catch (error) {
         next(error);
     }
-});
-export const updateTravelPlanMemberRole = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const updateTravelPlanMemberRole = async (req, res, next) => {
     try {
+        const user = await UserService.getUserByUsername(req.username);
         const payload = {
             user_id: req.body.user_id,
             travel_plan_id: req.params.travel_plan_id,
             role: req.body.role
         };
-        const result = yield TravelPlanMemberService.updateTravelPlanMemberRole(payload);
+        const result = await TravelPlanMemberService.updateTravelPlanMemberRole(payload, user.user_id);
         res.status(200).json(result);
     }
     catch (error) {
         next(error);
     }
-});
+};

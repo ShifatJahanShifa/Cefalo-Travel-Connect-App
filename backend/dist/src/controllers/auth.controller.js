@@ -1,16 +1,7 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import * as authService from "../services/auth.service.js";
-export const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+export const signup = async (req, res, next) => {
     try {
-        const result = yield authService.signup(req.body);
+        const result = await authService.signup(req.body);
         res
             .cookie('refreshToken', result.refreshToken, {
             httpOnly: true,
@@ -23,10 +14,10 @@ export const signup = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     catch (error) {
         next(error);
     }
-});
-export const signin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const signin = async (req, res, next) => {
     try {
-        const result = yield authService.signin(req.body);
+        const result = await authService.signin(req.body);
         res
             .cookie('refreshToken', result.refreshToken, {
             httpOnly: true,
@@ -39,23 +30,23 @@ export const signin = (req, res, next) => __awaiter(void 0, void 0, void 0, func
     catch (error) {
         next(error);
     }
-});
-export const signout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const signout = async (req, res, next) => {
     try {
-        yield authService.signout(req, res);
+        await authService.signout(req, res);
     }
     catch (error) {
         next(error);
     }
-});
-export const refreshAccessToken = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const refreshAccessToken = async (req, res, next) => {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
         res.status(401).json({ message: 'Missing refresh token' });
         return;
     }
     try {
-        const newAccessToken = yield authService.refreshAccessToken(refreshToken);
+        const newAccessToken = await authService.refreshAccessToken(refreshToken);
         res.header('Authorization', `Bearer ${newAccessToken}`)
             .status(200)
             .json({ accessToken: newAccessToken });
@@ -63,4 +54,4 @@ export const refreshAccessToken = (req, res, next) => __awaiter(void 0, void 0, 
     catch (error) {
         next(error);
     }
-});
+};

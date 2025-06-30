@@ -1,24 +1,15 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-import placeDao from "../repositories/dao/place.dao.js";
+import placeDao from "../repositories/dao/place.repository.js";
 import { placeDTO } from "../DTOs/place.dto.js";
-export const createPlace = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const place = yield placeDao.createPlace(data);
+export const createPlace = async (data) => {
+    const place = await placeDao.createPlace(data);
     return new placeDTO(place);
-});
-export const getPlaces = () => __awaiter(void 0, void 0, void 0, function* () {
-    const places = yield placeDao.getPlaces();
+};
+export const getPlaces = async () => {
+    const places = await placeDao.getPlaces();
     return places.map((place) => new placeDTO(place));
-});
-export const getPlaceByName = (name) => __awaiter(void 0, void 0, void 0, function* () {
-    const place = yield placeDao.getPlaceByName(name);
+};
+export const getPlaceByName = async (name) => {
+    const place = await placeDao.getPlaceByName(name);
     // if(!place) 
     // {
     //     throw new AppError("place not found", 404)
@@ -26,12 +17,12 @@ export const getPlaceByName = (name) => __awaiter(void 0, void 0, void 0, functi
     if (!place)
         return undefined;
     return new placeDTO(place);
-});
-export const updatePlace = (place_id, data) => __awaiter(void 0, void 0, void 0, function* () {
-    const place = yield placeDao.updatePlace(place_id, data);
+};
+export const updatePlace = async (place_id, data) => {
+    const place = await placeDao.updatePlace(place_id, data);
     return new placeDTO(place);
-});
-export const getPlacesByProximity = (latitude, longitude, radius) => __awaiter(void 0, void 0, void 0, function* () {
-    const places = yield placeDao.getPlacesByProximity(latitude, longitude, radius);
+};
+export const getPlacesByProximity = async (latitude, longitude, radius) => {
+    const places = await placeDao.getPlacesByProximity(latitude, longitude, radius);
     return places.map((place) => new placeDTO(place));
-});
+};

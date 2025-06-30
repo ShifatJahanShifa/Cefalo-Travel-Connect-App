@@ -1,31 +1,22 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-import accommodationDao from "../repositories/dao/accommodation.dao.js";
+import accommodationDao from "../repositories/dao/accommodation.repository.js";
 import { AccommodationDTO } from "../DTOs/accommodation.dto.js";
-export const createAccommodation = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const accommodation = yield accommodationDao.createAccommodation(data);
+export const createAccommodation = async (data) => {
+    const accommodation = await accommodationDao.createAccommodation(data);
     return new AccommodationDTO(accommodation);
-});
-export const getAccommodations = () => __awaiter(void 0, void 0, void 0, function* () {
-    const accommodations = yield accommodationDao.getAccommodations();
+};
+export const getAccommodations = async () => {
+    const accommodations = await accommodationDao.getAccommodations();
     return accommodations.map((accommodation) => new AccommodationDTO(accommodation));
-});
-export const getAccommodationByTypeAndName = (type, name) => __awaiter(void 0, void 0, void 0, function* () {
-    const accommodation = yield accommodationDao.getAccommodationByTypeAndName(type, name);
+};
+export const getAccommodationByTypeAndName = async (type, name) => {
+    const accommodation = await accommodationDao.getAccommodationByTypeAndName(type, name);
     return new AccommodationDTO(accommodation);
-});
-export const updateAccommodation = (accommodation_id, data) => __awaiter(void 0, void 0, void 0, function* () {
-    const accommodation = yield accommodationDao.updateAccommodation(accommodation_id, data);
+};
+export const updateAccommodation = async (accommodation_id, data) => {
+    const accommodation = await accommodationDao.updateAccommodation(accommodation_id, data);
     return new AccommodationDTO(accommodation);
-});
-export const getAccommodationsByProximity = (latitude, longitude, radius) => __awaiter(void 0, void 0, void 0, function* () {
-    const accommodations = yield accommodationDao.getAccommodationsByProximity(latitude, longitude, radius);
+};
+export const getAccommodationsByProximity = async (latitude, longitude, radius) => {
+    const accommodations = await accommodationDao.getAccommodationsByProximity(latitude, longitude, radius);
     return accommodations.map((accommodation) => new AccommodationDTO(accommodation));
-});
+};

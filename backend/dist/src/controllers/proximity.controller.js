@@ -1,20 +1,11 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 import * as ProximityService from "../services/proximity.service.js";
 import * as UserService from "../services/user.service.js";
 import * as WishlistService from "../services/wishlist.service.js";
 import { getDistanceInKm } from "../utils/getDistance.js";
-export const createProximity = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+export const createProximity = async (req, res, next) => {
     try {
         // retrieving user_id 
-        const user = yield UserService.getUserByUsername(req.username);
+        const user = await UserService.getUserByUsername(req.username);
         // only adding for wishlist now. later may consider other services
         const payload = {
             user_id: user.user_id,
@@ -22,27 +13,27 @@ export const createProximity = (req, res, next) => __awaiter(void 0, void 0, voi
             reference_id: req.body.reference_id,
             radius: req.body.radius
         };
-        const result = yield ProximityService.createProximity(payload);
+        const result = await ProximityService.createProximity(payload);
         res.status(201).json(result);
     }
     catch (error) {
         next(error);
     }
-});
-export const findUserProximity = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const findUserProximity = async (req, res, next) => {
     try {
-        const user = yield UserService.getUserByUsername(req.username);
-        const result = yield ProximityService.findUserProximity(user.user_id);
+        const user = await UserService.getUserByUsername(req.username);
+        const result = await ProximityService.findUserProximity(user.user_id);
         res.status(201).json(result);
     }
     catch (error) {
         next(error);
     }
-});
-export const updateProximity = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const updateProximity = async (req, res, next) => {
     try {
         // retrieving user_id 
-        const user = yield UserService.getUserByUsername(req.username);
+        const user = await UserService.getUserByUsername(req.username);
         // only adding for wishlist now. later may consider other services
         const payload = {
             user_id: user.user_id,
@@ -50,17 +41,17 @@ export const updateProximity = (req, res, next) => __awaiter(void 0, void 0, voi
             reference_id: req.body.reference_id,
             radius: req.body.radius
         };
-        const result = yield ProximityService.updateProximity(payload);
+        const result = await ProximityService.updateProximity(payload);
         res.status(200).json(result);
     }
     catch (error) {
         next(error);
     }
-});
-export const deleteProximity = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const deleteProximity = async (req, res, next) => {
     try {
         // retrieving user_id 
-        const user = yield UserService.getUserByUsername(req.username);
+        const user = await UserService.getUserByUsername(req.username);
         // only adding for wishlist now. later may consider other services
         const payload = {
             user_id: user.user_id,
@@ -68,21 +59,21 @@ export const deleteProximity = (req, res, next) => __awaiter(void 0, void 0, voi
             reference_id: req.body.reference_id,
             radius: req.body.radius
         };
-        const result = yield ProximityService.deleteProximity(payload);
+        const result = await ProximityService.deleteProximity(payload);
         res.status(204).json(result);
     }
     catch (error) {
         next(error);
     }
-});
-export const checkProximities = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+};
+export const checkProximities = async (req, res, next) => {
     try {
         const alerts = [];
-        const user = yield UserService.getUserByUsername(req.username);
+        const user = await UserService.getUserByUsername(req.username);
         const { userLat, userLong } = req.body;
-        const proximities = yield ProximityService.findUserProximity(user.user_id);
+        const proximities = await ProximityService.findUserProximity(user.user_id);
         for (const proximity of proximities) {
-            const wishlist = yield WishlistService.getWishlistById(proximity.reference_id);
+            const wishlist = await WishlistService.getWishlistById(proximity.reference_id);
             const latitude = wishlist.place_latitude;
             const longitude = wishlist.place_longitude;
             const distance = getDistanceInKm(userLat, userLong, latitude, longitude);
@@ -102,4 +93,4 @@ export const checkProximities = (req, res, next) => __awaiter(void 0, void 0, vo
     catch (error) {
         next(error);
     }
-});
+};

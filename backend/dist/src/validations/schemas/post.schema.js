@@ -64,9 +64,6 @@ export const createPostSchema = z.object({
     foods: z.array(foodSchema).optional(),
     images: z.array(imageSchema).optional(),
 });
-// ----------------------
-// ✅ UpdatePost Schema
-// ----------------------
 export const updatePostSchema = z.object({
     title: z.string().min(1),
     description: z.string().min(1),

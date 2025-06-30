@@ -11,37 +11,37 @@ export const transportCreationSchema = z.object({
         required_error: "Cost per person is required"
     })
         .min(0)
-        .transform((val) => Number(val.toFixed(2))),
+        .transform((val) => Number(val.toFixed(2))).optional(),
     starting_location_name: z.string({
         required_error: "Starting location name is required"
-    }),
+    }).optional(),
     starting_location_latitude: z
         .number({
         required_error: "Starting location latitude is required"
     })
         .min(-90)
-        .max(90),
+        .max(90).optional(),
     starting_location_longitude: z
         .number({
         required_error: "Starting location longitude is required"
     })
         .min(-180)
-        .max(180),
+        .max(180).optional(),
     ending_location_name: z.string({
         required_error: "Ending location name is required"
-    }),
+    }).optional(),
     ending_location_latitude: z
         .number({
         required_error: "Ending location latitude is required"
     })
         .min(-90)
-        .max(90),
+        .max(90).optional(),
     ending_location_longitude: z
         .number({
         required_error: "Ending location longitude is required"
     })
         .min(-180)
-        .max(180)
+        .max(180).optional()
 });
 export const transportUpdationSchema = z.object({
     transport_type: z.string().optional(),
