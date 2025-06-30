@@ -39,7 +39,6 @@ class TravelPlanDao implements ITravelPlan {
     async updateTravelPlanById(travel_plan_id: string, updatePlayload: travelPlanInput): Promise<string> {
         // will look later at this
         const travelplan = await db("travel_plans").where({travel_plan_id: travel_plan_id}).update({
-                planner_id: updatePlayload.planner_id,
                 start_date: updatePlayload.start_date,
                 end_date: updatePlayload.end_data,
                 note: updatePlayload.note,
