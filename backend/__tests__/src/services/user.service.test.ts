@@ -59,6 +59,20 @@ describe('User Service', () => {
 
             await expect(userService.updateUser('john', {})).rejects.toThrow('user not found');
         });
+
+
+        it('should update user without password hashing if no password provided', async () => {
+            (userDAO.getUserByUsername as jest.Mock).mockResolvedValue(mockCreatedUser);
+            (userDAO.updateUser as jest.Mock).mockResolvedValue({ ...mockCreatedUser, bio: 'bio change' });
+
+            const result = await userService.updateUser('testuser', {
+                bio: 'bio change'
+            });
+
+            expect(hash).not.toHaveBeenCalled();
+            expect(result.bio).toBe('bio change');
+        });
+
     });
 
     describe('deleteUser', () => {

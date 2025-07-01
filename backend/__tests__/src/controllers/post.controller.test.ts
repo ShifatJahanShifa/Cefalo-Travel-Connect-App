@@ -93,6 +93,7 @@ describe('Post Controller', () => {
             await getAllPosts(req as any, res, next);
             expect(next).toHaveBeenCalled();
         });
+
     });
 
     describe('getPostByPostID', () => {
@@ -151,6 +152,7 @@ describe('Post Controller', () => {
             await deletePost(req as any, res, next);
             expect(next).toHaveBeenCalled();
         });
+
     });
 
     describe('getPostsByUserID', () => {
@@ -205,6 +207,36 @@ describe('Post Controller', () => {
             await searchPosts(req as any, res, next);
             expect(next).toHaveBeenCalled();
         });
+
+
+        it('should handle missing min_cost and max_cost (undefined case)', async () => {
+            req.query = {
+                title: 'Trip',
+                transport_type: 'bus',
+                place_name: 'Beach',
+                restaurant_name: 'Café',
+                accommodation_type: 'hotel',
+                
+            };
+
+            (PostService.searchPosts as jest.Mock).mockResolvedValue([mockPostDTO]);
+
+            await searchPosts(req as any, res, next);
+
+            expect(PostService.searchPosts).toHaveBeenCalledWith({
+                title: 'Trip',
+                min_cost: undefined,
+                max_cost: undefined,
+                transport_type: 'bus',
+                place_name: 'Beach',
+                restaurant_name: 'Café',
+                accommodation_type: 'hotel',
+            });
+
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith([mockPostDTO]);
+        });
+
     });
 
     describe('togglePostLike', () => {

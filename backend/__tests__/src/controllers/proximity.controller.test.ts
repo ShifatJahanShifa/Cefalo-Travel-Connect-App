@@ -168,6 +168,23 @@ describe('Proximity Controller', () => {
             }]);
         });
 
+        it('should skip proximity if distance is greater than radius (no alert)', async () => {
+            req.body = { userLat: 10, userLong: 20 };
+
+            (UserService.getUserByUsername as jest.Mock).mockResolvedValue(mockUser);
+            (ProximityService.findUserProximity as jest.Mock).mockResolvedValue([{ ...mockProximityDTO }]);
+            (WishlistService.getWishlistById as jest.Mock).mockResolvedValue(mockWishlist);
+            (getDistanceInKm as jest.Mock).mockReturnValue(10); 
+
+            await checkProximities(req, res, next);
+
+            expect(getDistanceInKm).toHaveBeenCalledWith(10, 20, 10, 20);
+            expect(ProximityService.deleteProximityById).not.toHaveBeenCalled(); 
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith([]); 
+        });
+
+
         it('should call next on error', async () => {
             const error = new Error('Check error');
             (UserService.getUserByUsername as jest.Mock).mockRejectedValue(error);

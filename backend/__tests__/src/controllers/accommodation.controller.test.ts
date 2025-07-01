@@ -127,7 +127,7 @@ describe('Accommodation Controller', () => {
 
             await getAccommodationsByProximity(req as Request, res as Response, next);
 
-            expect(AccommodationService.getAccommodationsByProximity).toHaveBeenCalledWith(23, 90, 10); // Note: parseInt behavior
+            expect(AccommodationService.getAccommodationsByProximity).toHaveBeenCalledWith(23, 90, 10); 
             expect(res.status).toHaveBeenCalledWith(200);
             expect(res.json).toHaveBeenCalledWith([mockAccommodationDTO]);
         });

@@ -63,6 +63,27 @@ describe('Wishlist Service', () => {
             await expect(wishlistService.getWishlists(1, 10)).rejects.toThrow(AppError);
         });
 
+
+        it('should return wishlist without place info if placeDao.getById returns empty', async () => {
+            const wishlistWithoutMatch = [{ ...mockWishlist, reference_id: 'place-404' }];
+            (wishlistDao.getWishlists as jest.Mock).mockResolvedValue(wishlistWithoutMatch);
+            (placeDao.getById as jest.Mock).mockResolvedValue([]);
+
+            const result = await wishlistService.getWishlists(1, 10);
+
+            expect(result[0]).toBeInstanceOf(WishlistDTO);
+        });
+
+        it('should return wishlist without fetching places if no place-type items exist', async () => {
+            const nonPlaceWishlist = [{ ...mockWishlist, type: 'restaurant' }];
+            (wishlistDao.getWishlists as jest.Mock).mockResolvedValue(nonPlaceWishlist);
+
+            const result = await wishlistService.getWishlists(1, 10);
+
+            expect(result[0]).toBeInstanceOf(WishlistDTO);
+        });
+
+
     });
 
     describe('getWishlistById', () => {
@@ -89,6 +110,28 @@ describe('Wishlist Service', () => {
 
             await expect(wishlistService.getWishlistById('wish1')).rejects.toThrow('wishlist is not public');
         });
+
+        it('should return wishlist even if type is not "place"', async () => {
+            const wishlistWithTypeOther = { ...mockWishlist, type: 'restaurant', is_public: true };
+            (wishlistDao.getWishlistById as jest.Mock).mockResolvedValue(wishlistWithTypeOther);
+
+            const result = await wishlistService.getWishlistById('wish1');
+
+            expect(result).toBeInstanceOf(WishlistDTO);
+        });
+
+
+        it('should return wishlist even if placeDao.getById returns undefined', async () => {
+            const placeTypeWishlist = { ...mockWishlist, type: 'place', is_public: true };
+            (wishlistDao.getWishlistById as jest.Mock).mockResolvedValue(placeTypeWishlist);
+            (placeDao.getById as jest.Mock).mockResolvedValue(undefined); 
+
+            const result = await wishlistService.getWishlistById('wish1');
+
+            expect(result).toBeInstanceOf(WishlistDTO);
+        });
+
+
     });
 
     describe('updateWishlist', () => {
@@ -108,6 +151,14 @@ describe('Wishlist Service', () => {
             await expect(wishlistService.updateWishlist('wish1', { ...mockWishlist }))
                 .rejects.toThrow('You are not authorized to update wishlist');
         });
+
+        it('should throw if wishlist to update does not exist', async () => {
+            (wishlistDao.getWishlistById as jest.Mock).mockResolvedValue(undefined);
+
+            await expect(wishlistService.updateWishlist('wish404', { ...mockWishlist }))
+                .rejects.toThrow('wishlist is not found');
+        });
+
     });
 
     describe('deleteWishlist', () => {
@@ -126,6 +177,14 @@ describe('Wishlist Service', () => {
 
             await expect(wishlistService.deleteWishlist('wish1', 'user1')).rejects.toThrow('You are not authorized to update wishlist');
         });
+
+        it('should throw if wishlist to delete does not exist', async () => {
+            (wishlistDao.getWishlistById as jest.Mock).mockResolvedValue(undefined);
+
+            await expect(wishlistService.deleteWishlist('wish404', 'user1'))
+                .rejects.toThrow('wishlist is not found');
+        });
+
     });
 
     describe('getWishlistByUserid', () => {
@@ -169,5 +228,14 @@ describe('Wishlist Service', () => {
 
             await expect(wishlistService.groupUsersByWishlistTheme('Theme')).rejects.toThrow('no user matchted found');
         });
+
+        it('should return empty array if no users found but result is empty array', async () => {
+            (wishlistDao.groupUsersByWishlistTheme as jest.Mock).mockResolvedValue([]);
+
+            const result = await wishlistService.groupUsersByWishlistTheme('empty-theme');
+
+            expect(result).toEqual([]);
+        });
+
     });
 });

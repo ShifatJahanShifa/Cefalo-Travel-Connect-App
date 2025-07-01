@@ -113,5 +113,5 @@
   "ts-node": {
     "esm": true
   },
-  "include": ["src", "tests", "__tests__/__mocks__", "__tests__/src/services", "__tests__/src/middlewares", "__tests__/src/utils", "__tests__/app.test.ts"]
+  "include": ["src", "tests", "__tests__/__mocks__", "__tests__/src/services", "__tests__/src/middlewares", "__tests__/src/controllers", "__tests__/src/validations", "__tests__/src/utils", "__tests__/app.test.ts"]
 }

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/15</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>0/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -103,37 +103,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { NextFunction, Response } from "express";
 import { ExpressRequest } from "../middlewares/auth.middleware.ts";
@@ -141,35 +141,35 @@ import { travelPlanComment } from "../types/travelplan.type.ts";
 import { TravelPlanCommentDTO } from "../DTOs/travelplanmessage.dto.ts";
 import * as TravelPlanCommentService from "../services/travelplancomment.service.ts"
 &nbsp;
-export const createTravelPlanComment = async(req: ExpressRequest, res: Response, next: NextFunction): Promise&lt;void&gt; =&gt; {
-    try {
-        const payload: travelPlanComment = {
+export const createTravelPlanComment = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async(</span>req: ExpressRequest, res: Response, next: NextFunction): Promise&lt;void&gt; =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    try {</span>
+        const payload: travelPlanComment = <span class="cstat-no" title="statement not covered" >{</span>
             travel_plan_id: req.params.travel_plan_id,
             sender_id: req.body.sender_id,
             message: req.body.message
         }
 &nbsp;
-        const result: TravelPlanCommentDTO = await TravelPlanCommentService.createTravelPlanComment(payload)
+        const result: TravelPlanCommentDTO = <span class="cstat-no" title="statement not covered" >await TravelPlanCommentService.createTravelPlanComment(payload)</span>
 &nbsp;
-        res.status(201).json(result)
+<span class="cstat-no" title="statement not covered" >        res.status(201).json(result)</span>
     }
     catch(error) 
     {
-        next(error)
+<span class="cstat-no" title="statement not covered" >        next(error)</span>
     }
 }
 &nbsp;
-export const getTravelPlanComments = async(req: ExpressRequest, res: Response, next: NextFunction): Promise&lt;void&gt; =&gt; {
-    try {
-            const travel_plan_id =  req.params.travel_plan_id
+export const getTravelPlanComments = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async(</span>req: ExpressRequest, res: Response, next: NextFunction): Promise&lt;void&gt; =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    try {</span>
+            const travel_plan_id =  <span class="cstat-no" title="statement not covered" >req.params.travel_plan_id</span>
         
-            const results: TravelPlanCommentDTO[] = await TravelPlanCommentService.getTravelPlanComments(travel_plan_id)
+            const results: TravelPlanCommentDTO[] = <span class="cstat-no" title="statement not covered" >await TravelPlanCommentService.getTravelPlanComments(travel_plan_id)</span>
 &nbsp;
-            res.status(200).json(results)
+<span class="cstat-no" title="statement not covered" >            res.status(200).json(results)</span>
     }
     catch(error) 
     {
-        next(error)
+<span class="cstat-no" title="statement not covered" >        next(error)</span>
     }
 } </pre></td></tr></table></pre>
 
@@ -178,7 +178,7 @@ export const getTravelPlanComments = async(req: ExpressRequest, res: Response, n
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T06:59:53.294Z
+                at 2025-07-01T00:37:27.456Z
             </div>
         <script src="../prettify.js"></script>
         <script>

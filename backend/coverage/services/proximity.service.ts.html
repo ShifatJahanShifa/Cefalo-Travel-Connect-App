@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>23/23</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>17/17</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -94,67 +94,67 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ProximityDTO } from "../DTOs/proximity.dto.ts";
 import proximityDao from "../repositories/dao/proximity.repository.ts";
 import { proximity } from "../types/proximity.type.ts";
 &nbsp;
 &nbsp;
-export const createProximity = async (input: proximity): Promise&lt;ProximityDTO&gt; =&gt; {
-    const result: proximity = await proximityDao.createProximity(input)
-    return new ProximityDTO(result)
+export const createProximity = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(input: proximity): Promise&lt;ProximityDTO&gt; =&gt; {</span>
+    const result: proximity = <span class="cstat-no" title="statement not covered" >await proximityDao.createProximity(input)</span>
+<span class="cstat-no" title="statement not covered" >    return new ProximityDTO(result)</span>
 }
 &nbsp;
-export const findUserProximity = async (user_id: string): Promise&lt;ProximityDTO[]&gt; =&gt; {
-    const results: proximity[] = await proximityDao.findUserProximity(user_id)
-    return results.map(result =&gt; new ProximityDTO(result))
-}
-&nbsp;
-&nbsp;
-export const updateProximity = async (input: proximity): Promise&lt;ProximityDTO&gt; =&gt; {
-    const result: proximity = await proximityDao.updateProximity(input)
-    return new ProximityDTO(result)
+export const findUserProximity = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(user_id: string): Promise&lt;ProximityDTO[]&gt; =&gt; {</span>
+    const results: proximity[] = <span class="cstat-no" title="statement not covered" >await proximityDao.findUserProximity(user_id)</span>
+<span class="cstat-no" title="statement not covered" >    return results.map(<span class="fstat-no" title="function not covered" >result </span>=&gt; <span class="cstat-no" title="statement not covered" >new ProximityDTO(result))</span></span>
 }
 &nbsp;
 &nbsp;
-export const deleteProximityById = async (proximity_id: string): Promise&lt;boolean&gt; =&gt; {
-    const result: boolean = await proximityDao.deleteProximityById(proximity_id)
-    return result
+export const updateProximity = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(input: proximity): Promise&lt;ProximityDTO&gt; =&gt; {</span>
+    const result: proximity = <span class="cstat-no" title="statement not covered" >await proximityDao.updateProximity(input)</span>
+<span class="cstat-no" title="statement not covered" >    return new ProximityDTO(result)</span>
 }
 &nbsp;
-export const deleteProximity = async (input: proximity): Promise&lt;boolean&gt; =&gt; {
-    const result: boolean = await proximityDao.deleteProximity(input)
-    return result
+&nbsp;
+export const deleteProximityById = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(proximity_id: string): Promise&lt;boolean&gt; =&gt; {</span>
+    const result: boolean = <span class="cstat-no" title="statement not covered" >await proximityDao.deleteProximityById(proximity_id)</span>
+<span class="cstat-no" title="statement not covered" >    return result</span>
+}
+&nbsp;
+export const deleteProximity = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(input: proximity): Promise&lt;boolean&gt; =&gt; {</span>
+    const result: boolean = <span class="cstat-no" title="statement not covered" >await proximityDao.deleteProximity(input)</span>
+<span class="cstat-no" title="statement not covered" >    return result</span>
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -163,7 +163,7 @@ export const deleteProximity = async (input: proximity): Promise&lt;boolean&gt; 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T06:59:53.294Z
+                at 2025-07-01T00:37:27.456Z
             </div>
         <script src="../prettify.js"></script>
         <script>

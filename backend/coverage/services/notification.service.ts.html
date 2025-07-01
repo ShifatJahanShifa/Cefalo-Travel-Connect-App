@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>23/23</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>17/17</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -94,68 +94,68 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { notificationDTO } from "../DTOs/notification.dto.ts";
 import notifcationRepository from "../repositories/dao/notification.repository.ts";
 import { notification } from "../types/notifcation.type.ts";
 &nbsp;
-export const createNotification = async(data: notification): Promise&lt;notificationDTO&gt; =&gt; {
-    const result: notification= await notifcationRepository.createNotification(data)
+export const createNotification = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async(</span>data: notification): Promise&lt;notificationDTO&gt; =&gt; {</span>
+    const result: notification= <span class="cstat-no" title="statement not covered" >await notifcationRepository.createNotification(data)</span>
 &nbsp;
-    return new notificationDTO(result)
+<span class="cstat-no" title="statement not covered" >    return new notificationDTO(result)</span>
 }
 &nbsp;
-export const getNotificationByUserId = async(user_id: string): Promise&lt;notificationDTO[]&gt; =&gt; {
-    const results: notification[] = await notifcationRepository.getNotificationByUserId(user_id)
+export const getNotificationByUserId = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async(</span>user_id: string): Promise&lt;notificationDTO[]&gt; =&gt; {</span>
+    const results: notification[] = <span class="cstat-no" title="statement not covered" >await notifcationRepository.getNotificationByUserId(user_id)</span>
 &nbsp;
-    return results.map(result =&gt; new notificationDTO(result))
+<span class="cstat-no" title="statement not covered" >    return results.map(<span class="fstat-no" title="function not covered" >result </span>=&gt; <span class="cstat-no" title="statement not covered" >new notificationDTO(result))</span></span>
 }
 &nbsp;
-export const getNotificationByNotificationId = async(notification_id: string): Promise&lt;notificationDTO&gt; =&gt; {
-    const result: notification = await notifcationRepository.getNotificationByNotificationId(notification_id)
+export const getNotificationByNotificationId = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async(</span>notification_id: string): Promise&lt;notificationDTO&gt; =&gt; {</span>
+    const result: notification = <span class="cstat-no" title="statement not covered" >await notifcationRepository.getNotificationByNotificationId(notification_id)</span>
 &nbsp;
-    return new notificationDTO(result)
+<span class="cstat-no" title="statement not covered" >    return new notificationDTO(result)</span>
 }
 &nbsp;
-export const markAsRead = async(notification_id: string): Promise&lt;notificationDTO&gt; =&gt; {
-    const result: notification = await notifcationRepository.markAsRead(notification_id)
-    return new notificationDTO(result)
+export const markAsRead = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async(</span>notification_id: string): Promise&lt;notificationDTO&gt; =&gt; {</span>
+    const result: notification = <span class="cstat-no" title="statement not covered" >await notifcationRepository.markAsRead(notification_id)</span>
+<span class="cstat-no" title="statement not covered" >    return new notificationDTO(result)</span>
 }
 &nbsp;
-export const deleteNotiffication = async(notification_id: string): Promise&lt;boolean&gt; =&gt; {
-    const result: boolean = await notifcationRepository.deleteNotiffication(notification_id)
+export const deleteNotiffication = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async(</span>notification_id: string): Promise&lt;boolean&gt; =&gt; {</span>
+    const result: boolean = <span class="cstat-no" title="statement not covered" >await notifcationRepository.deleteNotiffication(notification_id)</span>
 &nbsp;
-    return result
+<span class="cstat-no" title="statement not covered" >    return result</span>
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -163,7 +163,7 @@ export const deleteNotiffication = async(notification_id: string): Promise&lt;bo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T06:59:53.294Z
+                at 2025-07-01T00:37:27.456Z
             </div>
         <script src="../prettify.js"></script>
         <script>

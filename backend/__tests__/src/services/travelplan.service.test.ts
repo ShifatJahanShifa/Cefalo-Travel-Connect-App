@@ -181,11 +181,17 @@ describe('TravelPlan Service', () => {
             const result = await craeteTravelPlan(input);
 
             expect(travelPlanDao.craeteTravelPlan).toHaveBeenCalled();
-            // expect(accommodationDao.getAccommodationByTypeAndName).not.toHaveBeenCalled();
-            // expect(transportDao.getTransportByTypeAndName).not.toHaveBeenCalled();
-            // expect(placeDao.getPlaceByName).not.toHaveBeenCalled();
             expect(result).toBe('travel plan created');
         });
+
+
+        it('should throw AppError when member creation fails in createTravelPlan', async () => {
+            (travelPlanDao.craeteTravelPlan as jest.Mock).mockResolvedValue(mockTravelPlan);
+            (travelPlanMemberdao.addTravelPlanMember as jest.Mock).mockResolvedValue(undefined);
+
+            await expect(craeteTravelPlan(input)).rejects.toThrow(new AppError('failed to add creator of the travel plan', 500));
+        });
+
 
         it('should throw an AppError if adding creator member fails', async () => {
             (travelPlanDao.craeteTravelPlan as jest.Mock).mockResolvedValue(mockTravelPlan);
@@ -194,6 +200,125 @@ describe('TravelPlan Service', () => {
             await expect(craeteTravelPlan(input))
                 .rejects.toThrow(new AppError('failed to add creator of the travel plan', 500));
         });
+
+
+        // adding more testcase for increasing branch coverage
+
+        it('should skip accommodations creation if accommodations is empty', async () => {
+            const noAccommodations = { ...input, accommodations: [] };
+
+            (travelPlanDao.craeteTravelPlan as jest.Mock).mockResolvedValue(mockTravelPlan);
+            (travelPlanMemberdao.addTravelPlanMember as jest.Mock).mockResolvedValue(mockTravelPlanMember);
+
+            const result = await craeteTravelPlan(noAccommodations);
+
+            expect(accommodationDao.getAccommodationByTypeAndName).not.toHaveBeenCalled();
+            expect(accommodationDao.createAccommodation).not.toHaveBeenCalled();
+            expect(travelPlanAccommodationDao.createTravelPlanAccommodation).not.toHaveBeenCalled();
+            expect(result).toBe('travel plan created');
+        });
+
+
+        it('should skip transports creation if transports is empty', async () => {
+            const noTransports = { ...input, transports: [] };
+
+            (travelPlanDao.craeteTravelPlan as jest.Mock).mockResolvedValue(mockTravelPlan);
+            (travelPlanMemberdao.addTravelPlanMember as jest.Mock).mockResolvedValue(mockTravelPlanMember);
+
+            const result = await craeteTravelPlan(noTransports);
+
+            expect(transportDao.getTransportByTypeAndName).not.toHaveBeenCalled();
+            expect(transportDao.createTransport).not.toHaveBeenCalled();
+            expect(travelPlanTransportDao.createTravelPlanTransport).not.toHaveBeenCalled();
+            expect(result).toBe('travel plan created');
+        });
+
+
+        it('should skip places creation if places is empty', async () => {
+            const noPlaces = { ...input, places: [] };
+
+            (travelPlanDao.craeteTravelPlan as jest.Mock).mockResolvedValue(mockTravelPlan);
+            (travelPlanMemberdao.addTravelPlanMember as jest.Mock).mockResolvedValue(mockTravelPlanMember);
+
+            const result = await craeteTravelPlan(noPlaces);
+
+            expect(placeDao.getPlaceByName).not.toHaveBeenCalled();
+            expect(placeDao.createPlace).not.toHaveBeenCalled();
+            expect(travelPlanPlaceDao.createTravelPlanPlace).not.toHaveBeenCalled();
+            expect(result).toBe('travel plan created');
+        });
+
+        it('should create travel plan with only places input', async () => {
+            const onlyPlaces = {
+                ...input,
+                accommodations: [],
+                transports: [],
+            };
+
+            (travelPlanDao.craeteTravelPlan as jest.Mock).mockResolvedValue(mockTravelPlan);
+            (placeDao.getPlaceByName as jest.Mock).mockResolvedValue(null);
+            (placeDao.createPlace as jest.Mock).mockResolvedValue(mockPlace);
+            (travelPlanPlaceDao.createTravelPlanPlace as jest.Mock).mockResolvedValue(undefined);
+            (travelPlanMemberdao.addTravelPlanMember as jest.Mock).mockResolvedValue(mockTravelPlanMember);
+
+            const result = await craeteTravelPlan(onlyPlaces);
+
+            expect(placeDao.createPlace).toHaveBeenCalled();
+            expect(travelPlanPlaceDao.createTravelPlanPlace).toHaveBeenCalled();
+            expect(result).toBe('travel plan created');
+        });
+
+
+        it('should create travel plan with only transports input', async () => {
+            const onlyTransports = {
+                ...input,
+                accommodations: [],
+                places: [],
+            };
+
+            (travelPlanDao.craeteTravelPlan as jest.Mock).mockResolvedValue(mockTravelPlan);
+            (transportDao.getTransportByTypeAndName as jest.Mock).mockResolvedValue(null);
+            (transportDao.createTransport as jest.Mock).mockResolvedValue(mockTransport);
+            (travelPlanTransportDao.createTravelPlanTransport as jest.Mock).mockResolvedValue(undefined);
+            (travelPlanMemberdao.addTravelPlanMember as jest.Mock).mockResolvedValue(mockTravelPlanMember);
+
+            const result = await craeteTravelPlan(onlyTransports);
+
+            expect(transportDao.createTransport).toHaveBeenCalledWith({
+                transport_type: 'Bus',
+                transport_name: 'Test Bus',
+            });
+            expect(travelPlanTransportDao.createTravelPlanTransport).toHaveBeenCalledWith('plan1', 'trans1');
+            expect(result).toBe('travel plan created');
+        });
+
+
+        it('should create travel plan with only accommodations input', async () => {
+            const onlyAccommodations = {
+                ...input,
+                transports: [],
+                places: [],
+            };
+
+            (travelPlanDao.craeteTravelPlan as jest.Mock).mockResolvedValue(mockTravelPlan);
+            (accommodationDao.getAccommodationByTypeAndName as jest.Mock).mockResolvedValue(null);
+            (accommodationDao.createAccommodation as jest.Mock).mockResolvedValue(mockAccommodation);
+            (travelPlanAccommodationDao.createTravelPlanAccommodation as jest.Mock).mockResolvedValue(undefined);
+            (travelPlanMemberdao.addTravelPlanMember as jest.Mock).mockResolvedValue(mockTravelPlanMember);
+
+            const result = await craeteTravelPlan(onlyAccommodations);
+
+            expect(accommodationDao.createAccommodation).toHaveBeenCalledWith({
+                accommodation_name: 'Test Hotel',
+                accommodation_type: 'Hotel',
+                latitude: 40.7128,
+                longitude: -74.0060,
+            });
+            expect(travelPlanAccommodationDao.createTravelPlanAccommodation).toHaveBeenCalledWith('plan1', 'acc1');
+            expect(result).toBe('travel plan created');
+        });
+
+
     });
 
     describe('getTravelPlans', () => {
@@ -227,6 +352,21 @@ describe('TravelPlan Service', () => {
             expect(travelPlanDao.getTravelPlans).toHaveBeenCalledWith(1, 10);
             expect(result).toEqual([]);
         });
+
+
+        it('should handle travel plans with no associated transport,place,accommodation', async () => {
+            (travelPlanDao.getTravelPlans as jest.Mock).mockResolvedValue([mockTravelPlan]);
+            (travelPlanTransportDao.getById as jest.Mock).mockResolvedValue([]);
+            (travelPlanPlaceDao.getById as jest.Mock).mockResolvedValue([]);
+            (travelPlanAccommodationDao.getById as jest.Mock).mockResolvedValue([]);
+
+            const result = await getTravelPlans(1, 10);
+
+            expect(result[0].transports).toEqual([]);
+            expect(result[0].places).toEqual([]);
+            expect(result[0].accommodations).toEqual([]);
+        });
+
     });
 
     describe('getTravelPlanById', () => {
@@ -250,6 +390,46 @@ describe('TravelPlan Service', () => {
 
             await expect(getTravelPlanById('plan1')).rejects.toThrow(new AppError('travel plan not found', 404));
         });
+
+
+        it('should handle partial enrichment where some entities are not found', async () => {
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(mockTravelPlan);
+            (travelPlanTransportDao.getById as jest.Mock).mockResolvedValue([{ transport_id: 'trans1' }]);
+            (travelPlanPlaceDao.getById as jest.Mock).mockResolvedValue([{ place_id: 'place1' }]);
+            (travelPlanAccommodationDao.getById as jest.Mock).mockResolvedValue([{ accommodation_id: 'acc1' }]);
+            (transportDao.getById as jest.Mock).mockResolvedValue([]); 
+            (placeDao.getById as jest.Mock).mockResolvedValue([mockPlace]);
+            (accommodationDao.getById as jest.Mock).mockResolvedValue([]);
+
+            const result = await getTravelPlanById('plan1');
+
+            expect(result.transports).toEqual([{ transport_id: 'trans1' }]);
+            expect(result.accommodations).toEqual([{ accommodation_id: 'acc1' }]); 
+        });
+
+
+        it('should skip DAO calls and return empty arrays when IDs are empty in getTravelPlanById', async () => {
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(mockTravelPlan);
+            (travelPlanTransportDao.getById as jest.Mock).mockResolvedValue([]);
+            (travelPlanPlaceDao.getById as jest.Mock).mockResolvedValue([]);
+            (travelPlanAccommodationDao.getById as jest.Mock).mockResolvedValue([]);
+
+            (transportDao.getById as jest.Mock).mockResolvedValue([]);
+            (placeDao.getById as jest.Mock).mockResolvedValue([]);
+            (accommodationDao.getById as jest.Mock).mockResolvedValue([]);
+
+            const result = await getTravelPlanById('plan1');
+
+            expect(transportDao.getById).not.toHaveBeenCalled();
+            expect(placeDao.getById).not.toHaveBeenCalled();
+            expect(accommodationDao.getById).not.toHaveBeenCalled();
+
+            expect(result.transports).toEqual([]);
+            expect(result.places).toEqual([]);
+            expect(result.accommodations).toEqual([]);
+         });
+
+
     });
 
     describe('updateTravelPlan', () => {
@@ -285,7 +465,7 @@ describe('TravelPlan Service', () => {
         };
 
         it('should update a travel plan and associated entities', async () => {
-            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null); // Assuming bug fix: if(!travelPlan)
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null); 
             (travelPlanMemberdao.memberExists as jest.Mock).mockResolvedValue(null);
             (travelPlanDao.updateTravelPlanById as jest.Mock).mockResolvedValue(mockTravelPlan);
             (accommodationDao.getAccommodationByTypeAndName as jest.Mock).mockResolvedValue(mockAccommodation);
@@ -307,17 +487,130 @@ describe('TravelPlan Service', () => {
         });
 
         it('should throw an AppError if travel plan is not found', async () => {
-            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(mockTravelPlan); // Bug: if(travelPlan)
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(mockTravelPlan); 
 
             await expect(updateTravelPlan('plan1', input)).rejects.toThrow(new AppError('travel not found', 404));
         });
 
         it('should throw an AppError if user is a member but not creator', async () => {
-            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null); // Assuming bug fix
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null); 
             (travelPlanMemberdao.memberExists as jest.Mock).mockResolvedValue({ role: 'member' });
 
             await expect(updateTravelPlan('plan1', input)).rejects.toThrow(new AppError('you are not allowed to update the travelplan', 403));
         });
+
+
+        it('should update travel plan without updating any associated entities if none are provided', async () => {
+            const emptyInput = {
+                planner_id: 'user1',
+                title: 'Updated Plan',
+                description: 'New desc',
+                start_date: '12-12-2025',
+                end_data: '13-12-2025',
+                note: 'note',
+                estimated_cost: 100,
+                accommodations: [],
+                transports: [],
+                places: [],
+            };
+
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null);
+            (travelPlanMemberdao.memberExists as jest.Mock).mockResolvedValue({ role: 'creator' });
+            (travelPlanDao.updateTravelPlanById as jest.Mock).mockResolvedValue(mockTravelPlan);
+
+            const result = await updateTravelPlan('plan1', emptyInput);
+            expect(result).toBe('travel plan updated successfully');
+        });
+
+
+        it('should skip updates if related entity not found (e.g., accommodation)', async () => {
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null);
+            (travelPlanMemberdao.memberExists as jest.Mock).mockResolvedValue({ role: 'creator' });
+            (travelPlanDao.updateTravelPlanById as jest.Mock).mockResolvedValue(mockTravelPlan);
+            (accommodationDao.getAccommodationByTypeAndName as jest.Mock).mockResolvedValue(null);
+            (transportDao.getTransportByTypeAndName as jest.Mock).mockResolvedValue(null);
+            (placeDao.getPlaceByName as jest.Mock).mockResolvedValue(null);
+
+            const input = {
+                planner_id: 'user1',
+                title: 'Updated',
+                description: 'desc',
+                start_date: '12-12-2025',
+                end_data: '12-12-2025',
+                note: '',
+                estimated_cost: 0,
+                accommodations: [mockAccommodation],
+                transports: [mockTransport],
+                places: [mockPlace],
+            };
+
+            const result = await updateTravelPlan('plan1', input);
+
+            expect(travelPlanAccommodationDao.updateTravelPlanAccommodation).not.toHaveBeenCalled();
+            expect(travelPlanTransportDao.updateTravelPlanTransport).not.toHaveBeenCalled();
+            expect(travelPlanPlaceDao.updateTravelPlanPlace).not.toHaveBeenCalled();
+        });
+
+
+        it('should update travel plan with only accommodations input', async () => {
+            const inputOnlyAcc = {
+                ...input,
+                transports: [],
+                places: [],
+            };
+
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null);
+            (travelPlanMemberdao.memberExists as jest.Mock).mockResolvedValue({ role: 'creator' });
+            (travelPlanDao.updateTravelPlanById as jest.Mock).mockResolvedValue(mockTravelPlan);
+            (accommodationDao.getAccommodationByTypeAndName as jest.Mock).mockResolvedValue(mockAccommodation);
+            (travelPlanAccommodationDao.updateTravelPlanAccommodation as jest.Mock).mockResolvedValue(undefined);
+
+            const result = await updateTravelPlan('plan1', inputOnlyAcc);
+
+            expect(travelPlanAccommodationDao.updateTravelPlanAccommodation).toHaveBeenCalledWith('plan1', 'acc1');
+            expect(result).toBe('travel plan updated successfully');
+        });
+
+
+        it('should update travel plan with only transports input', async () => {
+            const inputOnlyTransports = {
+                ...input,
+                accommodations: [],
+                places: [],
+            };
+
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null);
+            (travelPlanMemberdao.memberExists as jest.Mock).mockResolvedValue({ role: 'creator' });
+            (travelPlanDao.updateTravelPlanById as jest.Mock).mockResolvedValue(mockTravelPlan);
+            (transportDao.getTransportByTypeAndName as jest.Mock).mockResolvedValue(mockTransport);
+            (travelPlanTransportDao.updateTravelPlanTransport as jest.Mock).mockResolvedValue(undefined);
+
+            const result = await updateTravelPlan('plan1', inputOnlyTransports);
+
+            expect(travelPlanTransportDao.updateTravelPlanTransport).toHaveBeenCalledWith('plan1', 'trans1');
+            expect(result).toBe('travel plan updated successfully');
+        });
+
+
+        it('should update travel plan with only places input', async () => {
+            const inputOnlyPlaces = {
+                ...input,
+                accommodations: [],
+                transports: [],
+            };
+
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null);
+            (travelPlanMemberdao.memberExists as jest.Mock).mockResolvedValue({ role: 'creator' });
+            (travelPlanDao.updateTravelPlanById as jest.Mock).mockResolvedValue(mockTravelPlan);
+            (placeDao.getPlaceByName as jest.Mock).mockResolvedValue(mockPlace);
+            (travelPlanPlaceDao.updateTravelPlanPlace as jest.Mock).mockResolvedValue(undefined);
+
+            const result = await updateTravelPlan('plan1', inputOnlyPlaces);
+
+            expect(travelPlanPlaceDao.updateTravelPlanPlace).toHaveBeenCalledWith('plan1', 'place1');
+            expect(result).toBe('travel plan updated successfully');
+        });
+
     });
 
     describe('deleteTravelPlan', () => {
@@ -335,17 +628,35 @@ describe('TravelPlan Service', () => {
         });
 
         it('should throw an AppError if travel plan is not found', async () => {
-            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(mockTravelPlan); // Bug: if(travelPlan)
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(mockTravelPlan); 
 
             await expect(deleteTravelPlan('plan1', 'user1')).rejects.toThrow(new AppError('travel plan not found', 404));
         });
 
         it('should throw an AppError if user is not creator', async () => {
-            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null); // Assuming bug fix
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null); 
             (travelPlanMemberdao.memberExists as jest.Mock).mockResolvedValue({ role: 'member' });
 
             await expect(deleteTravelPlan('plan1', 'user1')).rejects.toThrow(new AppError('you are not allowed to delete the travelplan', 403));
         });
+
+        
+        it('should throw error if deletion unexpectedly fails', async () => {
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null);
+            (travelPlanMemberdao.memberExists as jest.Mock).mockResolvedValue({ role: 'creator' });
+            (travelPlanDao.deleteTravelPlanById as jest.Mock).mockRejectedValue(new Error('Delete failed'));
+
+            await expect(deleteTravelPlan('plan1', 'user1')).rejects.toThrow('Delete failed');
+        });
+
+
+        it('should throw if member check returns null during deletion', async () => {
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null);
+            (travelPlanMemberdao.memberExists as jest.Mock).mockResolvedValue(null);
+
+            await expect(deleteTravelPlan('plan1', 'user1')).rejects.toThrow('Delete failed');
+        });
+
     });
 
     describe('getTravelPlansByMemberId', () => {
@@ -373,5 +684,18 @@ describe('TravelPlan Service', () => {
             expect(travelPlanDao.getTravelPlanByMemberId).toHaveBeenCalledWith('user1');
             expect(result).toEqual([]);
         });
+
+
+        it('should skip undefined entity IDs in getTravelPlansByMemberId', async () => {
+            (travelPlanDao.getTravelPlanByMemberId as jest.Mock).mockResolvedValue([mockTravelPlan]);
+            (travelPlanTransportDao.getById as jest.Mock).mockResolvedValue([{ transport_id: undefined }]);
+            (travelPlanPlaceDao.getById as jest.Mock).mockResolvedValue([{ place_id: undefined }]);
+            (travelPlanAccommodationDao.getById as jest.Mock).mockResolvedValue([{ accommodation_id: undefined }]);
+
+            const result = await getTravelPlansByMemberId('user1');
+
+            expect(result[0].transports).toEqual([{ transport_id: undefined }]);
+        });
+
     });
 });

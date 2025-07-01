@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -80,48 +80,48 @@
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import express from 'express'
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import express from 'express'
 import { Request, Response } from 'express'
 import { authenticate, ExpressRequest } from '../middlewares/auth.middleware.ts'
 import { createPost, getAllPosts, getPostByPostID, updatePost, deletePost, searchPosts, togglePostLike } from '../controllers/post.controller.ts'
 import { validatePostCreationData, validateUpdatePostData } from '../validations/validationMiddlewares/post.validation.ts'
 import { validatePagination } from '../validations/validationMiddlewares/pagination.validation.ts'
-export const postRouter = express.Router()
+export const postRouter = <span class="cstat-no" title="statement not covered" >express.Router()</span>
 // import { createPost, getAllPosts } from '../controllers/post.controller.ts'
 &nbsp;
-postRouter.post('/', authenticate, validatePostCreationData, createPost) 
-postRouter.get('/', authenticate, validatePagination, getAllPosts) 
-postRouter.get('/search/', authenticate, searchPosts)
-postRouter.get('/:post_id', authenticate, getPostByPostID)
-postRouter.post("/:postId/like", authenticate, togglePostLike)
+<span class="cstat-no" title="statement not covered" >postRouter.post('/', authenticate, validatePostCreationData, createPost) </span>
+<span class="cstat-no" title="statement not covered" >postRouter.get('/', authenticate, validatePagination, getAllPosts) </span>
+<span class="cstat-no" title="statement not covered" >postRouter.get('/search/', authenticate, searchPosts)</span>
+<span class="cstat-no" title="statement not covered" >postRouter.get('/:post_id', authenticate, getPostByPostID)</span>
+<span class="cstat-no" title="statement not covered" >postRouter.post("/:postId/like", authenticate, togglePostLike)</span>
 &nbsp;
 &nbsp;
-postRouter.patch('/:post_id', authenticate, validateUpdatePostData, updatePost)
-postRouter.delete('/:post_id', authenticate, deletePost)</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >postRouter.patch('/:post_id', authenticate, validateUpdatePostData, updatePost)</span>
+<span class="cstat-no" title="statement not covered" >postRouter.delete('/:post_id', authenticate, deletePost)</span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T06:59:53.052Z
+                at 2025-07-01T00:37:27.231Z
             </div>
         <script src="../prettify.js"></script>
         <script>

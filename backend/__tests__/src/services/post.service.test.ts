@@ -184,21 +184,214 @@ describe('Post Service', () => {
             expect(result).toBe(true);
         });
 
-        // i will refine this testcase later
-        it('should handle empty optional arrays', async () => {
+
+        it('should throw error if post creation fails', async () => {
+            (posttDAO.createPost as jest.Mock).mockRejectedValue(new Error('DB Error'));
+            await expect(PostService.createPost(input)).rejects.toThrow('DB Error');
+        });
+
+
+        it('should not update user role if already a traveller', async () => {
             (posttDAO.createPost as jest.Mock).mockResolvedValue(mockPost);
             (userDAO.getUserByID as jest.Mock).mockResolvedValue({ ...mockUser, role: 'traveller' });
 
             const result = await PostService.createPost(input);
+            expect(userDAO.updateUser).not.toHaveBeenCalled(); 
+            expect(result).toBe(true);
+        });
 
-            expect(posttDAO.createPost).toHaveBeenCalled();
-            expect(accommodationDao.getAccommodationByTypeAndName).toHaveBeenCalled();
-            expect(transportDao.getTransportByTypeAndName).toHaveBeenCalled();
-            expect(placeDao.getPlaceByName).toHaveBeenCalled();
+
+       it('should throw an error if user is not found during post creation', async () => {
+            (posttDAO.createPost as jest.Mock).mockResolvedValue(mockPost);
+           
+            (userDAO.getUserByID as jest.Mock).mockImplementation(() => {
+                throw new AppError('User not found', 404);
+            });
+
+            await expect(PostService.createPost({
+                ...input,
+                user_id: 'unknown-user',
+            })).rejects.toThrow('User not found'); 
+        });
+
+
+        it('should not create new accommodation if it already exists', async () => {
+            (posttDAO.createPost as jest.Mock).mockResolvedValue(mockPost);
+            (accommodationDao.getAccommodationByTypeAndName as jest.Mock).mockResolvedValue(mockAccommodation);
+            (postAccommodationDao.createPostAccommodation as jest.Mock).mockResolvedValue(undefined);
+            (userDAO.getUserByID as jest.Mock).mockResolvedValue(mockUser);
+
+            const result = await PostService.createPost({ ...input, transports: [], places: [], foods: [], images: [] });
+
+            expect(accommodationDao.createAccommodation).not.toHaveBeenCalled();
+            expect(result).toBe(true);
+        });
+
+        it('should not create new transport if it already exists', async () => {
+            (posttDAO.createPost as jest.Mock).mockResolvedValue(mockPost);
+            (accommodationDao.getAccommodationByTypeAndName as jest.Mock).mockResolvedValue(null);
+            (accommodationDao.createAccommodation as jest.Mock).mockResolvedValue(mockAccommodation);
+            (postAccommodationDao.createPostAccommodation as jest.Mock).mockResolvedValue(undefined);
+
+            (transportDao.getTransportByTypeAndName as jest.Mock).mockResolvedValue(mockTransport);
+            (postTransportDao.createPostTransport as jest.Mock).mockResolvedValue(undefined);
+
+            (userDAO.getUserByID as jest.Mock).mockResolvedValue(mockUser);
+
+            const result = await PostService.createPost({ ...input, places: [], foods: [], images: [] });
+
+            expect(transportDao.createTransport).not.toHaveBeenCalled();
+            expect(result).toBe(true);
+        });
+
+
+        it('should not create new place if it already exists', async () => {
+            (posttDAO.createPost as jest.Mock).mockResolvedValue(mockPost);
+            (accommodationDao.getAccommodationByTypeAndName as jest.Mock).mockResolvedValue(null);
+            (accommodationDao.createAccommodation as jest.Mock).mockResolvedValue(mockAccommodation);
+            (postAccommodationDao.createPostAccommodation as jest.Mock).mockResolvedValue(undefined);
+
+            (transportDao.getTransportByTypeAndName as jest.Mock).mockResolvedValue(null);
+            (transportDao.createTransport as jest.Mock).mockResolvedValue(mockTransport);
+            (postTransportDao.createPostTransport as jest.Mock).mockResolvedValue(undefined);
+
+            (placeDao.getPlaceByName as jest.Mock).mockResolvedValue(mockPlace);
+            (postPlaceDao.createPostPlace as jest.Mock).mockResolvedValue(undefined);
+
+            (userDAO.getUserByID as jest.Mock).mockResolvedValue(mockUser);
+
+            const result = await PostService.createPost({ ...input, foods: [], images: [] });
+
+            expect(placeDao.createPlace).not.toHaveBeenCalled();
+            expect(result).toBe(true);
+        });
+
+
+        //  i am adding more tests for branch coverage 
+
+        it('should process only accommodations when others are empty', async () => {
+            (posttDAO.createPost as jest.Mock).mockResolvedValue(mockPost);
+            (accommodationDao.getAccommodationByTypeAndName as jest.Mock).mockResolvedValue(null);
+            (accommodationDao.createAccommodation as jest.Mock).mockResolvedValue(mockAccommodation);
+            (postAccommodationDao.createPostAccommodation as jest.Mock).mockResolvedValue(undefined);
+            (userDAO.getUserByID as jest.Mock).mockResolvedValue(mockUser);
+
+            const result = await PostService.createPost({
+                ...input,
+                transports: [],
+                places: [],
+                foods: [],
+                images: []
+            });
+
+            expect(accommodationDao.createAccommodation).toHaveBeenCalled();
+            expect(transportDao.getTransportByTypeAndName).not.toHaveBeenCalled();
+            expect(placeDao.getPlaceByName).not.toHaveBeenCalled();
+            expect(postFoodDao.createPostFood).not.toHaveBeenCalled();
+            expect(postImageDao.createPostImage).not.toHaveBeenCalled();
+            expect(result).toBe(true);
+        });
+
+
+        it('should process only transports when others are empty', async () => {
+            (posttDAO.createPost as jest.Mock).mockResolvedValue(mockPost);
+            (transportDao.getTransportByTypeAndName as jest.Mock).mockResolvedValue(null);
+            (transportDao.createTransport as jest.Mock).mockResolvedValue(mockTransport);
+            (postTransportDao.createPostTransport as jest.Mock).mockResolvedValue(undefined);
+            (userDAO.getUserByID as jest.Mock).mockResolvedValue(mockUser);
+
+            const result = await PostService.createPost({
+                ...input,
+                accommodations: [],
+                places: [],
+                foods: [],
+                images: []
+            });
+
+            expect(accommodationDao.getAccommodationByTypeAndName).not.toHaveBeenCalled();
+            expect(transportDao.createTransport).toHaveBeenCalled();
+            expect(result).toBe(true);
+        });
+
+
+        it('should process only places when others are empty', async () => {
+            (posttDAO.createPost as jest.Mock).mockResolvedValue(mockPost);
+            (placeDao.getPlaceByName as jest.Mock).mockResolvedValue(null);
+            (placeDao.createPlace as jest.Mock).mockResolvedValue(mockPlace);
+            (postPlaceDao.createPostPlace as jest.Mock).mockResolvedValue(undefined);
+            (userDAO.getUserByID as jest.Mock).mockResolvedValue(mockUser);
+
+            const result = await PostService.createPost({
+                ...input,
+                accommodations: [],
+                transports: [],
+                foods: [],
+                images: []
+            });
+
+            expect(placeDao.createPlace).toHaveBeenCalled();
+            expect(accommodationDao.getAccommodationByTypeAndName).not.toHaveBeenCalled();
+            expect(result).toBe(true);
+        });
+
+
+        it('should process only foods when others are empty', async () => {
+            (posttDAO.createPost as jest.Mock).mockResolvedValue(mockPost);
+            (postFoodDao.createPostFood as jest.Mock).mockResolvedValue(undefined);
+            (userDAO.getUserByID as jest.Mock).mockResolvedValue(mockUser);
+
+            const result = await PostService.createPost({
+                ...input,
+                accommodations: [],
+                transports: [],
+                places: [],
+                images: []
+            });
+
             expect(postFoodDao.createPostFood).toHaveBeenCalled();
+            expect(result).toBe(true);
+        });
+
+
+        it('should process only images when others are empty', async () => {
+            (posttDAO.createPost as jest.Mock).mockResolvedValue(mockPost);
+            (postImageDao.createPostImage as jest.Mock).mockResolvedValue(undefined);
+            (userDAO.getUserByID as jest.Mock).mockResolvedValue(mockUser);
+
+            const result = await PostService.createPost({
+                ...input,
+                accommodations: [],
+                transports: [],
+                places: [],
+                foods: []
+            });
+
             expect(postImageDao.createPostImage).toHaveBeenCalled();
             expect(result).toBe(true);
         });
+
+        it('should handle createPost when all optional arrays are empty', async () => {
+            (posttDAO.createPost as jest.Mock).mockResolvedValue(mockPost);
+            (userDAO.getUserByID as jest.Mock).mockResolvedValue(mockUser);
+
+            const result = await PostService.createPost({
+                ...input,
+                accommodations: [],
+                transports: [],
+                places: [],
+                foods: [],
+                images: [],
+            });
+
+            expect(accommodationDao.getAccommodationByTypeAndName).not.toHaveBeenCalled();
+            expect(transportDao.getTransportByTypeAndName).not.toHaveBeenCalled();
+            expect(placeDao.getPlaceByName).not.toHaveBeenCalled();
+            expect(postFoodDao.createPostFood).not.toHaveBeenCalled();
+            expect(postImageDao.createPostImage).not.toHaveBeenCalled();
+            expect(result).toBe(true);
+        });
+
+
     });
 
 
@@ -237,6 +430,22 @@ describe('Post Service', () => {
             expect(posttDAO.getAllPosts).toHaveBeenCalledWith(1, 10);
             expect(result).toEqual([]);
         });
+
+        it('should handle missing related entities gracefully', async () => {
+            (posttDAO.getAllPosts as jest.Mock).mockResolvedValue([mockPost]);
+            (postTransportDao.getById as jest.Mock).mockResolvedValue([]); 
+            (postPlaceDao.getById as jest.Mock).mockResolvedValue([]);     
+            (postAccommodationDao.getById as jest.Mock).mockResolvedValue([]); 
+            (postFoodDao.getById as jest.Mock).mockResolvedValue([]);
+            (postImageDao.getById as jest.Mock).mockResolvedValue([]);
+            (transportDao.getById as jest.Mock).mockResolvedValue([]);
+            (placeDao.getById as jest.Mock).mockResolvedValue([]);
+            (accommodationDao.getById as jest.Mock).mockResolvedValue([]);
+
+            const result = await PostService.getAllPosts(1, 10);
+            expect(result).toHaveLength(1);
+        });
+
     });
 
     describe('getPostByPostID', () => {
@@ -263,23 +472,34 @@ describe('Post Service', () => {
             await expect(PostService.getPostByPostID('1')).rejects.toThrow(new AppError('post not found', 404));
             expect(posttDAO.getPostByPostID).toHaveBeenCalledWith('1');
         });
+
+
+         it('should return post with empty transports, places, accommodations when IDs are empty', async () => {
+            
+            (posttDAO.getPostByPostID as jest.Mock).mockResolvedValue(mockPost);
+
+            (postTransportDao.getById as jest.Mock).mockResolvedValue([]);
+            (postPlaceDao.getById as jest.Mock).mockResolvedValue([]);
+            (postAccommodationDao.getById as jest.Mock).mockResolvedValue([]);
+
+            (transportDao.getById as jest.Mock).mockResolvedValue([]);
+            (placeDao.getById as jest.Mock).mockResolvedValue([]);
+            (accommodationDao.getById as jest.Mock).mockResolvedValue([]);
+
+            const result = await PostService.getPostByPostID('1');
+
+            expect(posttDAO.getPostByPostID).toHaveBeenCalledWith('1');
+            expect(transportDao.getById).not.toHaveBeenCalled();
+            expect(placeDao.getById).not.toHaveBeenCalled();
+            expect(accommodationDao.getById).not.toHaveBeenCalled();
+
+            expect(result.transports).toEqual([]);
+            expect(result.places).toEqual([]);
+            expect(result.accommodations).toEqual([]);
+        });
     });
 
     describe('updatePost', () => {
-        // const input = {
-        //     user_id: 'user1',
-        //     title: 'Updated Post',
-        //     description: 'my post', 
-        //     total_cost: 23, 
-        //     duration: '2hr', 
-        //     effort: 'my effort', 
-        //     categories: ['travel'],
-        //     accommodations: [{ accommodation_name: 'Test Hotel', accommodation_type: 'Hotel', cost: 150, rating: 5, review: 'Amazing stay' }],
-        //     transports: [{ transport_name: 'Test Bus', transport_type: 'Bus', cost: 25, rating: 4, review: 'Smooth ride' }],
-        //     places: [{ place_name: 'Test Place', cost: 60, rating: 4, review: 'Great place' }],
-        //     foods: [mockFood],
-        //     images: [mockImage],
-        // }; 
 
         const input = {
             user_id: 'user1',
@@ -361,6 +581,132 @@ describe('Post Service', () => {
 
             await expect(PostService.updatePost('1', input)).rejects.toThrow(new AppError('you are not authorized to update the post', 403));
         });
+
+        it('should create new place if not found during update', async () => {
+            (posttDAO.getPostByPostID as jest.Mock).mockResolvedValue(mockPost);
+            (posttDAO.updatePost as jest.Mock).mockResolvedValue(mockPost);
+            (placeDao.getPlaceByName as jest.Mock).mockResolvedValue(null);
+            (placeDao.createPlace as jest.Mock).mockResolvedValue(mockPlace);
+            (postPlaceDao.updatePostPlace as jest.Mock).mockResolvedValue(undefined);
+
+            const result = await PostService.updatePost('1', input);
+            expect(placeDao.createPlace).not.toHaveBeenCalled();
+                expect(result).toBe('Post updated successfully');
+        });
+
+                    
+        it('should create new accommodation if not found during update', async () => {
+            (posttDAO.getPostByPostID as jest.Mock).mockResolvedValue(mockPost);
+            (posttDAO.updatePost as jest.Mock).mockResolvedValue(mockPost);
+            (accommodationDao.getAccommodationByTypeAndName as jest.Mock).mockResolvedValue(null);
+            (accommodationDao.createAccommodation as jest.Mock).mockResolvedValue(mockAccommodation);
+            (postAccommodationDao.updatePostAccommodation as jest.Mock).mockResolvedValue(undefined);
+            (postImageDao.deleteById as jest.Mock).mockResolvedValue(undefined);
+            (postImageDao.createPostImage as jest.Mock).mockResolvedValue(undefined);
+
+            const result = await PostService.updatePost('1', input);
+
+            expect(accommodationDao.createAccommodation).not.toHaveBeenCalled();
+            expect(result).toBe('Post updated successfully');
+        });
+
+
+        it('should not create new transport if it already exists during update', async () => {
+            (posttDAO.getPostByPostID as jest.Mock).mockResolvedValue(mockPost);
+            (posttDAO.updatePost as jest.Mock).mockResolvedValue(mockPost);
+
+            (transportDao.getTransportByTypeAndName as jest.Mock).mockResolvedValue(mockTransport);
+            (postTransportDao.updatePostTransport as jest.Mock).mockResolvedValue(undefined);
+
+            (postImageDao.deleteById as jest.Mock).mockResolvedValue(undefined);
+            (postImageDao.createPostImage as jest.Mock).mockResolvedValue(undefined);
+
+            const testInput = {
+                ...input,
+                accommodations: [], 
+                transports: [mockTransport],
+                places: [],
+                foods: [],
+                images: [],
+            };
+
+            const result = await PostService.updatePost('1', input);
+
+            expect(transportDao.createTransport).not.toHaveBeenCalled(); 
+            expect(result).toBe('Post updated successfully');
+        });
+
+
+        // adding more branch to increase branch coverage. 
+
+        it('should skip accommodation update if input.accommodations is empty', async () => {
+            const minimalInput = { ...input, accommodations: [] };
+
+            (posttDAO.getPostByPostID as jest.Mock).mockResolvedValue(mockPost);
+            (posttDAO.updatePost as jest.Mock).mockResolvedValue(mockPost);
+
+            const result = await PostService.updatePost('1', minimalInput);
+            expect(accommodationDao.getAccommodationByTypeAndName).not.toHaveBeenCalled();
+            expect(postAccommodationDao.updatePostAccommodation).not.toHaveBeenCalled();
+            expect(result).toBe('Post updated successfully');
+        });
+
+
+        it('should skip transport update if input.transports is empty', async () => {
+            const inputWithoutTransports = {
+                ...input,
+                transports: [],
+            };
+
+            (posttDAO.getPostByPostID as jest.Mock).mockResolvedValue(mockPost);
+            (posttDAO.updatePost as jest.Mock).mockResolvedValue(mockPost);
+
+            const result = await PostService.updatePost('1', inputWithoutTransports);
+
+            expect(transportDao.getTransportByTypeAndName).not.toHaveBeenCalled();
+            expect(postTransportDao.updatePostTransport).not.toHaveBeenCalled();
+            expect(result).toBe('Post updated successfully');
+        });
+
+
+         it('should skip place update if input.accommodations is empty', async () => {
+            const minimalInput = { ...input, places: [] };
+
+            (posttDAO.getPostByPostID as jest.Mock).mockResolvedValue(mockPost);
+            (posttDAO.updatePost as jest.Mock).mockResolvedValue(mockPost);
+
+            const result = await PostService.updatePost('1', minimalInput);
+            expect(placeDao.getPlaceByName).not.toHaveBeenCalled();
+            expect(placeDao.updatePlace).not.toHaveBeenCalled();
+            expect(result).toBe('Post updated successfully');
+        });
+
+
+        it('should skip food update if input.foods is empty', async () => {
+            const noFoods = { ...input, foods: [] };
+
+            (posttDAO.getPostByPostID as jest.Mock).mockResolvedValue(mockPost);
+            (posttDAO.updatePost as jest.Mock).mockResolvedValue(mockPost);
+
+            const result = await PostService.updatePost('1', noFoods);
+            expect(postFoodDao.updatePostFood).not.toHaveBeenCalled();
+            expect(result).toBe('Post updated successfully');
+        });
+
+
+        it('should skip image delete/create if input.images is empty', async () => {
+            const noImages = { ...input, images: [] };
+
+            (posttDAO.getPostByPostID as jest.Mock).mockResolvedValue(mockPost);
+            (posttDAO.updatePost as jest.Mock).mockResolvedValue(mockPost);
+
+            const result = await PostService.updatePost('1', noImages);
+            expect(postImageDao.deleteById).not.toHaveBeenCalled();
+            expect(postImageDao.createPostImage).not.toHaveBeenCalled();
+            expect(result).toBe('Post updated successfully');
+        });
+
+
     });
 
     describe('deletePost', () => {
@@ -413,6 +759,33 @@ describe('Post Service', () => {
 
             expect(posttDAO.getPostsByUserID).toHaveBeenCalledWith('user1');
             expect(result).toEqual([]);
+        });
+
+        it('should return posts with empty transports, places, accommodations when IDs are empty', async () => {
+
+            (posttDAO.getPostsByUserID as jest.Mock).mockResolvedValue([mockPost]);
+
+     
+            (postTransportDao.getById as jest.Mock).mockResolvedValue([]);
+            (postPlaceDao.getById as jest.Mock).mockResolvedValue([]);
+            (postAccommodationDao.getById as jest.Mock).mockResolvedValue([]);
+
+      
+            (transportDao.getById as jest.Mock).mockResolvedValue([]);
+            (placeDao.getById as jest.Mock).mockResolvedValue([]);
+            (accommodationDao.getById as jest.Mock).mockResolvedValue([]);
+
+            const result = await PostService.getPostsByUserID('user1');
+
+            expect(posttDAO.getPostsByUserID).toHaveBeenCalledWith('user1');
+            expect(transportDao.getById).not.toHaveBeenCalled();
+            expect(placeDao.getById).not.toHaveBeenCalled();
+            expect(accommodationDao.getById).not.toHaveBeenCalled();
+
+ 
+            expect(result[0].transports).toEqual([]);
+            expect(result[0].places).toEqual([]);
+            expect(result[0].accommodations).toEqual([]);
         });
     });
 
@@ -474,5 +847,14 @@ describe('Post Service', () => {
             expect(posttDAO.togglePostLike).toHaveBeenCalledWith('1', false);
             expect(result).toBe('Like removed');
         });
+
+        it('should throw if DAO fails during like toggle', async () => {
+            (postInteractionDao.getPostInteraction as jest.Mock).mockResolvedValue(null);
+            (postInteractionDao.createPostInteraction as jest.Mock).mockResolvedValue({});
+            (posttDAO.togglePostLike as jest.Mock).mockRejectedValue(new Error('DB failure'));
+
+            await expect(PostService.togglePostLike('1', 'user1')).rejects.toThrow('DB failure');
+        });
+
     });
 });

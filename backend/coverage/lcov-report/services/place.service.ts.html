@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>26/26</span>
+                <span class='fraction'>0/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>0/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>18/18</span>
+                <span class='fraction'>0/16</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -99,75 +99,75 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ExpressRequest } from "../middlewares/auth.middleware";
 import placeDao from "../repositories/dao/place.repository.ts";
 import { placeDTO } from "../DTOs/place.dto.ts";
 import { placeCreation, placeUpdation, getPlace } from "../types/place.type.ts";
 import { AppError } from "../utils/appError.ts";
 &nbsp;
-export const createPlace = async (data: placeCreation): Promise&lt;placeDTO&gt; =&gt; {
-    const place: placeCreation = await placeDao.createPlace(data)
-    return new placeDTO(place)
+export const createPlace = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(data: placeCreation): Promise&lt;placeDTO&gt; =&gt; {</span>
+    const place: placeCreation = <span class="cstat-no" title="statement not covered" >await placeDao.createPlace(data)</span>
+<span class="cstat-no" title="statement not covered" >    return new placeDTO(place)</span>
 }
 &nbsp;
-export const getPlaces = async (): Promise&lt;placeDTO[]&gt; =&gt; {
-    const places: getPlace[] = await placeDao.getPlaces()
-    return places.map((place) =&gt; new placeDTO(place))
+export const getPlaces = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(): Promise&lt;placeDTO[]&gt; =&gt; {</span>
+    const places: getPlace[] = <span class="cstat-no" title="statement not covered" >await placeDao.getPlaces()</span>
+<span class="cstat-no" title="statement not covered" >    return places.map(<span class="fstat-no" title="function not covered" >(p</span>lace) =&gt; <span class="cstat-no" title="statement not covered" >new placeDTO(place))</span></span>
 }
 &nbsp;
-export const getPlaceByName = async (name: string): Promise&lt;placeDTO|undefined&gt; =&gt; {
-    const place: getPlace = await placeDao.getPlaceByName(name)
+export const getPlaceByName = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(name: string): Promise&lt;placeDTO|undefined&gt; =&gt; {</span>
+    const place: getPlace = <span class="cstat-no" title="statement not covered" >await placeDao.getPlaceByName(name)</span>
     
     // if(!place) 
     // {
     //     throw new AppError("place not found", 404)
     // }
-    if(!place) return undefined 
-    return new placeDTO(place)
+<span class="cstat-no" title="statement not covered" >    if(!place) <span class="cstat-no" title="statement not covered" >return undefined </span></span>
+<span class="cstat-no" title="statement not covered" >    return new placeDTO(place)</span>
 }
 &nbsp;
-export const updatePlace = async (place_id: string, data: placeUpdation): Promise&lt;placeDTO&gt; =&gt; {
-    const place: placeCreation = await placeDao.updatePlace(place_id, data)
-    return new placeDTO(place)
+export const updatePlace = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(place_id: string, data: placeUpdation): Promise&lt;placeDTO&gt; =&gt; {</span>
+    const place: placeCreation = <span class="cstat-no" title="statement not covered" >await placeDao.updatePlace(place_id, data)</span>
+<span class="cstat-no" title="statement not covered" >    return new placeDTO(place)</span>
 }
 &nbsp;
-export const getPlacesByProximity = async(latitude: number, longitude: number, radius: number): Promise&lt;placeDTO[]&gt; =&gt; {
-    const places: getPlace[] = await placeDao.getPlacesByProximity(latitude, longitude, radius)
-    return places.map((place) =&gt; new placeDTO(place))
+export const getPlacesByProximity = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async(</span>latitude: number, longitude: number, radius: number): Promise&lt;placeDTO[]&gt; =&gt; {</span>
+    const places: getPlace[] = <span class="cstat-no" title="statement not covered" >await placeDao.getPlacesByProximity(latitude, longitude, radius)</span>
+<span class="cstat-no" title="statement not covered" >    return places.map(<span class="fstat-no" title="function not covered" >(p</span>lace) =&gt; <span class="cstat-no" title="statement not covered" >new placeDTO(place))</span></span>
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -175,7 +175,7 @@ export const getPlacesByProximity = async(latitude: number, longitude: number, r
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-06-30T06:59:53.052Z
+                at 2025-07-01T00:37:27.231Z
             </div>
         <script src="../prettify.js"></script>
         <script>

@@ -43,13 +43,6 @@ describe('TravelPlanMemberService', () => {
                 role: 'member',
             });
 
-            // expect(result).toEqual(expect.objectContaining({
-            //     travel_plan_id: 'tp001',
-            //     user_id: 'u001',
-            //     travel_plan_member_role: 'member',
-            //     email: undefined,
-            //     username: undefined,
-            // }));
         });
     });
 
@@ -66,15 +59,6 @@ describe('TravelPlanMemberService', () => {
             expect(travelPlanMemberdao.getTravelPlanMemmebrs).toHaveBeenCalledWith('tp001');
             expect(userDAO.getUserByID).toHaveBeenCalledWith('u001');
 
-            // expect(result).toEqual([
-            //     expect.objectContaining({
-            //     travel_plan_id: 'tp001',
-            //     user_id: 'u001',
-            //     travel_plan_member_role: 'member',
-            //     email: 'user@example.com',
-            //     username: 'john',
-            //     }),
-            // ]);
         });
     });
 
@@ -101,13 +85,6 @@ describe('TravelPlanMemberService', () => {
                 role: 'admin',
             });
 
-            // expect(result).toEqual(expect.objectContaining({
-            //     travel_plan_id: 'tp001',
-            //     user_id: 'u001',
-            //     travel_plan_member_role: 'member',
-            //     email: undefined,
-            //     username: undefined,
-            // }));
         });
 
         it('should throw error if requester is not creator', async () => {
@@ -126,18 +103,5 @@ describe('TravelPlanMemberService', () => {
 
             expect(travelPlanMemberdao.updateTravelPlanMemberRole).not.toHaveBeenCalled();
         });
-
-        // it('should throw error if requester does not exist', async () => {
-        //     (travelPlanMemberdao.memberExists as jest.Mock).mockResolvedValue(null);
-
-        //     await expect(TravelPlanMemberService.updateTravelPlanMemberRole(
-        //         {
-        //         travel_plan_id: 'tp001',
-        //         user_id: 'u001',
-        //         role: 'admin',
-        //         },
-        //         'u999'
-        //     )).rejects.toThrow(AppError);
-        // });
     });
 });
