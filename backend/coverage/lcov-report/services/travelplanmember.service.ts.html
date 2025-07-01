@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/18</span>
+                <span class='fraction'>25/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>20/20</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -95,38 +95,38 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { TravelPlanMemberDTO } from "../DTOs/travelplanmember.dto.ts";
 import travelPlanMemberdao from "../repositories/dao/travelplanmember.repository.ts"; 
 import userDAO from "../repositories/dao/user.respository.ts";
@@ -134,31 +134,31 @@ import { createdUser } from "../types/auth.type.ts";
 import { travelPlanMember, travelPlanMemberAdd } from "../types/travelplan.type.ts";
 import { AppError } from "../utils/appError.ts";
 &nbsp;
-export const addTravelPlanMember = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async(</span>data: travelPlanMemberAdd): Promise&lt;TravelPlanMemberDTO&gt; =&gt; {</span>
-    const result: travelPlanMember = <span class="cstat-no" title="statement not covered" >await travelPlanMemberdao.addTravelPlanMember(data)</span>
-<span class="cstat-no" title="statement not covered" >    return new TravelPlanMemberDTO(result)</span>
+export const addTravelPlanMember = async(data: travelPlanMemberAdd): Promise&lt;TravelPlanMemberDTO&gt; =&gt; {
+    const result: travelPlanMember = await travelPlanMemberdao.addTravelPlanMember(data)
+    return new TravelPlanMemberDTO(result)
 }
 &nbsp;
-export const getTravelPlanMemmebrs = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async(</span>travel_plan_id: string): Promise&lt;TravelPlanMemberDTO[]&gt; =&gt; {</span>
-    const results: travelPlanMember[] = <span class="cstat-no" title="statement not covered" >await travelPlanMemberdao.getTravelPlanMemmebrs(travel_plan_id)</span>
-<span class="cstat-no" title="statement not covered" >    for(let i=<span class="cstat-no" title="statement not covered" >0;</span> i&lt;results.length; i++)</span>
+export const getTravelPlanMemmebrs = async(travel_plan_id: string): Promise&lt;TravelPlanMemberDTO[]&gt; =&gt; {
+    const results: travelPlanMember[] = await travelPlanMemberdao.getTravelPlanMemmebrs(travel_plan_id)
+    for(let i=0; i&lt;results.length; i++)
     {
-        const user: createdUser = <span class="cstat-no" title="statement not covered" >await  userDAO.getUserByID(results[i].user_id)</span>
-<span class="cstat-no" title="statement not covered" >        results[i].email = user.email</span>
-<span class="cstat-no" title="statement not covered" >        results[i].username = user.username</span>
+        const user: createdUser = await  userDAO.getUserByID(results[i].user_id)
+        results[i].email = user.email
+        results[i].username = user.username
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return results.map(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >new TravelPlanMemberDTO(result))</span></span>
+    return results.map((result) =&gt; new TravelPlanMemberDTO(result))
 }
 &nbsp;
-export const updateTravelPlanMemberRole = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async(</span>data: travelPlanMemberAdd, requester_id: string): Promise&lt;TravelPlanMemberDTO&gt; =&gt; {</span>
-    const isExist = <span class="cstat-no" title="statement not covered" >await travelPlanMemberdao.memberExists(requester_id, data.travel_plan_id) </span>
-<span class="cstat-no" title="statement not covered" >    if(isExist &amp;&amp; isExist.role !== "creator") </span>
+export const updateTravelPlanMemberRole = async(data: travelPlanMemberAdd, requester_id: string): Promise&lt;TravelPlanMemberDTO&gt; =&gt; {
+    const isExist = await travelPlanMemberdao.memberExists(requester_id, data.travel_plan_id) 
+    if(isExist &amp;&amp; isExist.role !== "creator") 
     {
-<span class="cstat-no" title="statement not covered" >        throw new AppError("you are not allowed to update the role", 403)</span>
+        throw new AppError("you are not allowed to update the role", 403)
     }
-    const result: travelPlanMember = <span class="cstat-no" title="statement not covered" >await travelPlanMemberdao.updateTravelPlanMemberRole(data)</span>
-<span class="cstat-no" title="statement not covered" >    return new TravelPlanMemberDTO(result)</span>
+    const result: travelPlanMember = await travelPlanMemberdao.updateTravelPlanMemberRole(data)
+    return new TravelPlanMemberDTO(result)
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -166,7 +166,7 @@ export const updateTravelPlanMemberRole = <span class="cstat-no" title="statemen
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-01T00:37:27.231Z
+                at 2025-07-01T00:48:06.771Z
             </div>
         <script src="../prettify.js"></script>
         <script>

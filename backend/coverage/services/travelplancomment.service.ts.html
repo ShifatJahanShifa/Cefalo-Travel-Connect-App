@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>16/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -85,28 +85,28 @@
 <a name='L20'></a><a href='#L20'>20</a>
 <a name='L21'></a><a href='#L21'>21</a>
 <a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L23'></a><a href='#L23'>23</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { TravelPlanCommentDTO } from "../DTOs/travelplanmessage.dto.ts";
 import { travelPlanComment } from "../types/travelplan.type.ts";
 &nbsp;
@@ -114,21 +114,21 @@ import travelPlanCommentDao from "../repositories/dao/travelplanmessage.reposito
 import travelPlanMemberdao from "../repositories/dao/travelplanmember.repository.ts";
 import { AppError } from "../utils/appError.ts";
 &nbsp;
-export const createTravelPlanComment = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(data: travelPlanComment): Promise&lt;TravelPlanCommentDTO&gt; =&gt; {</span>
-    const isExist: boolean = <span class="cstat-no" title="statement not covered" >await travelPlanMemberdao.memberExists(data.sender_id, data.travel_plan_id) </span>
-<span class="cstat-no" title="statement not covered" >    if(!isExist) </span>
+export const createTravelPlanComment = async (data: travelPlanComment): Promise&lt;TravelPlanCommentDTO&gt; =&gt; {
+    const isExist: boolean = await travelPlanMemberdao.memberExists(data.sender_id, data.travel_plan_id) 
+    if(!isExist) 
     {
-<span class="cstat-no" title="statement not covered" >        throw new AppError("you are not allowed to comment", 403)</span>
+        throw new AppError("you are not allowed to comment", 403)
     }
-    const result = <span class="cstat-no" title="statement not covered" >await travelPlanCommentDao.createComment(data) </span>
+    const result = await travelPlanCommentDao.createComment(data) 
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return new TravelPlanCommentDTO(result)</span>
+    return new TravelPlanCommentDTO(result)
 }
 &nbsp;
-export const getTravelPlanComments = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(travel_plan_id: string): Promise&lt;TravelPlanCommentDTO[]&gt; =&gt; {</span>
-    const results = <span class="cstat-no" title="statement not covered" >await travelPlanCommentDao.getComments(travel_plan_id)</span>
+export const getTravelPlanComments = async (travel_plan_id: string): Promise&lt;TravelPlanCommentDTO[]&gt; =&gt; {
+    const results = await travelPlanCommentDao.getComments(travel_plan_id)
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return results.map(<span class="fstat-no" title="function not covered" >(r</span>esult) =&gt; <span class="cstat-no" title="statement not covered" >new TravelPlanCommentDTO(result))</span></span>
+    return results.map((result) =&gt; new TravelPlanCommentDTO(result))
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -136,7 +136,7 @@ export const getTravelPlanComments = <span class="cstat-no" title="statement not
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-01T00:37:27.456Z
+                at 2025-07-01T00:48:07.029Z
             </div>
         <script src="../prettify.js"></script>
         <script>

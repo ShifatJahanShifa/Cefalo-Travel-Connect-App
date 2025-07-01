@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>24/24</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -92,61 +92,61 @@
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ExpressRequest } from "../middlewares/auth.middleware";
 import restaurantDao from "../repositories/dao/restaurant.repository.ts";
 import { restaurantDTO } from "../DTOs/restaurant.dto.ts"
 import { restaurantCreation, restaurantUpdation, getRestaurant } from "../types/restaurant.type.ts";
 &nbsp;
-export const createRestaurant = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(data: restaurantCreation): Promise&lt;restaurantDTO&gt; =&gt; {</span>
-    const restaurant: restaurantCreation = <span class="cstat-no" title="statement not covered" >await restaurantDao.createRestaurant(data)</span>
-<span class="cstat-no" title="statement not covered" >    return new restaurantDTO(restaurant)</span>
+export const createRestaurant = async (data: restaurantCreation): Promise&lt;restaurantDTO&gt; =&gt; {
+    const restaurant: restaurantCreation = await restaurantDao.createRestaurant(data)
+    return new restaurantDTO(restaurant)
 }
 &nbsp;
-export const getRestaurants = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(): Promise&lt;restaurantDTO[]&gt; =&gt; {</span>
-    const restaurants: getRestaurant[] = <span class="cstat-no" title="statement not covered" >await restaurantDao.getRestaurants()</span>
-<span class="cstat-no" title="statement not covered" >    return restaurants.map(<span class="fstat-no" title="function not covered" >(r</span>estaurant) =&gt; <span class="cstat-no" title="statement not covered" >new restaurantDTO(restaurant))</span></span>
+export const getRestaurants = async (): Promise&lt;restaurantDTO[]&gt; =&gt; {
+    const restaurants: getRestaurant[] = await restaurantDao.getRestaurants()
+    return restaurants.map((restaurant) =&gt; new restaurantDTO(restaurant))
 }
 &nbsp;
-export const getRestaurantByTypeAndName = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(name: string): Promise&lt;restaurantDTO&gt; =&gt; {</span>
-    const restaurant: getRestaurant = <span class="cstat-no" title="statement not covered" >await restaurantDao.getRestaurantByName(name)</span>
-<span class="cstat-no" title="statement not covered" >    return new restaurantDTO(restaurant)</span>
+export const getRestaurantByTypeAndName = async (name: string): Promise&lt;restaurantDTO&gt; =&gt; {
+    const restaurant: getRestaurant = await restaurantDao.getRestaurantByName(name)
+    return new restaurantDTO(restaurant)
 }
 &nbsp;
-export const updateRestaurant = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(restaurant_id: string, data: restaurantUpdation): Promise&lt;restaurantDTO&gt; =&gt; {</span>
-    const restaurant: restaurantCreation = <span class="cstat-no" title="statement not covered" >await restaurantDao.updateRestaurant(restaurant_id, data)</span>
-<span class="cstat-no" title="statement not covered" >    return new restaurantDTO(restaurant)</span>
+export const updateRestaurant = async (restaurant_id: string, data: restaurantUpdation): Promise&lt;restaurantDTO&gt; =&gt; {
+    const restaurant: restaurantCreation = await restaurantDao.updateRestaurant(restaurant_id, data)
+    return new restaurantDTO(restaurant)
 }
 &nbsp;
-export const getRestaurantsByProximity = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async(</span>latitude: number, longitude: number, radius: number): Promise&lt;restaurantDTO[]&gt; =&gt; {</span>
-    const restaurants: getRestaurant[] = <span class="cstat-no" title="statement not covered" >await restaurantDao.getRestaurantsByProximity(latitude, longitude, radius)</span>
-<span class="cstat-no" title="statement not covered" >    return restaurants.map(<span class="fstat-no" title="function not covered" >(r</span>estaurant) =&gt; <span class="cstat-no" title="statement not covered" >new restaurantDTO(restaurant))</span></span>
+export const getRestaurantsByProximity = async(latitude: number, longitude: number, radius: number): Promise&lt;restaurantDTO[]&gt; =&gt; {
+    const restaurants: getRestaurant[] = await restaurantDao.getRestaurantsByProximity(latitude, longitude, radius)
+    return restaurants.map((restaurant) =&gt; new restaurantDTO(restaurant))
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -154,7 +154,7 @@ export const getRestaurantsByProximity = <span class="cstat-no" title="statement
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-01T00:37:27.456Z
+                at 2025-07-01T00:48:07.029Z
             </div>
         <script src="../prettify.js"></script>
         <script>

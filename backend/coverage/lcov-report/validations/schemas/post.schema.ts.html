@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -154,9 +154,9 @@
 <a name='L89'></a><a href='#L89'>89</a>
 <a name='L90'></a><a href='#L90'>90</a>
 <a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -166,7 +166,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,7 +177,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -192,7 +192,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -201,20 +201,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -231,7 +231,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -247,7 +247,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { z } from 'zod';
 &nbsp;
-const categoryEnum = <span class="cstat-no" title="statement not covered" >z.enum([</span>
+const categoryEnum = z.enum([
   'Adventure',
   'Beach',
   'Cultural Site',
@@ -257,7 +257,7 @@ const categoryEnum = <span class="cstat-no" title="statement not covered" >z.enu
   'Heritage',
 ]);
 &nbsp;
-const accommodationSchema = <span class="cstat-no" title="statement not covered" >z.object({</span>
+const accommodationSchema = z.object({
   accommodation_type: z.string(),
   accommodation_name: z.string().min(1),
   cost_per_night: z.number().optional(),
@@ -268,7 +268,7 @@ const accommodationSchema = <span class="cstat-no" title="statement not covered"
   review: z.string().min(1),
 });
 &nbsp;
-const transportSchema = <span class="cstat-no" title="statement not covered" >z.object({</span>
+const transportSchema = z.object({
   transport_type: z.string(),
   transport_name: z.string(),
   cost_per_person: z.number().optional(),
@@ -283,7 +283,7 @@ const transportSchema = <span class="cstat-no" title="statement not covered" >z.
   review: z.string().min(1),
 });
 &nbsp;
-const placeSchema = <span class="cstat-no" title="statement not covered" >z.object({</span>
+const placeSchema = z.object({
   place_name: z.string().min(1),
   latitude: z.number().optional(),
   longitude: z.number().optional(),
@@ -292,20 +292,20 @@ const placeSchema = <span class="cstat-no" title="statement not covered" >z.obje
   review: z.string().min(1),
 });
 &nbsp;
-const foodSchema = <span class="cstat-no" title="statement not covered" >z.object({</span>
+const foodSchema = z.object({
   food_name: z.string().min(1),
   cost: z.number().min(0),
   rating: z.number().int().min(0).max(5),
   review: z.string().min(1),
 });
 &nbsp;
-const imageSchema = <span class="cstat-no" title="statement not covered" >z.object({</span>
+const imageSchema = z.object({
   image_url: z.string().url(),
   caption: z.string().optional(),
 });
 &nbsp;
 &nbsp;
-export const createPostSchema = <span class="cstat-no" title="statement not covered" >z.object({</span>
+export const createPostSchema = z.object({
   user_id: z.string().min(1),
   title: z.string().min(1),
   description: z.string().min(1),
@@ -322,7 +322,7 @@ export const createPostSchema = <span class="cstat-no" title="statement not cove
 });
 &nbsp;
 &nbsp;
-export const updatePostSchema = <span class="cstat-no" title="statement not covered" >z.object({</span>
+export const updatePostSchema = z.object({
   title: z.string().min(1),
   description: z.string().min(1),
   total_cost: z.number().min(0),
@@ -343,7 +343,7 @@ export const updatePostSchema = <span class="cstat-no" title="statement not cove
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-01T00:37:27.231Z
+                at 2025-07-01T00:48:06.771Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

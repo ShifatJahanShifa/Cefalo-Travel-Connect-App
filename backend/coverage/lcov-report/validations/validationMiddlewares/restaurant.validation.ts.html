@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -92,60 +92,60 @@
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { Request, Response, NextFunction } from 'express';
 import { createRestaurantSchema, updateRestaurantSchema } from '../schemas/restaurant.schema.ts';
 import { ExpressRequest } from '../../middlewares/auth.middleware.ts';
 &nbsp;
-export const validateRestaurantCreationData = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>eq: ExpressRequest, res: Response, next: NextFunction): void =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-        const validatedData = <span class="cstat-no" title="statement not covered" >createRestaurantSchema.parse(req.body);</span>
-<span class="cstat-no" title="statement not covered" >        next();</span>
+export const validateRestaurantCreationData = (req: ExpressRequest, res: Response, next: NextFunction): void =&gt; {
+    try {
+        const validatedData = createRestaurantSchema.parse(req.body);
+        next();
     } 
     catch (err: any) {
-<span class="cstat-no" title="statement not covered" >            res.status(400).json({</span>
+            res.status(400).json({
             message: err.errors?.[0]?.message || 'Invalid input for Restaurant creation',
         });
-<span class="cstat-no" title="statement not covered" >        return;</span>
+        return;
     }
 };
 &nbsp;
-export const validateUpdateRestaurantData = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(r</span>eq: ExpressRequest, res: Response, next: NextFunction): void =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    try {</span>
-        const validatedData = <span class="cstat-no" title="statement not covered" >updateRestaurantSchema.parse(req.body);</span>
-<span class="cstat-no" title="statement not covered" >        next();</span>
+export const validateUpdateRestaurantData = (req: ExpressRequest, res: Response, next: NextFunction): void =&gt; {
+    try {
+        const validatedData = updateRestaurantSchema.parse(req.body);
+        next();
     } 
     catch (err: any) {
-<span class="cstat-no" title="statement not covered" >            res.status(400).json({</span>
+            res.status(400).json({
             message: err.errors?.[0]?.message || 'Invalid input for Restaurant creation',
         });
-<span class="cstat-no" title="statement not covered" >        return;</span>
+        return;
     }
 };</pre></td></tr></table></pre>
 
@@ -154,7 +154,7 @@ export const validateUpdateRestaurantData = <span class="cstat-no" title="statem
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-01T00:37:27.231Z
+                at 2025-07-01T00:48:06.771Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>24/24</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -92,61 +92,61 @@
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { ExpressRequest } from "../middlewares/auth.middleware";
 import transportDao from "../repositories/dao/transport.repository.ts";
 import { transportDTO } from "../DTOs/transport.dto.ts";
 import { transportCreation, transportUpdation, getTransport } from "../types/transport.type.ts";
 &nbsp;
-export const createtransport = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(data: transportCreation): Promise&lt;transportDTO&gt; =&gt; {</span>
-    const transport: transportCreation = <span class="cstat-no" title="statement not covered" >await transportDao.createTransport(data)</span>
-<span class="cstat-no" title="statement not covered" >    return new transportDTO(transport)</span>
+export const createtransport = async (data: transportCreation): Promise&lt;transportDTO&gt; =&gt; {
+    const transport: transportCreation = await transportDao.createTransport(data)
+    return new transportDTO(transport)
 }
 &nbsp;
-export const gettransports = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(): Promise&lt;transportDTO[]&gt; =&gt; {</span>
-    const transports: getTransport[] = <span class="cstat-no" title="statement not covered" >await transportDao.getTransports()</span>
-<span class="cstat-no" title="statement not covered" >    return transports.map(<span class="fstat-no" title="function not covered" >(t</span>ransport) =&gt; <span class="cstat-no" title="statement not covered" >new transportDTO(transport))</span></span>
+export const gettransports = async (): Promise&lt;transportDTO[]&gt; =&gt; {
+    const transports: getTransport[] = await transportDao.getTransports()
+    return transports.map((transport) =&gt; new transportDTO(transport))
 }
 &nbsp;
-export const gettransportByTypeAndName = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(type: string, name: string): Promise&lt;transportDTO&gt; =&gt; {</span>
-    const transport: getTransport = <span class="cstat-no" title="statement not covered" >await transportDao.getTransportByTypeAndName(type, name)</span>
-<span class="cstat-no" title="statement not covered" >    return new transportDTO(transport)</span>
+export const gettransportByTypeAndName = async (type: string, name: string): Promise&lt;transportDTO&gt; =&gt; {
+    const transport: getTransport = await transportDao.getTransportByTypeAndName(type, name)
+    return new transportDTO(transport)
 }
 &nbsp;
-export const updatetransport = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async </span>(transport_id: string, data: transportUpdation): Promise&lt;transportDTO&gt; =&gt; {</span>
-    const transport: transportCreation = <span class="cstat-no" title="statement not covered" >await transportDao.updateTransport(transport_id, data)</span>
-<span class="cstat-no" title="statement not covered" >    return new transportDTO(transport)</span>
+export const updatetransport = async (transport_id: string, data: transportUpdation): Promise&lt;transportDTO&gt; =&gt; {
+    const transport: transportCreation = await transportDao.updateTransport(transport_id, data)
+    return new transportDTO(transport)
 }
 &nbsp;
-export const gettransportsByProximity = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async(</span>latitude: number, longitude: number, radius: number): Promise&lt;transportDTO[]&gt; =&gt; {</span>
-    const transports: getTransport[] = <span class="cstat-no" title="statement not covered" >await transportDao.getTransportsByProximity(latitude, longitude, radius)</span>
-<span class="cstat-no" title="statement not covered" >    return transports.map(<span class="fstat-no" title="function not covered" >(t</span>ransport) =&gt; <span class="cstat-no" title="statement not covered" >new transportDTO(transport))</span></span>
+export const gettransportsByProximity = async(latitude: number, longitude: number, radius: number): Promise&lt;transportDTO[]&gt; =&gt; {
+    const transports: getTransport[] = await transportDao.getTransportsByProximity(latitude, longitude, radius)
+    return transports.map((transport) =&gt; new transportDTO(transport))
 }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -154,7 +154,7 @@ export const gettransportsByProximity = <span class="cstat-no" title="statement 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-01T00:37:27.456Z
+                at 2025-07-01T00:48:07.029Z
             </div>
         <script src="../prettify.js"></script>
         <script>
