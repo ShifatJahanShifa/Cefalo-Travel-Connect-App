@@ -99,5 +99,6 @@ export const refreshAccessToken = async (refreshToken: string): Promise<string> 
   }
 
   const newAccessToken: string = generateAccessToken(user)
+  console.log('new ', newAccessToken)
   return newAccessToken
 }

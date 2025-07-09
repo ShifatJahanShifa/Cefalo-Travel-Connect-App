@@ -67,10 +67,10 @@ export const getWishlistById = async(wishlist_id: string): Promise<WishlistDTO> 
         throw new AppError("wishlist not found", 404)
     }
 
-    if(!result.is_public)
-    {
-        throw new AppError("wishlist is not public", 400)
-    }
+    // if(!result.is_public)
+    // {
+    //     throw new AppError("wishlist is not public", 400)
+    // }
 
     if (result.type === 'place') {
         let ids = []
@@ -141,6 +141,7 @@ export const toggleVisibility = async(wishlist_id: string): Promise<string> => {
 
 // returning the type, not calling dto
 export const groupUsersByWishlistTheme = async (theme: string): Promise<groupedUsers[]> => {
+    console.log('see heer theme', theme)
     const results: groupedUsers[] = await wishlistDao.groupUsersByWishlistTheme(theme)
 
     if(!results) 

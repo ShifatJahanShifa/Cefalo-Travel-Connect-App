@@ -9,6 +9,7 @@ class Place implements IPlace {
     async createPlace(data: placeCreation): Promise<getPlace> {
 
         const { latitude, longitude } = data;
+        console.log()
 
         const [place] = await db("places")
         .insert({
@@ -95,7 +96,7 @@ class Place implements IPlace {
     }
 
     async getPlacesByProximity(latitude: number, longitude: number, radius: number): Promise<getPlace[]> {
-
+         console.log(latitude, longitude, radius)
         const places: getPlace[] = await db("places")
         .select(
             "place_id",

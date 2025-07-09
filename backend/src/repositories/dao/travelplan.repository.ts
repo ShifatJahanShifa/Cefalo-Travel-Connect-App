@@ -13,7 +13,7 @@ class TravelPlanDao implements ITravelPlan {
         const [travelplan] = await db("travel_plans").insert({
                 planner_id: input.planner_id,
                 start_date: input.start_date,
-                end_date: input.end_data,
+                end_date: input.end_date,
                 note: input.note,
                 estimated_cost: input.estimated_cost 
             })
@@ -40,7 +40,7 @@ class TravelPlanDao implements ITravelPlan {
         // will look later at this
         const travelplan = await db("travel_plans").where({travel_plan_id: travel_plan_id}).update({
                 start_date: updatePlayload.start_date,
-                end_date: updatePlayload.end_data,
+                end_date: updatePlayload.end_date,
                 note: updatePlayload.note,
                 estimated_cost: updatePlayload.estimated_cost 
             })

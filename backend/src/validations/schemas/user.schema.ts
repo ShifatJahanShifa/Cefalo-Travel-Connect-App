@@ -21,5 +21,10 @@ export const updateUserSchema = z.object({
   hashed_password: z 
     .string()
     .max(70, 'Password length at most 70 characters')
+    .optional(),
+  
+  phone_no: z 
+    .string()
+    .max(15, 'phone nolength at most 70 characters')
     .optional()
 });

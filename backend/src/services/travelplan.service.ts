@@ -270,7 +270,7 @@ export const getTravelPlanById = async(travel_plan_id: string): Promise<TravelPl
 export const updateTravelPlan = async (travel_plan_id: string, input: travelPlanInput): Promise<string> => {
     const travelPlan = await travelPlanDao.getTravelPlanById(travel_plan_id)
 
-    if(travelPlan) 
+    if(!travelPlan) 
     {
         throw new AppError("travel not found", 404);
     }
@@ -338,7 +338,7 @@ export const updateTravelPlan = async (travel_plan_id: string, input: travelPlan
 export const deleteTravelPlan = async(travel_plan_id: string, user_id: string): Promise<string> => {
     const travelPlan = await travelPlanDao.getTravelPlanById(travel_plan_id)
 
-    if(travelPlan) 
+    if(!travelPlan) 
     {
         throw new AppError("travel plan not found", 404);
     }

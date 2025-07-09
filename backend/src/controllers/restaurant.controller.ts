@@ -47,9 +47,9 @@ export const updateRestaurant = async(req:ExpressRequest, res: Response, next: N
 
 export const getRestaurantsByProximity = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const latitude: number = parseInt(req.query.latitude as string)
-        const longitude: number = parseInt(req.query.longitude as string)
-        const radius: number = parseInt(req.query.radius as string)
+        const latitude: number = parseFloat(req.query.latitude as string)
+        const longitude: number = parseFloat(req.query.longitude as string)
+        const radius: number = parseFloat(req.query.radius as string)
 
         const data: restaurantDTO[] = await RestaurantService.getRestaurantsByProximity(latitude, longitude, radius)
         

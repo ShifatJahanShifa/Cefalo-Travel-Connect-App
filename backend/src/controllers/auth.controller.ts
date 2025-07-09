@@ -11,6 +11,7 @@ export const signup = async (req: Request, res: Response, next: NextFunction): P
     res
       .cookie('refreshToken', result.refreshToken, {
         httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
         sameSite: 'none',
         maxAge: 365 * 24 * 60 * 60 * 1000 
       })
@@ -29,6 +30,7 @@ export const signin = async (req: Request, res: Response, next: NextFunction): P
         res
         .cookie('refreshToken', result.refreshToken, {
           httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
           sameSite: 'none',
           maxAge: 365 * 24 * 60 * 60 * 1000 
         })
@@ -57,7 +59,7 @@ export const refreshAccessToken = async (req: ExpressRequest, res: Response, nex
     res.status(401).json({ message: 'Missing refresh token' });
     return;
   }
-
+ console.log(refreshToken)
   try {
     const newAccessToken = await authService.refreshAccessToken(refreshToken);
     res.header('Authorization', `Bearer ${newAccessToken}`)

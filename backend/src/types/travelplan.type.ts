@@ -1,7 +1,7 @@
 export type travelPlanInput = {
     planner_id?: string
     start_date: string 
-    end_data: string 
+    end_date: string 
     note: string 
     estimated_cost: number
 

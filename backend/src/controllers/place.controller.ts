@@ -47,9 +47,9 @@ export const updatePlace = async(req:ExpressRequest, res: Response, next: NextFu
 
 export const getPlacesByProximity = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const latitude: number = parseInt(req.query.latitude as string)
-        const longitude: number = parseInt(req.query.longitude as string)
-        const radius: number = parseInt(req.query.radius as string)
+        const latitude: number = parseFloat(req.query.latitude as string)
+        const longitude: number = parseFloat(req.query.longitude as string)
+        const radius: number = parseFloat(req.query.radius as string)
 
         const data: placeDTO[] = await PlaceService.getPlacesByProximity(latitude, longitude, radius)
         

@@ -31,8 +31,9 @@ export async function updateUser(username: string, updateUser: updateUserInfo): 
       const hashedPassword = await hash(updateUser.hashed_password, 10)
       updateUser.hashed_password=hashedPassword
     }
+    console.log(updateUser, 'sis')
     const updatedUser: createdUser = await userDAO.updateUser(username, updateUser);
-    
+    console.log(updatedUser, 'aa')
     return new UserDTO(updatedUser)
 }
 

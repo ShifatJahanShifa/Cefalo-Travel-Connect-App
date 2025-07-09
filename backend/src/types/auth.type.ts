@@ -6,6 +6,7 @@ export type createdUser = {
   role: 'explorer' | 'traveller' | 'admin';
   profile_picture_url: string | null;
   bio: string | null;
+  phone_no: string | null;
   created_at: Date;
   updated_at: Date;
 }

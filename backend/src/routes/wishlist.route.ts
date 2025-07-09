@@ -5,7 +5,8 @@ import { validateWishlistCreationData } from '../validations/validationMiddlewar
 export const wishlistRouter = express.Router()
 
 // add authorization
-wishlistRouter.get('/grouped/users', authenticate, groupUsersByWishlistTheme)
+// will fix it later
+wishlistRouter.post('/grouped/users', authenticate, groupUsersByWishlistTheme)
 wishlistRouter.post('/', authenticate, validateWishlistCreationData, createWishlist)
 wishlistRouter.get('/', authenticate, getWishlists)
 wishlistRouter.get('/shared/:wishlist_id', getWishlistById)

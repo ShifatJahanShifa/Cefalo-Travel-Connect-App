@@ -99,7 +99,8 @@ class Wishlist implements IWishlist {
                             'u.email',
                             'u.profile_picture_url'
                         )
-                        .where('w.theme', theme);
+                        .where('w.theme', theme)
+                        .andWhere('w.is_public', true); 
         
         return results
     }

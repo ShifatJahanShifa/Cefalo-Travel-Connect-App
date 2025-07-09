@@ -96,6 +96,8 @@ class Accommodation implements IAccommodation {
     }
 
     async getAccommodationsByProximity (latitude: number,longitude: number,radius: number): Promise<getAccommodation[]> {
+        // console.log(latitude, longitude, radius)
+        // latitude=23.7423916, longitude=90.3805896
         const accommodations: getAccommodation[] = await db('accommodations')
             .select(
             'accommodation_id',

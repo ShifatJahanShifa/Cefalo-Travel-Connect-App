@@ -40,7 +40,7 @@ export const getTravelPlans = async(req: ExpressRequest, res: Response, next: Ne
 export const getTravelPlanById = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const result: TravelPlanResponseDTO = await TravelPlanService.getTravelPlanById(req.params.travel_plan_id)
-
+        console.log(result, 'res')
         res.status(200).json(result)
     }
     catch(error)
