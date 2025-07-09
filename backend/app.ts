@@ -15,7 +15,7 @@ import { travelPlanRouter } from './src/routes/travelplan.route.ts'
 import { notificationRouter } from './src/routes/notification.route.ts'
 import { proximityRouter } from './src/routes/proximity.route.ts'
 import { globalErrorHandler } from './src/utils/globalErrorHandler.ts'
-// import { swaggerUi, swaggerDocument } from './utils/swagger';
+
 
 const app = express();
 
@@ -23,7 +23,7 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   console.log(`[INCOMING REQUEST] ${req.method} ${req.originalUrl}`);
@@ -42,7 +42,7 @@ app.use('/api/v1/travelplans', travelPlanRouter);
 app.use('/api/v1/notifications', notificationRouter);
 app.use('/api/v1/proximity', proximityRouter);
 
-// Health check / test endpoint
+
 app.get('/', (req: Request, res: Response) => {
   res.send('hello world');
 });

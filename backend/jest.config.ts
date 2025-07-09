@@ -1,14 +1,4 @@
-// const { createDefaultPreset } = require("ts-jest");
-
-// const tsJestTransformCfg = createDefaultPreset().transform;
-
-/** @type {import("jest").Config} **/
 export default {
-  // testEnvironment: "node",
-  // transform: {
-  //   ...tsJestTransformCfg,
-  // },
-
   preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
   extensionsToTreatAsEsm: ['.ts'],
@@ -21,15 +11,11 @@ export default {
   testPathIgnorePatterns: ['/dist/'],
   collectCoverage: true,
   collectCoverageFrom: [
-    "src/**/*.ts",           // Include all TS files in src
-    "!src/**/*.d.ts",        // Exclude type declarations
-    "!src/**/index.ts",      // Optionally exclude barrel files
+    "src/**/*.ts",           
+    "!src/**/*.d.ts",        
+    "!src/**/index.ts",      
   ],
   coverageDirectory: "coverage",
   coverageReporters: ["text", "lcov", "html"]
-  // globals: {
-  //   'ts-jest': {
-  //     useESM: true
-  //   },
-  // },
+
 };
