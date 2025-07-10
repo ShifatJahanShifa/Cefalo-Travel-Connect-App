@@ -615,7 +615,7 @@ describe('TravelPlan Service', () => {
 
     describe('deleteTravelPlan', () => {
         it('should delete a travel plan and return status', async () => {
-            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null); // Assuming bug fix
+            (travelPlanDao.getTravelPlanById as jest.Mock).mockResolvedValue(null); 
             (travelPlanMemberdao.memberExists as jest.Mock).mockResolvedValue({ role: 'creator' });
             (travelPlanDao.deleteTravelPlanById as jest.Mock).mockResolvedValue('Travel plan deleted successfully');
 
