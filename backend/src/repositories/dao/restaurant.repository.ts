@@ -1,4 +1,4 @@
-import { restaurantCreation, getRestaurant, restaurantUpdation } from "../../types/restaurant.type.ts"
+import { restaurantCreation, getRestaurant, restaurantUpdation } from "../../types/restaurant.type.ts";
 import { IRestaurant } from "../interfaces/restaurant.interface.ts";
 import { Knex } from "knex";
 import { dbClient } from "../../db/db.ts";
@@ -122,12 +122,12 @@ class Restaurant implements IRestaurant {
         )
         .whereIn(
             'restaurant_id', id
-        )
+        );
         
 
         return restaurant;
     }
 }
 
-const restaurantDao: Restaurant = new Restaurant()
-export default restaurantDao
+const restaurantDao: Restaurant = new Restaurant();
+export default restaurantDao;

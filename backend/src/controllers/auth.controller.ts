@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import * as authService from '../services/auth.service.ts';
 import { ExpressRequest } from '../middlewares/auth.middleware.ts';
 import { AuthDTO } from '../DTOs/auth.dto.ts';
+import { HTTP_STATUS } from '../constants/httpStatus.ts';
+import { ONE_DAY_IN_MS, ONE_YEAR_IN_MS } from '../constants/time.ts';
 
 
 export const signup = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
@@ -13,10 +15,10 @@ export const signup = async (req: Request, res: Response, next: NextFunction): P
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'none',
-        maxAge: 365 * 24 * 60 * 60 * 1000 
+        maxAge: ONE_YEAR_IN_MS
       })
       .header('Authorization', `Bearer ${result.accessToken}`)
-      .status(201).json(result);
+      .status(HTTP_STATUS.CREATED).json(result);
       
   } catch (error) {
     next(error);
@@ -32,10 +34,10 @@ export const signin = async (req: Request, res: Response, next: NextFunction): P
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'none',
-          maxAge: 365 * 24 * 60 * 60 * 1000 
+          maxAge: ONE_YEAR_IN_MS
         })
         .header('Authorization', `Bearer ${result.accessToken}`)
-        .status(200).json(result);
+        .status(HTTP_STATUS.OK).json(result);
 
     } catch (error) {
        next(error);
@@ -56,14 +58,14 @@ export const refreshAccessToken = async (req: ExpressRequest, res: Response, nex
   const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) 
   { 
-    res.status(401).json({ message: 'Missing refresh token' });
+    res.status(HTTP_STATUS.UNAUTHORIZED).json({ message: 'Missing refresh token' });
     return;
   }
- console.log(refreshToken)
+
   try {
     const newAccessToken = await authService.refreshAccessToken(refreshToken);
     res.header('Authorization', `Bearer ${newAccessToken}`)
-       .status(200)
+       .status(HTTP_STATUS.OK)
        .json({ accessToken: newAccessToken });
 
   } catch (error) {

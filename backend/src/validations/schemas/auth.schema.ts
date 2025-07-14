@@ -1,4 +1,4 @@
-import { z }  from "zod"
+import { z }  from "zod";
 
 export const signupSchema = z.object({
   username: z.string().max(50, 'Username must be at most 50 characters'),

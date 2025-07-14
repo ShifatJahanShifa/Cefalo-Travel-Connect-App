@@ -1,9 +1,11 @@
+import { Role } from "../enums/role";
+
 export type createdUser = {
   user_id: string;
   username: string;
   email: string;
   hashed_password: string;
-  role: 'explorer' | 'traveller' | 'admin';
+  role: Role;
   profile_picture_url: string | null;
   bio: string | null;
   phone_no: string | null;

@@ -1,6 +1,6 @@
-import { createdUser } from "../types/auth.type"
-import dotenv from 'dotenv'
-dotenv.config()
+import { createdUser } from "../types/auth.type";
+import dotenv from 'dotenv';
+dotenv.config();
 // import { sign } from 'jsonwebtoken'  
 import jwt, { JwtPayload} from 'jsonwebtoken';
 const { sign, verify } = jwt;

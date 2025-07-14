@@ -6,7 +6,7 @@ import { wishlistSchema } from '../schemas/wishlist.schema.ts';
 export const validateWishlistCreationData = (req: ExpressRequest, res: Response, next: NextFunction): void => {
     try {
         const validatedData = wishlistSchema.parse(req.body);
-        // req.body=validatedData
+        
         next();
     } 
     catch (err: any) {

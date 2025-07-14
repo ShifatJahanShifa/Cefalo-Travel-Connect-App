@@ -1,4 +1,4 @@
-import { placeCreation, getPlace, placeUpdation } from "../../types/place.type.ts"
+import { placeCreation, getPlace, placeUpdation } from "../../types/place.type.ts";
 import { IPlace } from "../interfaces/place.interface.ts";
 import { Knex } from "knex";
 import { dbClient } from "../../db/db.ts";
@@ -9,7 +9,6 @@ class Place implements IPlace {
     async createPlace(data: placeCreation): Promise<getPlace> {
 
         const { latitude, longitude } = data;
-        console.log()
 
         const [place] = await db("places")
         .insert({
@@ -96,38 +95,38 @@ class Place implements IPlace {
     }
 
     async getPlacesByProximity(latitude: number, longitude: number, radius: number): Promise<getPlace[]> {
-         console.log(latitude, longitude, radius)
+       
         const places: getPlace[] = await db("places")
-        .select(
-            "place_id",
-            "place_name",
-            db.raw("ST_Y(location::geometry) as latitude"),
-            db.raw("ST_X(location::geometry) as longitude")
-        )
-        .whereRaw(
-            `ST_DWithin(location, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography, ?)`,
-            [longitude, latitude, radius]
-        );
+                                    .select(
+                                        "place_id",
+                                        "place_name",
+                                        db.raw("ST_Y(location::geometry) as latitude"),
+                                        db.raw("ST_X(location::geometry) as longitude")
+                                    )
+                                    .whereRaw(
+                                        `ST_DWithin(location, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography, ?)`,
+                                        [longitude, latitude, radius]
+                                    );
 
         return places;
     };
 
     async getById(id: string[]): Promise<getPlace[]> {
         const place = await db("places")
-        .select(
-            "place_id",
-            "place_name",
-            db.raw("ST_Y(location::geometry) as latitude"),
-            db.raw("ST_X(location::geometry) as longitude")
-        )
-        .whereIn(
-            'place_id', id
-        )
+                        .select(
+                            "place_id",
+                            "place_name",
+                            db.raw("ST_Y(location::geometry) as latitude"),
+                            db.raw("ST_X(location::geometry) as longitude")
+                        )
+                        .whereIn(
+                            'place_id', id
+                        )
         
 
         return place;
     }
 }
 
-const placeDao: Place = new Place()
-export default placeDao
+const placeDao: Place = new Place();
+export default placeDao;

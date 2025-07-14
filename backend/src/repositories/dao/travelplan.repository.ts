@@ -3,7 +3,7 @@ import { ITravelPlan } from "../interfaces/travelplan.interface.ts";
 import { Knex } from 'knex';
 import { dbClient } from '../../db/db.ts';
 import { IUser } from '../interfaces/user.interface.ts';
-import { updateUserInfo } from '../../types/user.tpye.ts';
+import { updateUserInfo } from '../../types/user.type.ts';
 import { Role } from '../../enums/role.ts';
 const db: Knex = dbClient.getConnection();
 
@@ -17,41 +17,41 @@ class TravelPlanDao implements ITravelPlan {
                 note: input.note,
                 estimated_cost: input.estimated_cost 
             })
-            .returning("*")
+            .returning("*");
 
-        return travelplan
+        return travelplan;
     }
 
     async getTravelPlans(page: number, limit: number): Promise<any[]> {
-        const offset=(page-1)*limit
+        const offset=(page-1)*limit;
 
-        const travelplans = await db("travel_plans").select("*").offset(offset).limit(limit)
+        const travelplans = await db("travel_plans").select("*").offset(offset).limit(limit);
 
-        return travelplans
+        return travelplans;
     }
 
     async getTravelPlanById(travel_plan_id: string): Promise<travelPlanOutput> {
-        const travelplan = await db("travel_plans").where({travel_plan_id: travel_plan_id}).first()
+        const travelplan = await db("travel_plans").where({travel_plan_id: travel_plan_id}).first();
 
-        return travelplan
+        return travelplan;
     }
 
     async updateTravelPlanById(travel_plan_id: string, updatePlayload: travelPlanInput): Promise<string> {
-        // will look later at this
+      
         const travelplan = await db("travel_plans").where({travel_plan_id: travel_plan_id}).update({
                 start_date: updatePlayload.start_date,
                 end_date: updatePlayload.end_date,
                 note: updatePlayload.note,
                 estimated_cost: updatePlayload.estimated_cost 
-            })
+            });
 
-        return "updated travel plan"
+        return "updated travel plan";
     }
 
     async deleteTravelPlanById(travel_plan_id: string): Promise<string> {
-        const result = await db("travel_plans").where({travel_plan_id: travel_plan_id}).del()
+        const result = await db("travel_plans").where({travel_plan_id: travel_plan_id}).del();
 
-        return "deleted travel plan"
+        return "deleted travel plan";
     }
 
     async getTravelPlanByMemberId(user_id: string): Promise<any[]> {
@@ -60,10 +60,10 @@ class TravelPlanDao implements ITravelPlan {
                 .where('tpm.user_id', user_id)
                 .select('tp.*');
 
-        return travelplans
+        return travelplans;
     }
 
 }
 
-const travelPlanDao = new TravelPlanDao()
-export default travelPlanDao
+const travelPlanDao = new TravelPlanDao();
+export default travelPlanDao;

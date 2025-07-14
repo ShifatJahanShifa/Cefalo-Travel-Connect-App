@@ -7,8 +7,8 @@ const db: Knex = dbClient.getConnection();
 
 class Accommodation implements IAccommodation {
     async createAccommodation(data: accommodationCreation): Promise<getAccommodation> {
-        const latitude = data.latitude
-        const longitude = data.longitude
+        const latitude = data.latitude;
+        const longitude = data.longitude;
 
         const [accommodation] = await db("accommodations").insert({
             accommodation_type: data.accommodation_type,
@@ -22,9 +22,9 @@ class Accommodation implements IAccommodation {
             'accommodation_name',
             db.raw('ST_Y(location::geometry) as latitude'),
             db.raw('ST_X(location::geometry) as longitude')
-        ]) 
+        ]);
 
-        return accommodation
+        return accommodation;
     }
 
     async getAccommodations(): Promise<getAccommodation[]> {
@@ -35,7 +35,7 @@ class Accommodation implements IAccommodation {
             db.raw("ST_Y(location::geometry) as latitude"),
             db.raw("ST_X(location::geometry) as longitude")
         )
-        .orderBy("accommodation_name", 'asc')
+        .orderBy("accommodation_name", 'asc');
 
         return accommodations;
     }
@@ -52,7 +52,7 @@ class Accommodation implements IAccommodation {
             accommodation_type: type,
             accommodation_name: name
         })
-        .first()
+        .first();
 
         return accommodation;
     }
@@ -69,12 +69,12 @@ class Accommodation implements IAccommodation {
 
         if (hasLat || hasLng) {
             const existing = await db("accommodations")
-            .where({accommodation_id: accommodation_id})
-            .select(
-                db.raw("ST_Y(location::geometry) as latitude"),
-                db.raw("ST_X(location::geometry) as longitude")
-            )
-            .first();
+                .where({accommodation_id: accommodation_id})
+                .select(
+                    db.raw("ST_Y(location::geometry) as latitude"),
+                    db.raw("ST_X(location::geometry) as longitude")
+                )
+                .first();
 
             const latitude = hasLat ? data.latitude : existing.latitude;
             const longitude = hasLng ? data.longitude : existing.longitude;
@@ -86,32 +86,30 @@ class Accommodation implements IAccommodation {
             .where({accommodation_id: accommodation_id})
             .update({...updates})
             .returning([
-            "accommodation_type",
-            "accommodation_name",
-            db.raw("ST_Y(location::geometry) as latitude"),
-            db.raw("ST_X(location::geometry) as longitude")
+                "accommodation_type",
+                "accommodation_name",
+                db.raw("ST_Y(location::geometry) as latitude"),
+                db.raw("ST_X(location::geometry) as longitude")
             ]);
 
         return updated;
     }
 
     async getAccommodationsByProximity (latitude: number,longitude: number,radius: number): Promise<getAccommodation[]> {
-        // console.log(latitude, longitude, radius)
-        // latitude=23.7423916, longitude=90.3805896
         const accommodations: getAccommodation[] = await db('accommodations')
             .select(
-            'accommodation_id',
-            'accommodation_type',
-            'accommodation_name',
-            db.raw('ST_Y(location::geometry) as latitude'),
-            db.raw('ST_X(location::geometry) as longitude')
+                'accommodation_id',
+                'accommodation_type',
+                'accommodation_name',
+                db.raw('ST_Y(location::geometry) as latitude'),
+                db.raw('ST_X(location::geometry) as longitude')
             )
             .whereRaw(
-            `ST_DWithin(location, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography, ?)`,
-                [longitude, latitude, radius]
+                `ST_DWithin(location, ST_SetSRID(ST_MakePoint(?, ?), 4326)::geography, ?)`,
+                    [longitude, latitude, radius]
             );
         
-        return accommodations
+        return accommodations;
     };
 
     async getById(id: number[]): Promise<getAccommodation[]> {
@@ -124,11 +122,11 @@ class Accommodation implements IAccommodation {
         )
         .whereIn(
             'accommodation_id', id
-        )
+        );
        
         return accommodation;
     }
 }
 
-const accommodationDao: Accommodation = new Accommodation()
-export default accommodationDao
+const accommodationDao: Accommodation = new Accommodation();
+export default accommodationDao;

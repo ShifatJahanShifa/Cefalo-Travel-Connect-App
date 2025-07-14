@@ -6,7 +6,7 @@ import { notificationSchema } from '../schemas/notifcation.schema.ts'
 export const validateWishlistCreationData = (req: ExpressRequest, res: Response, next: NextFunction): void => {
     try {
         const validatedData = notificationSchema.parse(req.body);
-        // req.body=validatedData
+       
         next();
     } 
     catch (err: any) {

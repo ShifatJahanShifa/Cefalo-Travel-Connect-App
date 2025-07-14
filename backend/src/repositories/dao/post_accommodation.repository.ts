@@ -17,9 +17,9 @@ class PostAccommodationDao implements IPostAccommodation {
 
     async getById(post_id: string): Promise<any[]> {
         
-        const data: any[] = await db('post_accommodations').where({post_id})
+        const data: any[] = await db('post_accommodations').where({post_id});
         
-        return data
+        return data;
     }
 
     async updatePostAccommodation(post_id: string, accommodation_id: string, cost: number, rating: number, review: string): Promise<any> {
@@ -27,9 +27,14 @@ class PostAccommodationDao implements IPostAccommodation {
                     cost: cost,
                     rating: rating,
                     review: review 
-        })
+        });
+    }
+
+    async deleteById(post_id: string): Promise<boolean> {
+        await db('post_accommodations').where({post_id: post_id}).del();
+        return true;
     }
 }
 
-const postAccommodationDao = new PostAccommodationDao()
-export default postAccommodationDao
+const postAccommodationDao = new PostAccommodationDao();
+export default postAccommodationDao;

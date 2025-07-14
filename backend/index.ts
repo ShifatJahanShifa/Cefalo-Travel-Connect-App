@@ -7,7 +7,7 @@ import { postRouter } from './src/routes/post.route.ts'
 import { accommodationRouter } from './src/routes/accommodation.route.ts'
 import { placeRouter } from './src/routes/place.route.ts'
 import { transportRouter } from './src/routes/transport.route.ts'
-import { resrestaurantRouter } from './src/routes/restaurant.route.ts'
+import { restaurantRouter } from './src/routes/restaurant.route.ts'
 import { wishlistRouter } from './src/routes/wishlist.route.ts'
 import { travelPlanRouter } from './src/routes/travelplan.route.ts'
 import { notificationRouter } from './src/routes/notification.route.ts'
@@ -16,6 +16,7 @@ import { dbClient } from './src/db/db.ts'
 import { globalErrorHandler } from './src/utils/globalErrorHandler.ts'
 import { swaggerUi, swaggerDocument } from './src/utils/swagger.ts'
 import dotenv from 'dotenv'
+import logger from './src/utils/logger.ts'
 
 
 dotenv.config()
@@ -44,38 +45,33 @@ app.use('/api/v1/posts',postRouter)
 app.use('/api/v1/accommodations',accommodationRouter)
 app.use('/api/v1/places',placeRouter)
 app.use('/api/v1/transports',transportRouter)
-app.use('/api/v1/restaurants',resrestaurantRouter)
+app.use('/api/v1/restaurants',restaurantRouter)
 app.use('/api/v1/wishlists',wishlistRouter)
 app.use('/api/v1/travelplans',travelPlanRouter)
 app.use('/api/v1/notifications',notificationRouter)
 app.use('/api/v1/proximity',proximityRouter)
 
 
-// testing
-app.get('/',(req: Request, res: Response)=>{
-    res.send('hello world')
-})
 
 app.use(globalErrorHandler)
 
 async function startServer() {
-    try {
-        await dbClient.connect() 
-        
-        app.listen(process.env.PORT, () => {
-          console.log(`Connected to server on port ${process.env.PORT}`)
-          console.log(`Swagger docs: http://localhost:${process.env.PORT}/api-docs`)
-        });
-      
-
-        process.on('SIGINT', async () => {
-        console.log('Shutting down...')
-        await dbClient.disconnect() 
-        process.exit(0)
-        });
-
-  } catch (error) {
-    console.error(' Failed to start server:', error)
+  try {
+    await dbClient.connect() 
+    
+    app.listen(process.env.PORT, () => {
+      logger.info(`Connected to server on port ${process.env.PORT}`)
+      logger.info(`Swagger docs: http://localhost:${process.env.PORT}/api-docs`)
+    });
+  
+    process.on('SIGINT', async () => {
+      logger.warn('Shutting down...')
+      await dbClient.disconnect() 
+      process.exit(0)
+    });
+  } 
+  catch (error) {
+    logger.error({ err: error }, 'Failed to start server');
     process.exit(1)
   }
 }

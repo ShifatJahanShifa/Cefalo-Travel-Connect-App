@@ -13,9 +13,9 @@ class PostInteraction implements IPostInteraction {
             interaction_type: type,
             value: value 
         })
-        .returning("*")
+        .returning("*");
 
-        return interactiuon
+        return interactiuon;
     }
 
     async getPostInteraction(post_id: string, user_id: string, type: string): Promise<post_interaction> {
@@ -24,9 +24,9 @@ class PostInteraction implements IPostInteraction {
             user_id: user_id,
             interaction_type: type
         })
-        .first()
+        .first();
 
-        return interactiuon
+        return interactiuon;
     }
 
     async deletePostInteraction(post_id: string, user_id: string, type: string): Promise<void> {
@@ -35,9 +35,9 @@ class PostInteraction implements IPostInteraction {
             user_id: user_id,
             interaction_type: type
         })
-        .del()
+        .del();
     }
 }
 
-const postInteractionDao = new PostInteraction()
-export default postInteractionDao
+const postInteractionDao = new PostInteraction();
+export default postInteractionDao;

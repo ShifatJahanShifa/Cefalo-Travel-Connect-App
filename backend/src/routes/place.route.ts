@@ -5,7 +5,7 @@ import { validatePlaceCreationData, validatePlaceUpdationData } from '../validat
 
 export const placeRouter = express.Router()
 
-placeRouter.post('/',authenticate, authorizeAdmin, validatePlaceCreationData ,createPlace)
 placeRouter.get('/', authenticate, getPlaces)
-placeRouter.patch('/:placeId',authenticate, authorizeAdmin, validatePlaceUpdationData, updatePlace)
 placeRouter.get('/search',authenticate, getPlacesByProximity)
+placeRouter.post('/',authenticate, authorizeAdmin, validatePlaceCreationData ,createPlace)
+placeRouter.patch('/:placeId',authenticate, authorizeAdmin, validatePlaceUpdationData, updatePlace)

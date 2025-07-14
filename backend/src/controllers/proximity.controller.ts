@@ -7,12 +7,12 @@ import * as UserService from '../services/user.service.ts'
 import { ProximityDTO } from '../DTOs/proximity.dto.ts'
 import * as WishlistService from '../services/wishlist.service.ts'
 import { WishlistDTO } from '../DTOs/wishlist.dto.ts'
-import { getDistanceInKm } from '../utils/getDistance.ts'
+import { getDistanceInKm } from '../utils/distanceCalculator.ts'
+import { HTTP_STATUS } from '../constants/httpStatus.ts'
 
 
 export const createProximity = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        // retrieving user_id 
         const user: UserDTO = await UserService.getUserByUsername(req.username!)
         
         // only adding for wishlist now. later may consider other services
@@ -25,7 +25,7 @@ export const createProximity = async(req: ExpressRequest, res: Response, next: N
 
         const result: ProximityDTO = await ProximityService.createProximity(payload)
 
-        res.status(201).json(result)
+        res.status(HTTP_STATUS.CREATED).json(result)
     }
     catch(error)
     {
@@ -38,7 +38,7 @@ export const findUserProximity = async(req: ExpressRequest, res: Response, next:
         const user: UserDTO = await UserService.getUserByUsername(req.username!)
 
         const result: ProximityDTO[] = await ProximityService.findUserProximity(user.user_id)
-        res.status(201).json(result)
+        res.status(HTTP_STATUS.OK).json(result)
     }
     catch(error)
     {
@@ -48,10 +48,8 @@ export const findUserProximity = async(req: ExpressRequest, res: Response, next:
 
 export const updateProximity = async(req: ExpressRequest, res: Response, next: NextFunction) => {
     try {
-        // retrieving user_id 
         const user: UserDTO = await UserService.getUserByUsername(req.username!)
         
-        // only adding for wishlist now. later may consider other services
         const payload: proximity = {
             user_id: user.user_id,
             type: req.body.type, 
@@ -61,7 +59,7 @@ export const updateProximity = async(req: ExpressRequest, res: Response, next: N
 
         const result: ProximityDTO = await ProximityService.updateProximity(payload)
 
-        res.status(200).json(result)
+        res.status(HTTP_STATUS.OK).json(result)
     }
     catch(error)
     {
@@ -72,10 +70,8 @@ export const updateProximity = async(req: ExpressRequest, res: Response, next: N
 
 export const deleteProximity = async(req: ExpressRequest, res: Response, next: NextFunction) => {
     try {
-         // retrieving user_id 
         const user: UserDTO = await UserService.getUserByUsername(req.username!)
         
-        // only adding for wishlist now. later may consider other services
         const payload: proximity = {
             user_id: user.user_id,
             type: req.body.type, 
@@ -85,7 +81,7 @@ export const deleteProximity = async(req: ExpressRequest, res: Response, next: N
 
         const result: boolean = await ProximityService.deleteProximity(payload)
 
-        res.status(204).json(result)
+        res.status(HTTP_STATUS.NO_CONTENT).json(result)
     }
     catch(error)
     {
@@ -122,7 +118,7 @@ export const checkProximities = async(req: ExpressRequest, res: Response, next: 
             }
         }
 
-        res.status(200).json(alerts)
+        res.status(HTTP_STATUS.OK).json(alerts)
     } 
     catch(error)
     {

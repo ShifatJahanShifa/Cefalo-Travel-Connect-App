@@ -11,25 +11,30 @@ class PostTransportDao implements IPostTransport {
             transport_id: transport_id,
             cost: cost,
             rating: rating,
-            review: review,
+            review: review
         });
     }
 
     async getById(post_id: string): Promise<any[]> {
        
-        const data: any[] = await db('post_transports').where({ post_id: post_id }) 
+        const data: any[] = await db('post_transports').where({ post_id: post_id }); 
        
-        return data
+        return data;
     }
 
     async updatePostTransport(post_id: string, transport_id: string, cost: number, rating: number, review: string): Promise<any> {
-         await db('post_transports').where({post_id: post_id, transport_id: transport_id}).update({
-                    cost: cost,
-                    rating: rating,
-                    review: review 
-        })
+        await db('post_transports').where({post_id: post_id, transport_id: transport_id}).update({
+            cost: cost,
+            rating: rating,
+            review: review 
+        });
+    }
+
+    async deleteById(post_id: string): Promise<boolean> {
+        await db('post_transports').where({post_id: post_id}).del();
+        return true;
     }
 }
 
-const postTransportDao = new PostTransportDao()
-export default postTransportDao
+const postTransportDao = new PostTransportDao();
+export default postTransportDao;

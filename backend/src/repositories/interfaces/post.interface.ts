@@ -6,7 +6,6 @@ export interface IPost {
     getPostByPostID(post_id: string): Promise<any>
     updatePost(post_id: string, updatedPostData: UpdatePostInput): Promise<string>
     deletePost(post_id: string): Promise<string>
-    // // not applying pagination rn
     getPostsByUserID(user_id: string): Promise<any[]>
     searchPosts(filters: {
         transport_type?: string;

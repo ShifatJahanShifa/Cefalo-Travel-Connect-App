@@ -1,4 +1,3 @@
-// migration: add user_id back to posts
 exports.up = async function(knex) {
   await knex.schema.alterTable('posts', (table) => {
     table.uuid('user_id')

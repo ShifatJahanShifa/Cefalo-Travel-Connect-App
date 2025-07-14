@@ -1,4 +1,3 @@
-
 exports.up = async function(knex) {
   await knex.schema.createTable('posts_interactions', (table) => {
     table.increments('post_interaction_id').primary();

@@ -6,7 +6,7 @@ import { validateSignup, validateSignin} from '../validations/validationMiddlewa
 
 export const authRouter=express.Router()
 
+authRouter.get('/refresh-token', refreshAccessToken)
 authRouter.post('/signup', validateSignup, signup)
 authRouter.post('/signin', validateSignin, signin)
 authRouter.post('/signout', authenticate, signout)
-authRouter.get('/refresh-token', refreshAccessToken)

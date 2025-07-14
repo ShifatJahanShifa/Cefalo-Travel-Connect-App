@@ -1,4 +1,4 @@
-import { proximity } from "../../types/proximity.type.ts";
+import { proximity } from "../../types/proximity.type.ts"
 
 export interface IProximity {
     createProximity(input: proximity): Promise<proximity> 

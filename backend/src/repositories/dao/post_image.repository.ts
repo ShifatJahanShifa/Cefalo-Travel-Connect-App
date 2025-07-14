@@ -15,21 +15,21 @@ class PostImageDao implements IPostImage {
 
     async getById(post_id: string): Promise<any[]> {
        
-       const data: any[] = await db('post_images').where({ post_id })
+       const data: any[] = await db('post_images').where({ post_id });
       
-       return data
+       return data;
     }
 
     async updatePostImage(post_id: string, image_id: string, caption?: string): Promise<any> {
         await db('post_images').where({post_id: post_id, image_id: image_id}).update({
                     caption: caption
-        })
+        });
     }
 
     async deleteById(post_id: string): Promise<void> {
-        await db('post_images').where({post_id: post_id}).del()
+        await db('post_images').where({post_id: post_id}).del();
     }
 }
 
-const postImageDao = new PostImageDao()
-export default postImageDao
+const postImageDao = new PostImageDao();
+export default postImageDao;

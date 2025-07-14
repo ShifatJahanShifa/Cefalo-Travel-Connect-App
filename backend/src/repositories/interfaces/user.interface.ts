@@ -1,5 +1,5 @@
 import { createdUser } from "../../types/auth.type.ts"
-import { updateUserInfo } from "../../types/user.tpye.ts"
+import { updateUserInfo } from "../../types/user.type.ts"
 
 export interface IUser {
     getAllUsers(page: number, limit: number): Promise<createdUser[]>

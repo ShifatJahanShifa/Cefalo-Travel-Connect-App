@@ -4,14 +4,16 @@ import { createWishlist, deleteWishlist, getWishlistById, getWishlists, updateWi
 import { validateWishlistCreationData } from '../validations/validationMiddlewares/wishlist.validation.ts'
 export const wishlistRouter = express.Router()
 
-// add authorization
-// will fix it later
-wishlistRouter.post('/grouped/users', authenticate, groupUsersByWishlistTheme)
-wishlistRouter.post('/', authenticate, validateWishlistCreationData, createWishlist)
+
 wishlistRouter.get('/', authenticate, getWishlists)
 wishlistRouter.get('/shared/:wishlist_id', getWishlistById)
 wishlistRouter.get('/:wishlist_id', authenticate, getWishlistById)
-wishlistRouter.patch('/:wishlist_id', authenticate, validateWishlistCreationData, updateWishlist)
-wishlistRouter.delete('/:wishlist_id', authenticate, deleteWishlist)
 wishlistRouter.get('/:wishlist_id/share', authenticate, shareWishlist)
+
+wishlistRouter.post('/grouped/users', authenticate, groupUsersByWishlistTheme)
+wishlistRouter.post('/', authenticate, validateWishlistCreationData, createWishlist)
+
+wishlistRouter.patch('/:wishlist_id', authenticate, validateWishlistCreationData, updateWishlist)
 wishlistRouter.patch('/:wishlist_id/visibility', authenticate, toggleVisibility)
+
+wishlistRouter.delete('/:wishlist_id', authenticate, deleteWishlist)

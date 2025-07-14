@@ -2,15 +2,16 @@ import { NextFunction, Response } from 'express'
 import { ExpressRequest } from '../middlewares/auth.middleware.ts'
 import * as PlaceService from '../services/place.service.ts' 
 import { placeCreation, placeUpdation } from '../types/place.type.ts'
-import { placeDTO } from '../DTOs/place.dto.ts'
+import { PlaceDTO } from '../DTOs/place.dto.ts'
 import { AppError } from '../utils/appError.ts'
+import { HTTP_STATUS } from '../constants/httpStatus.ts'
 
 export const createPlace = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const data: placeCreation = req.body
-        const place: placeDTO = await PlaceService.createPlace(data)
+        const place: PlaceDTO = await PlaceService.createPlace(data)
 
-        res.status(201).json(place)
+        res.status(HTTP_STATUS.CREATED).json(place)
     }
     catch (error) 
     {
@@ -20,9 +21,9 @@ export const createPlace = async(req: ExpressRequest, res: Response, next: NextF
 
 export const getPlaces = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const places: placeDTO[] = await PlaceService.getPlaces()
+        const places: PlaceDTO[] = await PlaceService.getPlaces()
 
-        res.status(200).json(places)
+        res.status(HTTP_STATUS.OK).json(places)
     }
     catch (error) 
     {
@@ -34,9 +35,9 @@ export const updatePlace = async(req:ExpressRequest, res: Response, next: NextFu
     try {
         const place_id: string = (req.params.placeId) 
         const data: placeUpdation = req.body
-        const place: placeDTO = await PlaceService.updatePlace(place_id,data)
+        const place: PlaceDTO = await PlaceService.updatePlace(place_id,data)
 
-        res.status(200).json(place)
+        res.status(HTTP_STATUS.OK).json(place)
     }
     catch (error) 
     {
@@ -51,9 +52,9 @@ export const getPlacesByProximity = async(req: ExpressRequest, res: Response, ne
         const longitude: number = parseFloat(req.query.longitude as string)
         const radius: number = parseFloat(req.query.radius as string)
 
-        const data: placeDTO[] = await PlaceService.getPlacesByProximity(latitude, longitude, radius)
+        const data: PlaceDTO[] = await PlaceService.getPlacesByProximity(latitude, longitude, radius)
         
-        res.status(200).json(data)
+        res.status(HTTP_STATUS.OK).json(data)
     }
     catch (error) 
     {
