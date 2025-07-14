@@ -1,0 +1,46 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "migrate:latest": "node --loader ts-node/esm ./node_modules/knex/bin/cli.js migrate:latest --knexfile ./src/db/config/knexfile.ts",
+    "migrate:rollback": "node --loader ts-node/esm ./node_modules/knex/bin/cli.js migrate:rollback --knexfile ./src/db/config/knexfile.ts",
+    "seed:run": "node --loader ts-node/esm ./node_modules/knex/bin/cli.js seed:run --knexfile ./src/db/config/knexfile.ts"
+  },
+  "type": "module",
+  "author": "Shifat Jahan Shifa",
+  "license": "ISC",
+  "description": "my backend code for cefalo travel connect app",
+  "dependencies": {
+    "@types/cors": "^2.8.19",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "js-yaml": "^4.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "pg": "^8.16.0",
+    "swagger-ui-express": "^5.0.1",
+    "typescipt": "^1.0.0",
+    "uuid": "^11.1.0",
+    "zod": "^3.25.64"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.8",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.2",
+    "@types/js-yaml": "^4.0.9",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/knex": "^0.15.2",
+    "@types/node": "^22.15.24",
+    "@types/swagger-ui-express": "^4.1.8",
+    "@types/uuid": "^10.0.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  }
+}
