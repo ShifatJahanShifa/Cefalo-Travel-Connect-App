@@ -42,9 +42,7 @@ export async function deleteUser(username: string):  Promise<UserDTO> {
       throw new AppError("user not found",404)
     }
     const result: createdUser = await userDAO.deleteUser(username);
-    if (!result) {
-        throw new AppError("Internal server error",500)
-    }
+    
     console.log(result)
     return new UserDTO(result); 
 }
