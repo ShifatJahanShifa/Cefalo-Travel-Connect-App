@@ -20,7 +20,7 @@ class TravelPlanAccommodationDao implements ITravelPlanAccommodation {
         return data;
     }
 
-    // later
+   
     async updateTravelPlanAccommodation(travel_plan_id: string, accommodation_id: string): Promise<any> {
         await db('travel_plan_accommodations').where({travel_plan_id: travel_plan_id, accommodation_id: accommodation_id}).update({
                 

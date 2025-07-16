@@ -5,7 +5,7 @@ export interface ITransport {
     createTransport(data:  transportCreation): Promise<getTransport>     
     getTransports(): Promise<getTransport[]>       
     getTransportByTypeAndName(type: string, name: string): Promise<getTransport>        
-    updateTransport(transport_id: string, data: transportUpdation): Promise<transportCreation>      
+    updateTransport(transportId: string, data: transportUpdation): Promise<transportCreation>      
     // getTransportsByProximity(latitude: number, longitude: number, radius: number): Promise<getTransport[]>
     getById(id: any[]): Promise<getTransport[]>
 }

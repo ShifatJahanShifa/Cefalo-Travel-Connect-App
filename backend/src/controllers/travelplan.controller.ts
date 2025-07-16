@@ -11,10 +11,10 @@ export const craeteTravelPlan = async(req: ExpressRequest, res: Response, next: 
     try {
        
         const user: UserDTO = await UserService.getUserByUsername(req.username!); 
-        const payload: travelPlanInput = req.body;
-        payload.planner_id = user.user_id; 
+        const travelPlanData: travelPlanInput = req.body;
+        travelPlanData.planner_id = user.user_id; 
 
-        const result = await TravelPlanService.craeteTravelPlan(payload);
+        const result = await TravelPlanService.craeteTravelPlan(travelPlanData);
 
         res.status(HTTP_STATUS.CREATED).json(result);
     }
@@ -53,10 +53,10 @@ export const getTravelPlanById = async(req: ExpressRequest, res: Response, next:
 export const updateTravelPlanById = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const user: UserDTO = await UserService.getUserByUsername(req.username!); 
-        const payload: travelPlanInput = req.body; 
-        payload.planner_id = user.user_id; 
+        const travelPlanData: travelPlanInput = req.body; 
+        travelPlanData.planner_id = user.user_id; 
 
-        const result: string = await TravelPlanService.updateTravelPlan(req.params.travel_plan_id, payload);
+        const result: string = await TravelPlanService.updateTravelPlan(req.params.travel_plan_id, travelPlanData);
 
         res.status(HTTP_STATUS.OK).json(result);
     }

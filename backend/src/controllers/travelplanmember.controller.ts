@@ -35,13 +35,13 @@ export const updateTravelPlanMemberRole = async(req: ExpressRequest, res: Respon
     try {
 
         const user: UserDTO = await UserService.getUserByUsername(req.username!)
-        const payload: travelPlanMemberAdd = {
+        const travelPlanMemberData: travelPlanMemberAdd = {
             user_id: req.body.user_id,
             travel_plan_id: req.params.travel_plan_id, 
             role: req.body.role
         }
 
-        const result: TravelPlanMemberDTO = await TravelPlanMemberService.updateTravelPlanMemberRole(payload, user.user_id)
+        const result: TravelPlanMemberDTO = await TravelPlanMemberService.updateTravelPlanMemberRole(travelPlanMemberData, user.user_id)
         res.status(HTTP_STATUS.OK).json(result)
     }
     catch(error) 

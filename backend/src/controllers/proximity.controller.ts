@@ -16,14 +16,14 @@ export const createProximity = async(req: ExpressRequest, res: Response, next: N
         const user: UserDTO = await UserService.getUserByUsername(req.username!)
         
         // only adding for wishlist now. later may consider other services
-        const payload: proximity = {
+        const proximityData: proximity = {
             user_id: user.user_id,
             type: req.body.type, 
             reference_id: req.body.reference_id,
             radius: req.body.radius
         }
 
-        const result: ProximityDTO = await ProximityService.createProximity(payload)
+        const result: ProximityDTO = await ProximityService.createProximity(proximityData)
 
         res.status(HTTP_STATUS.CREATED).json(result)
     }
@@ -50,14 +50,14 @@ export const updateProximity = async(req: ExpressRequest, res: Response, next: N
     try {
         const user: UserDTO = await UserService.getUserByUsername(req.username!)
         
-        const payload: proximity = {
+        const proximityData: proximity = {
             user_id: user.user_id,
             type: req.body.type, 
             reference_id: req.body.reference_id,
             radius: req.body.radius
         }
 
-        const result: ProximityDTO = await ProximityService.updateProximity(payload)
+        const result: ProximityDTO = await ProximityService.updateProximity(proximityData)
 
         res.status(HTTP_STATUS.OK).json(result)
     }
@@ -72,14 +72,14 @@ export const deleteProximity = async(req: ExpressRequest, res: Response, next: N
     try {
         const user: UserDTO = await UserService.getUserByUsername(req.username!)
         
-        const payload: proximity = {
+        const proximityData: proximity = {
             user_id: user.user_id,
             type: req.body.type, 
             reference_id: req.body.reference_id,
             radius: req.body.radius
         }
 
-        const result: boolean = await ProximityService.deleteProximity(payload)
+        const result: boolean = await ProximityService.deleteProximity(proximityData)
 
         res.status(HTTP_STATUS.NO_CONTENT).json(result)
     }

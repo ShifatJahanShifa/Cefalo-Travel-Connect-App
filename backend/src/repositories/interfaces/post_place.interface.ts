@@ -1,6 +1,6 @@
 export interface IPostPlace {
-    createPostPlace(post_id: string, place_id: string, cost: number, rating: number, review: string): Promise<void> 
-    getById(post_id: string): Promise<any[]>
-    updatePostPlace(post_id: string, place_id: string, cost: number, rating: number, review: string): Promise<any>
-    deleteById(post_id: string): Promise<boolean>
+    createPostPlace(postId: string, placeId: string, cost: number, rating: number, review: string): Promise<void> 
+    getById(postId: string): Promise<any[]>
+    updatePostPlace(postId: string, placeId: string, cost: number, rating: number, review: string): Promise<any>
+    deleteById(postId: string): Promise<boolean>
 }

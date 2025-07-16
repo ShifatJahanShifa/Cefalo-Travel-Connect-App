@@ -6,6 +6,7 @@ import wishlistDao from "../repositories/dao/wishlist.repository.ts";
 import { getPlace } from "../types/place.type.ts";
 import { createWishlistType, getWishlistType, groupedUsers } from "../types/wishlist.type.ts";
 import { AppError } from "../utils/appError.ts";
+import { doesDataExist } from "../utils/dataExistenceChecker.ts";
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -38,7 +39,7 @@ export const getWishlists = async(page: number, limit: number): Promise<Wishlist
 
     let placeMap: Record<string, getPlace> = {};
     
-    if(ids.length) 
+    if(doesDataExist(ids)) 
     {
         const places: getPlace[] = await placeDao.getById(ids);
         placeMap = places.reduce((acc, place) => {
@@ -125,10 +126,10 @@ export const deleteWishlist = async(wishlist_id: string, user_id: string): Promi
 export const getWishlistByUserid = async(user_id: string, page: number, limit: number): Promise<WishlistDTO[]> => {
     const results: getWishlistType[] = await wishlistDao.getWishlistByUserid(user_id, page, limit);
 
-    if(!results || results.length === 0) 
-    {
-        throw new AppError("wishlist not found", HTTP_STATUS.NOT_FOUND);
-    }
+    // if(!results || results.length === 0) 
+    // {
+    //     throw new AppError("wishlist not found", HTTP_STATUS.NOT_FOUND);
+    // }
 
     return results.map((result) => new WishlistDTO(result));
 }

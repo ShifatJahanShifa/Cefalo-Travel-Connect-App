@@ -10,7 +10,7 @@ export type CreatePostInput = {
     accommodations?: Array<{
         accommodation_type: string;
         accommodation_name: string;
-        cost_per_night?: number;
+        costPerNight?: number;
         latitude: number;
         longitude: number;
         cost: number; 
@@ -21,13 +21,13 @@ export type CreatePostInput = {
     transports?: Array<{
         transport_type: string;
         transport_name: string;
-        cost_per_person?: number;
-        starting_location_name?: string;
-        starting_location_latitude?: number;
-        starting_location_longitude?: number;
-        ending_location_name?: string;
-        ending_location_latitude?: number;
-        ending_location_longitude?: number;
+        costPerPerson?: number;
+        startingLocationName?: string;
+        startingLocationLatitude?: number;
+        startingLocationLongitude?: number;
+        endingLocationName?: string;
+        endingLocationLatitude?: number;
+        endingLocationLongitude?: number;
         cost: number; 
         rating: number;
         review: string;
@@ -44,7 +44,7 @@ export type CreatePostInput = {
 
     restaurants?: Array<{
         restaurant_name: string;
-        popular_food?: string;
+        popularFood?: string;
         cost: number;
         rating: number;
         review: string;
@@ -113,7 +113,7 @@ export type UpdatePostInput = {
     accommodations?: Array<{
         accommodation_type: string;
         accommodation_name: string;
-        cost_per_night?: number;
+        costPerNight?: number;
         latitude: number;
         longitude: number;
         cost: number ;
@@ -124,11 +124,11 @@ export type UpdatePostInput = {
     transports?: Array<{
         transport_type: string;
         transport_name: string;
-        cost_per_person?: number;
-        starting_location_latitude?: number;
-        ending_location_latitude?: number;
-        starting_location_longitude?: number;
-        ending_location_longitude?: number;
+        costPerPerson?: number;
+        startingLocationLatitude?: number;
+        endingLocationLatitude?: number;
+        startingLocationLongitude?: number;
+        endingLocationLongitude?: number;
         cost: number ;
         rating: number;
         review: string;
@@ -145,7 +145,7 @@ export type UpdatePostInput = {
 
     restaurants?: Array<{
         restaurant_name: string;
-        popular_food?: string;
+        popularFood?: string;
         cost: number;
         rating: number;
         review: string;

@@ -5,7 +5,7 @@ export interface IAccommodation {
     createAccommodation(data:  accommodationCreation): Promise<getAccommodation>     
     getAccommodations(): Promise<getAccommodation[]>      
     getAccommodationByTypeAndName(type: string, name: string): Promise<getAccommodation>      
-    updateAccommodation(accommodation_id: string, data: accommodationUpdation): Promise<accommodationCreation>     
+    updateAccommodation(accommodationId: string, data: accommodationUpdation): Promise<accommodationCreation>     
     getAccommodationsByProximity(latitude: number, longitude: number, radius: number): Promise<getAccommodation[]>
     getById(id: any[]): Promise<getAccommodation[]>
 }

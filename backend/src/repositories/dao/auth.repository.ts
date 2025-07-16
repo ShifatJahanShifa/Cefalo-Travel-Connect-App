@@ -67,10 +67,7 @@ class AuthDAO implements IAuth{
   }
 
   async findRefreshToken(user_id: string): Promise<string> {
-    const token: string = await db('refresh_tokens')
-                            .select('token')
-                            .where({ user_id: user_id})
-                            .first();
+    const token: string = await db('refresh_tokens').select('token').where({ user_id: user_id}).first();
 
     return token;
   }

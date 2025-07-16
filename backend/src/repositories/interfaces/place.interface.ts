@@ -5,7 +5,7 @@ export interface IPlace {
     createPlace(data: placeCreation): Promise<getPlace>    
     getPlaces(): Promise<getPlace[]>        
     getPlaceByName(name: string): Promise<getPlace>       
-    updatePlace(place_id: string, data: placeUpdation): Promise<placeCreation>    
+    updatePlace(placeId: string, data: placeUpdation): Promise<placeCreation>    
     getPlacesByProximity(latitude: number, longitude: number, radius: number): Promise<getPlace[]>
     getById(id: any[]): Promise<getPlace[]>
 }

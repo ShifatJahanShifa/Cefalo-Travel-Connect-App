@@ -3,10 +3,10 @@ import { createWishlistType, getWishlistType, groupedUsers } from "../../types/w
 export interface IWishlist {
     createWishlist(input: createWishlistType): Promise<getWishlistType>
     getWishlists(page: number, limit: number): Promise<getWishlistType[]>
-    getWishlistById(wishlist_id: string): Promise<getWishlistType> 
-    updateWishlist(wishlist_id: string, updatedPayload: createWishlistType): Promise<string>
-    deleteWishlist(wishlist_id: string): Promise<string>
-    getWishlistByUserid(user_id: string, page: number, limit: number): Promise<getWishlistType[]>
-    toggleVisibility(wishlist_id: string): Promise<string> 
+    getWishlistById(wishlistId: string): Promise<getWishlistType> 
+    updateWishlist(wishlistId: string, updatedPayload: createWishlistType): Promise<string>
+    deleteWishlist(wishlistId: string): Promise<string>
+    getWishlistByUserid(userId: string, page: number, limit: number): Promise<getWishlistType[]>
+    toggleVisibility(wishlistId: string): Promise<string> 
     groupUsersByWishlistTheme(theme: string): Promise<groupedUsers[]>
 }

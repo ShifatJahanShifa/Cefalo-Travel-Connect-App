@@ -28,9 +28,7 @@ class Notifcation implements INotification {
     } 
 
     async markAsRead(notification_id: string): Promise<notification> {
-        const [result] = await db("notifications").update({
-                                    read: true
-                                }).where({notification_id: notification_id}).returning("*");
+        const [result] = await db("notifications").update({read: true}).where({notification_id: notification_id}).returning("*");
         return result;
     }
 

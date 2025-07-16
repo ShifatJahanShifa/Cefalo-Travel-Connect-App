@@ -7,13 +7,13 @@ import { HTTP_STATUS } from "../constants/httpStatus.ts";
 
 export const createTravelPlanComment = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const payload: travelPlanComment = {
+        const travelPlanCommentData: travelPlanComment = {
             travel_plan_id: req.params.travel_plan_id,
             sender_id: req.body.sender_id,
             message: req.body.message
         };
 
-        const result: TravelPlanCommentDTO = await TravelPlanCommentService.createTravelPlanComment(payload);
+        const result: TravelPlanCommentDTO = await TravelPlanCommentService.createTravelPlanComment(travelPlanCommentData);
 
         res.status(HTTP_STATUS.CREATED).json(result);
     }

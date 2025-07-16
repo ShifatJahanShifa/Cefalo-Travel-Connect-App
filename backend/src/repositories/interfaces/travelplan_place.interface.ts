@@ -1,6 +1,6 @@
 export interface ITravelPlanPlace {
-    createTravelPlanPlace(travel_plan_id: string, place_id: string): Promise<void> 
-    getById(travel_plan_id: string): Promise<any[]>
-    updateTravelPlanPlace(travel_plan_id: string, place_id: string): Promise<any>
-    deleteById(travel_plan_id: string): Promise<boolean>
+    createTravelPlanPlace(travelPlanId: string, placeId: string): Promise<void> 
+    getById(travelPlanId: string): Promise<any[]>
+    updateTravelPlanPlace(travelPlanId: string, placeId: string): Promise<any>
+    deleteById(travelPlanId: string): Promise<boolean>
 }

@@ -18,7 +18,7 @@ export const createWishlist = async(req: ExpressRequest, res: Response, next: Ne
     try {
         const user: UserDTO = await UserService.getUserByUsername(req.username!)
        
-        const payload: createWishlistType = req.body
+        const wishlistData: createWishlistType = req.body
         let place: PlaceDTO | null = await PlaceService.getPlaceByName(req.body.place_name)
         if(!place) 
         {
@@ -29,10 +29,10 @@ export const createWishlist = async(req: ExpressRequest, res: Response, next: Ne
             }
             place = await PlaceService.createPlace(data)
         }
-        payload.user_id = user.user_id
-        payload.reference_id = place.place_id
+        wishlistData.user_id = user.user_id
+        wishlistData.reference_id = place.place_id
 
-        const wishlist: WishlistDTO = await WishlistService.createWishlist(payload)
+        const wishlist: WishlistDTO = await WishlistService.createWishlist(wishlistData)
 
         res.status(HTTP_STATUS.CREATED).json(wishlist)
     }
@@ -76,12 +76,12 @@ export const updateWishlist = async(req: ExpressRequest, res: Response, next: Ne
         const wishlist_id: string = (req.params.wishlist_id)  
 
         const user: UserDTO = await UserService.getUserByUsername(req.username!)
-        const payload: createWishlistType = req.body
+        const wishlistData: createWishlistType = req.body
         const place: PlaceDTO | null = await PlaceService.getPlaceByName(req.body.place_name)
-        payload.user_id = user.user_id
-        payload.reference_id = place?.place_id as string 
+        wishlistData.user_id = user.user_id
+        wishlistData.reference_id = place?.place_id as string 
 
-        const wishlist = await WishlistService.updateWishlist(wishlist_id, payload)
+        const wishlist = await WishlistService.updateWishlist(wishlist_id, wishlistData)
 
         res.status(HTTP_STATUS.OK).json(wishlist)
     }
