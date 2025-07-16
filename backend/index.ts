@@ -24,7 +24,7 @@ dotenv.config()
 const app = express()
 
 app.use(cors({
-    origin: "http://localhost:5173",  
+    origin: ["http://localhost:5173","https://cefalo-travel-connect-frontend.onrender.com"],  
     credentials: true,               
   }))
 
