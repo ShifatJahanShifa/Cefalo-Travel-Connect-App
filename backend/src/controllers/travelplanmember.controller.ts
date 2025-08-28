@@ -5,20 +5,12 @@ import { travelPlanMember, travelPlanMemberAdd } from '../types/travelplan.type.
 import * as UserService from '../services/user.service.ts'
 import { UserDTO } from '../DTOs/user.dto.ts'
 import { TravelPlanMemberDTO } from '../DTOs/travelplanmember.dto.ts'
+import { HTTP_STATUS } from '../constants/httpStatus.ts'
 
 export const addTravelPlanMember = async(req: ExpressRequest, res: Response, next: NextFunction) => {
     try {
-        // getting from userserice
-        // const user: UserDTO = await UserService.getUserByUsername(req.username!) 
-
-        // const payload: travelPlanMemberAdd = {
-        //     user_id: user.user_id,
-        //     travel_plan_id: req.params.travel_plan_id, 
-        //     role: "member"
-        // }
-
         const result: TravelPlanMemberDTO = await TravelPlanMemberService.addTravelPlanMember(req.body)
-        res.status(201).json(result)
+        res.status(HTTP_STATUS.CREATED).json(result)
     }
     catch(error) 
     {
@@ -30,7 +22,7 @@ export const getTravelPlanMemmebrs = async(req: ExpressRequest, res: Response, n
     try {
     
         const result: TravelPlanMemberDTO[] = await TravelPlanMemberService.getTravelPlanMemmebrs(req.params.travel_plan_id)
-        res.status(200).json(result)
+        res.status(HTTP_STATUS.OK).json(result)
     }
     catch(error) 
     {
@@ -43,14 +35,14 @@ export const updateTravelPlanMemberRole = async(req: ExpressRequest, res: Respon
     try {
 
         const user: UserDTO = await UserService.getUserByUsername(req.username!)
-        const payload: travelPlanMemberAdd = {
+        const travelPlanMemberData: travelPlanMemberAdd = {
             user_id: req.body.user_id,
             travel_plan_id: req.params.travel_plan_id, 
             role: req.body.role
         }
 
-        const result: TravelPlanMemberDTO = await TravelPlanMemberService.updateTravelPlanMemberRole(payload, user.user_id)
-        res.status(200).json(result)
+        const result: TravelPlanMemberDTO = await TravelPlanMemberService.updateTravelPlanMemberRole(travelPlanMemberData, user.user_id)
+        res.status(HTTP_STATUS.OK).json(result)
     }
     catch(error) 
     {

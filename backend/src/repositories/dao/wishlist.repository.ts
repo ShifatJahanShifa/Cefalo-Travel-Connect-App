@@ -3,7 +3,7 @@ import { IWishlist } from "../interfaces/wishlist.interface.ts";
 import { Knex } from 'knex';
 import { dbClient } from '../../db/db.ts';
 import { IUser } from '../interfaces/user.interface.ts';
-import { updateUserInfo } from '../../types/user.tpye.ts';
+import { updateUserInfo } from '../../types/user.type.ts';
 import { Role } from '../../enums/role.ts';
 const db: Knex = dbClient.getConnection();
 
@@ -19,25 +19,25 @@ class Wishlist implements IWishlist {
             note: input.note,
             is_public: input.is_public
         })
-        .returning("*")
+        .returning("*");
 
-        return wishlist
+        return wishlist;
     }
 
     async getWishlists(page: number, limit: number): Promise<getWishlistType[]> {
-        const offset=(page-1)*limit
-        const wishlists = await db("wishlists").where({ is_public: true }).orderBy('created_at', 'desc').offset(offset).limit(limit)
+        const offset=(page-1)*limit;
+        const wishlists = await db("wishlists").where({ is_public: true }).orderBy('created_at', 'desc').offset(offset).limit(limit);
         
-        return wishlists
+        return wishlists;
     }
 
     async getWishlistById(wishlist_id: string): Promise<getWishlistType> {
         const wishlist: getWishlistType = await db("wishlists").where({
             wishlist_id: wishlist_id
         })
-        .first()
+        .first();
         
-        return wishlist
+        return wishlist;
     }
 
     async updateWishlist(wishlist_id: string, updatedPayload: createWishlistType): Promise<string> {
@@ -54,22 +54,22 @@ class Wishlist implements IWishlist {
         })
         .where({
             wishlist_id: wishlist_id
-        }) 
+        });
 
-        return "updated wishlist"
+        return "updated wishlist";
     }    
 
     async deleteWishlist(wishlist_id: string): Promise<string> {
-        await db("wishlists").where({wishlist_id: wishlist_id}).del()
+        await db("wishlists").where({wishlist_id: wishlist_id}).del();
 
-        return "deleted wishlist"
+        return "deleted wishlist";
     }
 
     async getWishlistByUserid(user_id: string, page: number, limit: number): Promise<getWishlistType[]> {
-        const offset=(page-1)*limit
-        const wishlists = await db("wishlists").where({ user_id: user_id }).orderBy('created_at', 'desc').offset(offset).limit(limit)
+        const offset=(page-1)*limit;
+        const wishlists = await db("wishlists").where({ user_id: user_id }).orderBy('created_at', 'desc').offset(offset).limit(limit);
         
-        return wishlists
+        return wishlists;
     }
 
     async toggleVisibility(wishlist_id: string): Promise<string> {
@@ -80,7 +80,7 @@ class Wishlist implements IWishlist {
             updated_at: db.fn.now()
         });
 
-        return "toggled"
+        return "toggled";
     }
 
 
@@ -99,12 +99,13 @@ class Wishlist implements IWishlist {
                             'u.email',
                             'u.profile_picture_url'
                         )
-                        .where('w.theme', theme);
+                        .where('w.theme', theme)
+                        .andWhere('w.is_public', true); 
         
-        return results
+        return results;
     }
 }
 
 
-const wishlistDao = new Wishlist()
-export default wishlistDao
+const wishlistDao = new Wishlist();
+export default wishlistDao;

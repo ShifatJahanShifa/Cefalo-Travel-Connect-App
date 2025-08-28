@@ -12,7 +12,6 @@ export type createWishlistType = {
     longitude?: number
 }
 
-// i will add travel plan to wishlist later 
 export type getWishlistType = {
     wishlist_id: string
     user_id: string 
@@ -28,7 +27,7 @@ export type getWishlistType = {
     is_public: boolean 
 }
 
-// adding new type for grouped users 
+
 export type groupedUsers = {
     wishlist_id : string
     title: string

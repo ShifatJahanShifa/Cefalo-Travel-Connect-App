@@ -4,8 +4,8 @@ import { checkProximities, createProximity, deleteProximity, findUserProximity, 
 
 export const proximityRouter = express.Router()
 
+proximityRouter.get('/:username', authenticate, findUserProximity)
 proximityRouter.post('/', authenticate, createProximity) 
 proximityRouter.post('/alert', authenticate, checkProximities)
-proximityRouter.get('/:username', authenticate, findUserProximity)
 proximityRouter.put('/', authenticate, updateProximity)
 proximityRouter.delete('/', authenticate, deleteProximity)

@@ -6,7 +6,7 @@ exports.up = async function(knex) {
   await knex.schema.createTable('transports', (table) => {
     table.uuid('transport_id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
     
-    table.enu('transport_type', ['bus', 'car', 'train', 'flight', 'boat']) // add values as needed
+    table.enu('transport_type', ['bus', 'car', 'train', 'flight', 'boat']) 
       .notNullable();
 
     table.string('transport_name').notNullable();

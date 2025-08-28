@@ -1,6 +1,6 @@
-import { ProximityDTO } from "../DTOs/proximity.dto.ts";
-import proximityDao from "../repositories/dao/proximity.repository.ts";
-import { proximity } from "../types/proximity.type.ts";
+import { ProximityDTO } from "../DTOs/proximity.dto.ts"
+import proximityDao from "../repositories/dao/proximity.repository.ts"
+import { proximity } from "../types/proximity.type.ts"
 
 
 export const createProximity = async (input: proximity): Promise<ProximityDTO> => {

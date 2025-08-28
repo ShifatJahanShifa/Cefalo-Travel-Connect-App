@@ -7,6 +7,6 @@ export class ProximityDTO {
 
     constructor(data: Partial<ProximityDTO>)
     {
-        Object.assign(this, data);
+        Object.assign(this, data)
     }
 }

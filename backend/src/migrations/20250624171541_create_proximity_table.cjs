@@ -16,7 +16,7 @@ exports.up = async function (knex) {
 
     table.uuid('reference_id'); // could reference other entities dynamically
 
-    table.decimal('radius', 10, 2).notNullable(); // You can adjust precision
+    table.decimal('radius', 10, 2).notNullable(); 
   });
 };
 

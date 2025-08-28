@@ -13,11 +13,11 @@ class PostFood implements IPostFood {
             rating: rating,
             review: review
         })
-        .returning("*") 
+        .returning("*"); 
     }
 
     async getById(post_id: string): Promise<any[]> {
-        const results = await db("post_foods").select("*").where({ post_id: post_id})
+        const results = await db("post_foods").select("*").where({ post_id: post_id});
         return results;
     }
 
@@ -26,9 +26,14 @@ class PostFood implements IPostFood {
             cost: cost,
             rating: rating,
             review: review 
-        })
+        });
+    }
+
+    async deleteById(post_id: string): Promise<boolean> {
+        await db('post_foods').where({post_id: post_id}).del();
+        return true;
     }
 }
 
-const postFoodDao = new PostFood()
-export default postFoodDao
+const postFoodDao = new PostFood();
+export default postFoodDao;

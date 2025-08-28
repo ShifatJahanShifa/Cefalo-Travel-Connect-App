@@ -1,6 +1,6 @@
 import { restaurantCreation, getRestaurant } from "../types/restaurant.type.ts"
 
-export class restaurantDTO {
+export class RestaurantDTO {
     restaurant_id: string
     restaurant_name: string 
     location: {

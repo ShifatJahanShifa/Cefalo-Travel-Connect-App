@@ -1,6 +1,7 @@
 export interface ITravelPlanTransport {
-    createTravelPlanTransport(travel_plan_id: string, transport_id: string): Promise<void> 
-    getById(travel_plan_id: string): Promise<any[]>
-    updateTravelPlanTransport(travel_plan_id: string, transport_id: string): Promise<any>
+    createTravelPlanTransport(travelPlanId: string, transportId: string): Promise<void> 
+    getById(travelPlanId: string): Promise<any[]>
+    updateTravelPlanTransport(travelPlanId: string, transportId: string): Promise<any>
+    deleteById(travelPlanId: string): Promise<boolean>
 }
 

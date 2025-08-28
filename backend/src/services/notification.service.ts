@@ -1,28 +1,28 @@
-import { notificationDTO } from "../DTOs/notification.dto.ts";
-import notifcationRepository from "../repositories/dao/notification.repository.ts";
-import { notification } from "../types/notifcation.type.ts";
+import { NotificationDTO } from "../DTOs/notification.dto.ts"
+import notifcationRepository from "../repositories/dao/notification.repository.ts"
+import { notification } from "../types/notifcation.type.ts"
 
-export const createNotification = async(data: notification): Promise<notificationDTO> => {
+export const createNotification = async(data: notification): Promise<NotificationDTO> => {
     const result: notification= await notifcationRepository.createNotification(data)
 
-    return new notificationDTO(result)
+    return new NotificationDTO(result)
 }
 
-export const getNotificationByUserId = async(user_id: string): Promise<notificationDTO[]> => {
+export const getNotificationByUserId = async(user_id: string): Promise<NotificationDTO[]> => {
     const results: notification[] = await notifcationRepository.getNotificationByUserId(user_id)
 
-    return results.map(result => new notificationDTO(result))
+    return results.map(result => new NotificationDTO(result))
 }
 
-export const getNotificationByNotificationId = async(notification_id: string): Promise<notificationDTO> => {
+export const getNotificationByNotificationId = async(notification_id: string): Promise<NotificationDTO> => {
     const result: notification = await notifcationRepository.getNotificationByNotificationId(notification_id)
 
-    return new notificationDTO(result)
+    return new NotificationDTO(result)
 }
 
-export const markAsRead = async(notification_id: string): Promise<notificationDTO> => {
+export const markAsRead = async(notification_id: string): Promise<NotificationDTO> => {
     const result: notification = await notifcationRepository.markAsRead(notification_id)
-    return new notificationDTO(result)
+    return new NotificationDTO(result)
 }
 
 export const deleteNotiffication = async(notification_id: string): Promise<boolean> => {

@@ -16,7 +16,7 @@ export class PostResponseDTO {
   places?: any[];
   restaurants?: any[];
   images?: any[];
-  foods?: any[]
+  foods?: any[];
   
 
   constructor(data: Partial<PostResponseDTO>) {

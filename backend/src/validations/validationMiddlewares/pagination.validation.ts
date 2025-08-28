@@ -7,7 +7,7 @@ export const validatePagination = (req: ExpressRequest, res: Response, next: Nex
     const result = paginationSchema.parse(req.query);
 
     req.query.page = result.page?.toString() || '1';
-    req.query.limit = result.limit?.toString() || '10';
+    req.query.limit = result.limit?.toString() || '50';
     next();
 
    } 

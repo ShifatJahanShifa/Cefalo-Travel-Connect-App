@@ -5,7 +5,7 @@ import { validatetransportCreationData, validatetransportUpdationData } from '..
 
 export const transportRouter = express.Router()
 
-transportRouter.post('/',authenticate, authorizeAdmin, validatetransportCreationData ,createTransport)
 transportRouter.get('/', authenticate, getTransports)
-transportRouter.patch('/:transportId',authenticate, authorizeAdmin, validatetransportUpdationData, updateTransport)
 transportRouter.get('/search',authenticate, getTransportsByProximity)
+transportRouter.post('/',authenticate, authorizeAdmin, validatetransportCreationData ,createTransport)
+transportRouter.patch('/:transportId',authenticate, authorizeAdmin, validatetransportUpdationData, updateTransport)

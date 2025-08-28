@@ -2,10 +2,10 @@ import { accommodationCreation, accommodationUpdation, getAccommodation } from "
 
 
 export interface IAccommodation {
-    createAccommodation(data:  accommodationCreation): Promise<getAccommodation>     // suppose admin creates it
-    getAccommodations(): Promise<getAccommodation[]>        // recommendation time
-    getAccommodationByTypeAndName(type: string, name: string): Promise<getAccommodation>        // post and plan e use
-    updateAccommodation(accommodation_id: string, data: accommodationUpdation): Promise<accommodationCreation>      // admin controls it
+    createAccommodation(data:  accommodationCreation): Promise<getAccommodation>     
+    getAccommodations(): Promise<getAccommodation[]>      
+    getAccommodationByTypeAndName(type: string, name: string): Promise<getAccommodation>      
+    updateAccommodation(accommodationId: string, data: accommodationUpdation): Promise<accommodationCreation>     
     getAccommodationsByProximity(latitude: number, longitude: number, radius: number): Promise<getAccommodation[]>
     getById(id: any[]): Promise<getAccommodation[]>
 }

@@ -2,8 +2,8 @@ import { notification } from "../../types/notifcation.type.ts";
 
 export interface INotification {
     createNotification(data: notification): Promise<notification>   
-    getNotificationByUserId(user_id: string): Promise<notification[]>  
-    getNotificationByNotificationId(notification_id: string): Promise<notification>
-    markAsRead(notification_id: string): Promise<notification>
-    deleteNotiffication(notification_id: string): Promise<boolean>
+    getNotificationByUserId(userId: string): Promise<notification[]>  
+    getNotificationByNotificationId(notificationId: string): Promise<notification>
+    markAsRead(notificationId: string): Promise<notification>
+    deleteNotiffication(notificationId: string): Promise<boolean>
 }

@@ -12,14 +12,14 @@ class PostRestaurantDao implements IPostRestaurant {
             cost: cost,
             rating: rating,
             review: review,
-        })
+        });
     }
 
     async getById(post_id: string): Promise<any[]> {
         
-        const data: any[] = await db('post_restaurants').where({ post_id })
+        const data: any[] = await db('post_restaurants').where({ post_id });
        
-        return data
+        return data;
     }
 
     async updatePostRestaurant(post_id: string, restaurant_id: string, cost: number, rating: number, review: string): Promise<any> {
@@ -27,9 +27,9 @@ class PostRestaurantDao implements IPostRestaurant {
                     cost: cost,
                     rating: rating,
                     review: review 
-        })
+            });
     }
 }
 
-const postRestaurantDao = new PostRestaurantDao()
-export default postRestaurantDao
+const postRestaurantDao = new PostRestaurantDao();
+export default postRestaurantDao;

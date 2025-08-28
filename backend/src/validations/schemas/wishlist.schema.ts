@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const wishlistSchema = z.object({
     place_name: z.string().min(1, { message: "Place name is required" }),
-    type: z.string().min(1, { message: "type is required" }),
+    type: z.string().min(1, { message: "Type is required" }),
     title: z.string().min(1, { message: "Title is required" }),
     theme: z.string().optional(),  
     region: z.string().optional(), 

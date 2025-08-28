@@ -1,12 +1,13 @@
-import { Request, Response, NextFunction } from "express"
+import { Request, Response, NextFunction } from "express";
 import jwt from 'jsonwebtoken';
-import userDAO from '../repositories/dao/auth.repository.ts'
+import userDAO from '../repositories/dao/auth.repository.ts';
 import { Role } from "../enums/role.ts";
 import { DecodedUser, verifyAccessToken } from "../utils/jwt.ts";
-import dotenv from "dotenv"
-dotenv.config()
+import { HTTP_STATUS } from "../constants/httpStatus.ts";
+import dotenv from "dotenv";
+dotenv.config();
 
-const { sign, verify } = jwt
+const { sign, verify } = jwt;
 
 // let's see later
 export interface ExpressRequest extends Request{
@@ -25,20 +26,20 @@ export const authenticate = async (req: ExpressRequest, res: Response, next: Nex
 
         if(!accessToken) 
         {
-            res.status(401).send("Cannot access this route");
+            res.status(HTTP_STATUS.UNAUTHORIZED).send("Cannot access this route");
             return;
         }        
       
-        const decode: DecodedUser=verifyAccessToken(accessToken);
+        const decodedUserInfo: DecodedUser=verifyAccessToken(accessToken);
       
-        req.username=decode.username;
-        req.email=decode.email;
-        req.role=decode.role;
+        req.username=decodedUserInfo.username;
+        req.email=decodedUserInfo.email;
+        req.role=decodedUserInfo.role;
         
         next();
     }
     catch(error) {
-        res.status(401).send("Unauthorized User");
+        res.status(HTTP_STATUS.UNAUTHORIZED).send("Unauthorized User");
     }
     
 }
@@ -50,15 +51,11 @@ export const authorize = async (req: ExpressRequest, res: Response, next: NextFu
         const targetUsername = req.params.username;
         const requesterRole = req.role;
 
-        // if(req.body.role && req.body.role === Role.ADMIN && !isAdmin) {
-
-        // }
-        // else 
+        
         if (req.body.role && !isAdmin) {
             res.status(403).json({ message: "Only admin can set user's role." });
             return;
         }
-        // Check if attempting to update someone else's profile info except role
         else if (!req.body.role && loggedInUsername !== targetUsername) {
             res.status(403).json({ message: "You can only update your own profile." });
             return;

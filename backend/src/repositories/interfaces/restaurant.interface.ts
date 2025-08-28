@@ -2,10 +2,10 @@ import { restaurantCreation, getRestaurant, restaurantUpdation } from "../../typ
 
 
 export interface IRestaurant {
-    createRestaurant(data: restaurantCreation): Promise<restaurantCreation>     // suppose admin creates it
-    getRestaurants(): Promise<getRestaurant[]>        // recommendation time
-    getRestaurantByName(name: string): Promise<getRestaurant>        // post and plan e use
-    updateRestaurant(restaurant_id: string, data: restaurantUpdation): Promise<restaurantCreation>      // admin controls it
+    createRestaurant(data: restaurantCreation): Promise<restaurantCreation>     
+    getRestaurants(): Promise<getRestaurant[]>       
+    getRestaurantByName(name: string): Promise<getRestaurant>        
+    updateRestaurant(restaurantId: string, data: restaurantUpdation): Promise<restaurantCreation>    
     getRestaurantsByProximity(latitude: number, longitude: number, radius: number): Promise<getRestaurant[]>
     getById(id: any[]): Promise<getRestaurant[]>
 }

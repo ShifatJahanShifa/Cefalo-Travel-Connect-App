@@ -1,8 +1,8 @@
-import { accommodationCreation, getAccommodation } from "../types/accommodation.type.ts"
+import { AccommodationType } from "../enums/accommodation"
 
 export class AccommodationDTO {
     accommodation_id: string
-    accommodation_type: 'hotel' | 'motel' | 'resort' | 'villa' | 'cottage' 
+    accommodation_type: AccommodationType
     accommodation_name: string 
     location: {
         latitude: number

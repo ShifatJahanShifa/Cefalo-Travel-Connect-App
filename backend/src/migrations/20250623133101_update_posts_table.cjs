@@ -1,4 +1,3 @@
-// migration: drop user_id from posts
 exports.up = async function(knex) {
   await knex.schema.alterTable('posts', (table) => {
     table.dropForeign('user_id');
