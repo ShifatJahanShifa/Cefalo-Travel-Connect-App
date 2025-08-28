@@ -5,12 +5,12 @@ import { createPost, getAllPosts, getPostByPostID, updatePost, deletePost, searc
 import { validatePostCreationData, validateUpdatePostData } from '../validations/validationMiddlewares/post.validation.ts'
 import { validatePagination } from '../validations/validationMiddlewares/pagination.validation.ts'
 export const postRouter = express.Router()
-// import { createPost, getAllPosts } from '../controllers/post.controller.ts'
 
-postRouter.post('/', authenticate, validatePostCreationData, createPost) 
 postRouter.get('/', authenticate, validatePagination, getAllPosts) 
 postRouter.get('/search/', authenticate, searchPosts)
 postRouter.get('/:post_id', authenticate, getPostByPostID)
+
+postRouter.post('/', authenticate, validatePostCreationData, createPost) 
 postRouter.post("/:postId/like", authenticate, togglePostLike)
 
 

@@ -15,10 +15,11 @@ export const userRouter=express.Router()
 userRouter.get('/', authenticate, validatePagination, getAllUsers)   
 userRouter.get('/me', authenticate, getMe)
 userRouter.get('/:username', authenticate, getUserByUsername)  
-userRouter.patch('/:username', authenticate, authorize, validateUpdateUser, updateUserByUsername)
-userRouter.delete('/:username', authenticate, authorizeAdmin, deleteUserByUsername)  
 
 userRouter.get('/:username/posts', authenticate, getPostsByUserID)
 userRouter.get('/:username/wishlists', authenticate, getWishlistByUserid)
 userRouter.get('/:username/travelplans', authenticate, getTravelPlanByMemberId)
 userRouter.get('/:username/notifications', authenticate, getNotificationByUserId)
+
+userRouter.patch('/:username', authenticate, authorize, validateUpdateUser, updateUserByUsername)
+userRouter.delete('/:username', authenticate, authorizeAdmin, deleteUserByUsername)  

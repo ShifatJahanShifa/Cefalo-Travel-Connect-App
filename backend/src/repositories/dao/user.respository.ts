@@ -5,7 +5,7 @@ import { createdUser } from '../../types/auth.type.ts';
 import { Knex } from 'knex';
 import { dbClient } from '../../db/db.ts';
 import { IUser } from '../interfaces/user.interface.ts';
-import { updateUserInfo } from '../../types/user.tpye.ts';
+import { updateUserInfo } from '../../types/user.type.ts';
 import { Role } from '../../enums/role.ts';
 const db: Knex = dbClient.getConnection();
 
@@ -60,8 +60,6 @@ class UserDAO implements IUser{
 
         return result;
     }
-
-    
 }
 
 const userDAO = new UserDAO();

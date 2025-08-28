@@ -1,6 +1,6 @@
 import { placeCreation, getPlace } from "../types/place.type.ts"
 
-export class placeDTO {
+export class PlaceDTO {
     place_id: string
     place_name: string 
     location: {

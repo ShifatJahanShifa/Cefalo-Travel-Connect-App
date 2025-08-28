@@ -1,25 +1,26 @@
 import { NextFunction, Response } from "express";
 import { ExpressRequest } from "../middlewares/auth.middleware.ts";
-import * as UserService from "../services/user.service.ts"
+import * as UserService from "../services/user.service.ts";
 import { travelPlanInput } from "../types/travelplan.type.ts";
-import * as TravelPlanService from "../services/travelplan.service.ts"
+import * as TravelPlanService from "../services/travelplan.service.ts";
 import { TravelPlanResponseDTO } from "../DTOs/travelplan.dto.ts";
 import { UserDTO } from "../DTOs/user.dto.ts";
+import { HTTP_STATUS } from "../constants/httpStatus.ts";
 
 export const craeteTravelPlan = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        // at first getting the planner_id 
-        const user: UserDTO = await UserService.getUserByUsername(req.username!) 
-        const payload: travelPlanInput = req.body 
-        payload.planner_id = user.user_id 
+       
+        const user: UserDTO = await UserService.getUserByUsername(req.username!); 
+        const travelPlanData: travelPlanInput = req.body;
+        travelPlanData.planner_id = user.user_id; 
 
-        const result = await TravelPlanService.craeteTravelPlan(payload)
+        const result = await TravelPlanService.craeteTravelPlan(travelPlanData);
 
-        res.status(201).json(result)
+        res.status(HTTP_STATUS.CREATED).json(result);
     }
     catch(error)
     {
-        next(error)
+        next(error);
     }
 }
 
@@ -27,69 +28,69 @@ export const getTravelPlans = async(req: ExpressRequest, res: Response, next: Ne
     try {
         const page: number = parseInt(req.query.page as string);
         const limit: number = parseInt(req.query.limit as string);
-        const results: TravelPlanResponseDTO[] = await TravelPlanService.getTravelPlans(page, limit) 
+        const results: TravelPlanResponseDTO[] = await TravelPlanService.getTravelPlans(page, limit); 
 
-        res.status(200).json(results)
+        res.status(HTTP_STATUS.OK).json(results);
     }
     catch(error)
     {
-        next(error)
+        next(error);
     }
 }
 
 export const getTravelPlanById = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const result: TravelPlanResponseDTO = await TravelPlanService.getTravelPlanById(req.params.travel_plan_id)
-
-        res.status(200).json(result)
+        const result: TravelPlanResponseDTO = await TravelPlanService.getTravelPlanById(req.params.travel_plan_id);
+        
+        res.status(HTTP_STATUS.OK).json(result);
     }
     catch(error)
     {
-        next(error)
+        next(error);
     }
 }
 
 export const updateTravelPlanById = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const user: UserDTO = await UserService.getUserByUsername(req.username!) 
-        const payload: travelPlanInput = req.body 
-        payload.planner_id = user.user_id 
+        const user: UserDTO = await UserService.getUserByUsername(req.username!); 
+        const travelPlanData: travelPlanInput = req.body; 
+        travelPlanData.planner_id = user.user_id; 
 
-        const result: string = await TravelPlanService.updateTravelPlan(req.params.travel_plan_id, payload)
+        const result: string = await TravelPlanService.updateTravelPlan(req.params.travel_plan_id, travelPlanData);
 
-        res.status(200).json(result)
+        res.status(HTTP_STATUS.OK).json(result);
     }
     catch(error)
     {
-        next(error)
+        next(error);
     }
 }
 
 export const deleteTravelPlanById = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const user: UserDTO = await UserService.getUserByUsername(req.username!) 
-        const result: string = await TravelPlanService.deleteTravelPlan(req.params.travel_plan_id, user.user_id)
+        const user: UserDTO = await UserService.getUserByUsername(req.username!); 
+        const result: string = await TravelPlanService.deleteTravelPlan(req.params.travel_plan_id, user.user_id);
 
-        res.status(200).json(result)
+        res.status(HTTP_STATUS.NO_CONTENT).json(result);
     }
     catch(error)
     {
-        next(error)
+        next(error);
     }
 }
 
 
 export const getTravelPlanByMemberId = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-         // at first getting th eplanner_id 
-        const user: UserDTO = await UserService.getUserByUsername(req.username!) 
+       
+        const user: UserDTO = await UserService.getUserByUsername(req.username!); 
         
-        const results: TravelPlanResponseDTO[] = await TravelPlanService.getTravelPlansByMemberId(user.user_id)
+        const results: TravelPlanResponseDTO[] = await TravelPlanService.getTravelPlansByMemberId(user.user_id);
 
-        res.status(200).json(results)
+        res.status(HTTP_STATUS.OK).json(results);
     }
     catch(error) 
     {
-        next(error)
+        next(error);
     }
 }

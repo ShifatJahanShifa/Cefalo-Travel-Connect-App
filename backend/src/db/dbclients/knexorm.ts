@@ -1,6 +1,7 @@
-import knex, { Knex } from 'knex'
+import knex, { Knex } from 'knex';
 import knexfile from '../config/knexfile.js';
 import { IDatabaseClient } from '../dbclientsinterface.ts';
+import logger from '../../utils/logger.ts';
 
 export class KnexDatabaseClient implements IDatabaseClient {
   private knexDB: Knex;
@@ -12,16 +13,17 @@ export class KnexDatabaseClient implements IDatabaseClient {
   async connect(): Promise<void> {
     try {
       await this.knexDB.raw('SELECT 1');
-      console.log('Connected to Knex database');
-    } catch (err) {
-      console.error('Failed to connect to Knex database:', err);
+      logger.info('Connected to Knex database');
+    } 
+    catch (err) {
+      logger.error('Failed to connect to Knex database:', err);
       throw err;
     }
   }
 
   async disconnect(): Promise<void> {
     await this.knexDB.destroy();
-    console.log('Knex connection closed');
+    logger.info('Knex connection closed');
   }
 
   getConnection(): Knex {

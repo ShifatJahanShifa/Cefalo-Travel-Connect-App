@@ -2,15 +2,16 @@ import { NextFunction, Response } from 'express'
 import { ExpressRequest } from '../middlewares/auth.middleware.ts'
 import * as TransportService from '../services/transport.service.ts' 
 import { transportCreation, transportUpdation } from '../types/transport.type.ts'
-import { transportDTO } from '../DTOs/transport.dto.ts'
+import { TransportDTO } from '../DTOs/transport.dto.ts'
 import { AppError } from '../utils/appError.ts'
+import { HTTP_STATUS } from '../constants/httpStatus.ts'
 
 export const createTransport = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const data: transportCreation = req.body
-        const transport: transportDTO = await TransportService.createtransport(data)
+        const transport: TransportDTO = await TransportService.createtransport(data)
 
-        res.status(201).json(transport)
+        res.status(HTTP_STATUS.CREATED).json(transport)
     }
     catch (error) 
     {
@@ -20,9 +21,9 @@ export const createTransport = async(req: ExpressRequest, res: Response, next: N
 
 export const getTransports = async(req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
-        const transports: transportDTO[] = await TransportService.gettransports()
+        const transports: TransportDTO[] = await TransportService.gettransports()
 
-        res.status(200).json(transports)
+        res.status(HTTP_STATUS.OK).json(transports)
     }
     catch (error) 
     {
@@ -34,9 +35,9 @@ export const updateTransport = async(req:ExpressRequest, res: Response, next: Ne
     try {
         const transport_id: string = (req.params.transportId) 
         const data: transportUpdation = req.body
-        const transport: transportDTO = await TransportService.updatetransport(transport_id,data)
+        const transport: TransportDTO = await TransportService.updatetransport(transport_id,data)
 
-        res.status(200).json(transport)
+        res.status(HTTP_STATUS.OK).json(transport)
     }
     catch (error) 
     {
@@ -51,9 +52,9 @@ export const getTransportsByProximity = async(req: ExpressRequest, res: Response
         const longitude: number = parseInt(req.query.longitude as string)
         const radius: number = parseInt(req.query.radius as string)
 
-        const data: transportDTO[] = await TransportService.gettransportsByProximity(latitude, longitude, radius)
+        const data: TransportDTO[] = await TransportService.gettransportsByProximity(latitude, longitude, radius)
         
-        res.status(200).json(data)
+        res.status(HTTP_STATUS.OK).json(data)
     }
     catch (error) 
     {

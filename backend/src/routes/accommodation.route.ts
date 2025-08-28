@@ -5,7 +5,7 @@ import { validateAccommodationCreationData, validateAccommodationUpdationData } 
 
 export const accommodationRouter = express.Router()
 
-accommodationRouter.post('/',authenticate, authorizeAdmin, validateAccommodationCreationData ,createAccommodation)
 accommodationRouter.get('/', authenticate, getAccommodations)
-accommodationRouter.patch('/:accommodationId',authenticate, authorizeAdmin, validateAccommodationUpdationData, updateAccommodation)
 accommodationRouter.get('/search',authenticate, getAccommodationsByProximity)
+accommodationRouter.post('/',authenticate, authorizeAdmin, validateAccommodationCreationData ,createAccommodation)
+accommodationRouter.patch('/:accommodationId',authenticate, authorizeAdmin, validateAccommodationUpdationData, updateAccommodation)

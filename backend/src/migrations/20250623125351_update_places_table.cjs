@@ -8,7 +8,7 @@ exports.up = async function(knex) {
 
     table.string('place_name').notNullable();
 
-    // Assumes you're using PostGIS for geolocation
+  
     table.specificType('location', 'GEOGRAPHY(Point, 4326)').notNullable();
   });
 };

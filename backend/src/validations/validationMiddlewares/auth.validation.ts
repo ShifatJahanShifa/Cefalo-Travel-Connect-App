@@ -17,7 +17,7 @@ export const validateSignup = (req: ExpressRequest, res: Response, next: NextFun
       });
       return;
     }
-    next(err);    // need to check
+    next(err);   
   }
 }
 
@@ -34,6 +34,6 @@ export const validateSignin = (req: ExpressRequest, res: Response, next: NextFun
       });
       return;
     }
-    next(err);    // need to check
+    next(err);   
   }
 }

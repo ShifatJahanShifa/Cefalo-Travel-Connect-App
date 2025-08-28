@@ -1,6 +1,6 @@
 export interface IPostRestaurant {
-    createPostRestaurant(post_id: string, restaurant_id: string, cost: number, rating: number, review: string): Promise<void> 
-    getById(post_id: string): Promise<any[]>
-    updatePostRestaurant(post_id: string, restaurant_id: string, cost: number, rating: number, review: string): Promise<any>
+    createPostRestaurant(postId: string, restaurantId: string, cost: number, rating: number, review: string): Promise<void> 
+    getById(postId: string): Promise<any[]>
+    updatePostRestaurant(postId: string, restaurantId: string, cost: number, rating: number, review: string): Promise<any>
 }
 

@@ -1,4 +1,5 @@
-import { z } from 'zod'
+import { z } from 'zod';
+import { Role } from '../../enums/role.ts';
 
 export const updateUserSchema = z.object({
   profile_picture_url: z
@@ -9,11 +10,11 @@ export const updateUserSchema = z.object({
 
   bio: z
     .string()
-    .max(10000, 'Bio is too long') // PostgreSQL text supports large input, but you can set your own limit
+    .max(10000, 'Bio is too long') 
     .optional(),
 
   role: z
-    .enum(['explorer', 'traveller', 'admin'], {
+    .nativeEnum(Role, {
       errorMap: () => ({ message: 'Role must be either explorer, traveller, or admin' }),
     })
     .optional(),
@@ -21,5 +22,10 @@ export const updateUserSchema = z.object({
   hashed_password: z 
     .string()
     .max(70, 'Password length at most 70 characters')
+    .optional(),
+  
+  phone_no: z 
+    .string()
+    .max(15, 'Phone no length at most 70 characters')
     .optional()
 });

@@ -1,7 +1,7 @@
-import { ExpressRequest } from "../middlewares/auth.middleware";
-import accommodationDao from "../repositories/dao/accommodation.repository.ts";
-import { AccommodationDTO } from "../DTOs/accommodation.dto.ts";
-import { accommodationCreation, accommodationUpdation, getAccommodation } from "../types/accommodation.type.ts";
+import { ExpressRequest } from "../middlewares/auth.middleware"
+import accommodationDao from "../repositories/dao/accommodation.repository.ts"
+import { AccommodationDTO } from "../DTOs/accommodation.dto.ts"
+import { accommodationCreation, accommodationUpdation, getAccommodation } from "../types/accommodation.type.ts"
 
 export const createAccommodation = async (data: accommodationCreation): Promise<AccommodationDTO> => {
     const accommodation: getAccommodation = await accommodationDao.createAccommodation(data)

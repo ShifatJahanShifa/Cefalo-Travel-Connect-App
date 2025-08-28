@@ -15,18 +15,23 @@ class TravelPlanAccommodationDao implements ITravelPlanAccommodation {
     }
 
     async getById(travel_plan_id: string): Promise<any[]> {
-        const data: any[] = await db('travel_plan_accommodations').where({travel_plan_id})
+        const data: any[] = await db('travel_plan_accommodations').where({travel_plan_id});
         
-        return data
+        return data;
     }
 
-    // later
+   
     async updateTravelPlanAccommodation(travel_plan_id: string, accommodation_id: string): Promise<any> {
         await db('travel_plan_accommodations').where({travel_plan_id: travel_plan_id, accommodation_id: accommodation_id}).update({
-                    
-        })
+                
+        });
+    }
+
+    async deleteById(travel_plan_id: string): Promise<boolean> {
+        await db('travel_plan_accommodations').where({travel_plan_id: travel_plan_id}).del();
+        return true;
     }
 }
 
-const travelPlanAccommodationDao = new TravelPlanAccommodationDao()
-export default travelPlanAccommodationDao
+const travelPlanAccommodationDao = new TravelPlanAccommodationDao();
+export default travelPlanAccommodationDao;

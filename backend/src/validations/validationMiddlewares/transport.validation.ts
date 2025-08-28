@@ -5,7 +5,7 @@ import { transportCreationSchema, transportUpdationSchema } from '../schemas/tra
 export const validatetransportCreationData = (req: ExpressRequest, res: Response, next: NextFunction): void => {
     try {
         const validatedData = transportCreationSchema.parse(req.body);
-        req.body=validatedData
+        req.body=validatedData;
         next();
     } 
     catch (err: any) {
@@ -19,7 +19,7 @@ export const validatetransportCreationData = (req: ExpressRequest, res: Response
 export const validatetransportUpdationData = (req: ExpressRequest, res: Response, next: NextFunction): void => {
     try {
         const validatedData = transportUpdationSchema.parse(req.body);
-        req.body=validatedData
+        req.body=validatedData;
         next();
     } 
     catch (err: any) {

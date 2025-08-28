@@ -14,17 +14,22 @@ class TravelPlanTransportDao implements ITravelPlanTransport {
     }
 
     async getById(travel_plan_id: string): Promise<any[]> {
-        const data: any[] = await db('travel_plan_transports').where({ travel_plan_id: travel_plan_id }) 
-        return data
+        const data: any[] = await db('travel_plan_transports').where({ travel_plan_id: travel_plan_id }); 
+        return data;
     }
 
-    // update mane delete kore new ta rakha
+ 
     async updateTravelPlanTransport(travel_plan_id: string, transport_id: string): Promise<any> {
         await db('travel_plan_transports').where({travel_plan_id: travel_plan_id, transport_id: transport_id}).update({
                     
-        })
+        });
+    }
+
+    async deleteById(travel_plan_id: string): Promise<boolean> {
+        await db('travel_plan_transports').where({travel_plan_id: travel_plan_id}).del();
+        return true;
     }
 }
 
-const travelPlanTransportDao = new TravelPlanTransportDao()
-export default travelPlanTransportDao
+const travelPlanTransportDao = new TravelPlanTransportDao();
+export default travelPlanTransportDao;

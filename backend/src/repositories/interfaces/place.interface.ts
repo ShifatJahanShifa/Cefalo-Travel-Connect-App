@@ -2,10 +2,10 @@ import { placeCreation, getPlace, placeUpdation } from "../../types/place.type.t
 
 
 export interface IPlace {
-    createPlace(data: placeCreation): Promise<getPlace>     // suppose admin creates it
-    getPlaces(): Promise<getPlace[]>        // recommendation time
-    getPlaceByName(name: string): Promise<getPlace>        // post and plan e use
-    updatePlace(place_id: string, data: placeUpdation): Promise<placeCreation>      // admin controls it
+    createPlace(data: placeCreation): Promise<getPlace>    
+    getPlaces(): Promise<getPlace[]>        
+    getPlaceByName(name: string): Promise<getPlace>       
+    updatePlace(placeId: string, data: placeUpdation): Promise<placeCreation>    
     getPlacesByProximity(latitude: number, longitude: number, radius: number): Promise<getPlace[]>
     getById(id: any[]): Promise<getPlace[]>
 }

@@ -14,9 +14,9 @@ class Proximity implements IProximity {
             reference_id: input.reference_id,
             radius: input.radius
         })
-        .returning("*")
+        .returning("*");
 
-        return proximity
+        return proximity;
     }
 
 
@@ -24,33 +24,34 @@ class Proximity implements IProximity {
         const proximity: proximity[] = await db("proximity").where({
             user_id: user_id,
             type: "wishlist"
-        })
+        });
         
-        return proximity
+        return proximity;
     }
 
     async updateProximity(input: proximity): Promise<proximity> {
         // at first deleteing the existing ones 
         await db("proximity").where({
             user_id: input.user_id,
-            type: input.type
+            type: input.type,
+            reference_id: input.reference_id
         })
-        .del()
+        .del();
 
-        // then add ones 
-        const result: proximity = await this.createProximity(input)
+        // then adding new one
+        const result: proximity = await this.createProximity(input);
 
-        return result
+        return result;
     }
 
     async deleteProximityById(proximity_id: string): Promise<boolean> {
-        // add try catch
+       
         await db("proximity").where({
             proximity_id: proximity_id
         })
-        .del()
+        .del();
 
-        return true 
+        return true; 
     }
 
     async deleteProximity(input: proximity): Promise<boolean> {
@@ -59,11 +60,11 @@ class Proximity implements IProximity {
             type: input.type,
             reference_id: input.reference_id
         })
-        .del()
+        .del();
 
-        return true
+        return true;
     }
 }
 
-const proximityDao = new Proximity()
-export default proximityDao
+const proximityDao = new Proximity();
+export default proximityDao;

@@ -1,296 +1,123 @@
-// import { CreatedPost, CreatePostInput, getPost, UpdatePostInput } from "../../types/post.type.ts";
-// import { IPost } from "../interfaces/post.interface.ts";
-// import { Knex } from "knex";
-// import { dbClient } from "../../db/db.ts";
-// import { AppError } from "../../utils/appError.ts";
-// const db: Knex = dbClient.getConnection();
+import { CreatedPost, CreatePostInput, getPost, UpdatePostInput } from "../../types/post.type.ts";
+import { IPost } from "../interfaces/post.interface.ts";
+import { Knex } from "knex";
+import { dbClient } from "../../db/db.ts";
+import { AppError } from "../../utils/appError.ts";
+const db: Knex = dbClient.getConnection();
 
-// class PostDAO implements IPost {
-//     async createPost(input: CreatePostInput): Promise<CreatedPost> {
-//         const [post] = await db('posts')
-//                         .insert({
-//                         user_id: input.user_id,
-//                         title: input.title,
-//                         description: input.description,
-//                         total_cost: input.total_cost,
-//                         duration: input.duration,
-//                         effort: input.effort,
-//                         categories: input.categories  // will change it. 
-//                     })
-//                     .returning('*');
-
-//         const post_id = post.post_id;
+class PostDAO implements IPost {
+    async createPost(input: CreatePostInput): Promise<any> {
+        const [post] = await db('posts')
+                    .insert({
+                    user_id: input.user_id,
+                    title: input.title,
+                    description: input.description,
+                    total_cost: input.total_cost,
+                    duration: input.duration,
+                    effort: input.effort,
+                    categories: input.categories  
+                })
+                .returning('*');
         
+        return post;
+    }
 
-//         if(input.hotels?.length) {
-//             // at first search in hotels table
-
-//             for (let index=0; index<input.hotels?.length;index++) {
-//                 const hotelRecord = await db('hotels')
-//                     .select('hotel_id')
-//                     .where({ hotel_name: input.hotels[index].hotel_name })
-//                     .first();
-
-//                 if (hotelRecord) {
-//                     await db('post_hotels').insert({
-//                     post_id,
-//                     hotel_id: hotelRecord.hotel_id,
-//                     cost: input.hotels[index].cost,
-//                     rating: input.hotels[index].rating,
-//                     review: input.hotels[index].review,
-//                     });
-//                 } else {
-//                     // later will include creation logic
-//                 }
-//             }
-
-//         }
-
-//         if(input.transports?.length) {
-//             for (let index=0; index<input.transports?.length;index++) {
-//                 const transportRecord = await db('transports')
-//                     .select('transport_id')
-//                     .where({ transport_type: input.transports[index].transport_type,
-//                         transport_provider: input.transports[index].transport_provider
-//                     })
-//                     .first();
-
-//                 if (transportRecord) {
-//                     await db('post_transports').insert({
-//                     post_id,
-//                     transport_id: transportRecord.transport_id,
-//                     cost: input.transports[index].cost,
-//                     rating: input.transports[index].rating,
-//                     review: input.transports[index].review,
-//                     });
-//                 } else {
-//                     // later will include creation logic
-//                 }
-//             }   
-//         }
-
-//         if(input.places?.length) {
-//             for (let index=0; index<input.places?.length;index++) {
-//                 const placeRecord = await db('places')
-//                     .select('place_id')
-//                     .where({ place_name: input.places[index].place_name })
-//                     .first();
-
-//                 if (placeRecord) {
-//                     await db('post_places').insert({
-//                     post_id,
-//                     place_id: placeRecord.place_id,
-                    
-//                     rating: input.places[index].rating,
-//                     review: input.places[index].review,
-//                     });
-//                 } else {
-//                     // later will include creation logic
-//                 }
-//             }
-//         }
-
-//         if(input.foods?.length) {
-//             await db('post_foods').insert(
-//                 input.foods.map(food => ({ post_id, ...food }))
-//             );
-//         }
-
-//         if(input.images?.length) {
-//             await db('post_images').insert(
-//                 input.images.map(image => ({ post_id, ...image }))
-//             );
-//         }
-
-//         return post;
-//     };
-
-//     async getAllPosts(page: number, limit: number): Promise<getPost[]> {
-//         const offset=(page-1)*limit;
-//         const posts: CreatedPost[] = await db('posts').select('*').orderBy('created_at','desc').limit(limit).offset(offset);
-
-//         const enrichedPosts: getPost[] = await Promise.all(
-//             posts.map(async post => {
-//             const [hotels, transports, places, foods, images] = await Promise.all([
-//                 db('post_hotels').where('post_id', post.post_id),
-//                 db('post_transports').where('post_id', post.post_id),
-//                 db('post_places').where('post_id', post.post_id),
-//                 db('post_foods').where('post_id', post.post_id),
-//                 db('post_images').where('post_id', post.post_id),
-//             ]);
-
-//             return {
-//                 ...post,
-//                 hotels,
-//                 transports,
-//                 places,
-//                 foods,
-//                 images,
-//             };
-//             })
-//         );
-
-//         return enrichedPosts;
-//     }
-
-//     async getPostByPostID(post_id: number): Promise<getPost> {
-//         const post: CreatedPost = await db('posts').select('*').where({post_id: post_id}).first();
-
-//         if(!post) 
-//         {
-//             throw new AppError("post not found",404);
-//         }
-      
-//         const [hotels, transports, places, foods, images] = await Promise.all([
-//             db('post_hotels').where('post_id', post.post_id),
-//             db('post_transports').where('post_id', post.post_id),
-//             db('post_places').where('post_id', post.post_id),
-//             db('post_foods').where('post_id', post.post_id),
-//             db('post_images').where('post_id', post.post_id),
-//         ]);
-
-//         const enrichedPost: getPost = {
-//                 ...post,
-//                 hotels,
-//                 transports,
-//                 places,
-//                 foods,
-//                 images
-//             };
-
-//         return enrichedPost;
-//     }
-
-
-//     async updatePost(post_id: number, updatedPostData: UpdatePostInput): Promise<string> {
-       
-//         await db('posts').where({ post_id: post_id }).update({
-//             title: updatedPostData.title,
-//             description: updatedPostData.description,
-//             total_cost: updatedPostData.total_cost,
-//             duration: updatedPostData.duration,
-//             effort: updatedPostData.effort,
-//             categories: updatedPostData.categories,
-//             updated_at: db.fn.now()});
-
-       
-//         if (updatedPostData.hotels && updatedPostData.hotels.length>0) {
-
-//             for (let index=0; index<updatedPostData.hotels?.length;index++) {
-//                 const hotelRecord = await db('hotels')
-//                     .select('hotel_id')
-//                     .where({ hotel_name: updatedPostData.hotels[index].hotel_name })
-//                     .first();
-
-//                 if (hotelRecord) {
-//                     await db('post_hotels').where({post_id: post_id, hotel_id: hotelRecord.hotel_id}).update({
-                    
-//                     cost: updatedPostData.hotels[index].cost,
-//                     rating: updatedPostData.hotels[index].rating,
-//                     review: updatedPostData.hotels[index].review,
-                    
-//                     });
-//                 } else {
-//                     // later will include creation logic
-//                 }
-//             }
-//         }
-
-//         if (updatedPostData.transports && updatedPostData.transports.length>0) {
-//              for (let index=0; index<updatedPostData.transports?.length;index++) {
-//                 const transportRecord = await db('transports')
-//                     .select('transport_id')
-//                     .where({ transport_type: updatedPostData.transports[index].transport_type,
-//                         transport_provider: updatedPostData.transports[index].transport_provider
-//                     })
-//                     .first();
-
-//                 if (transportRecord) {
-//                     await db('post_transports').where({post_id: post_id,
-//                     transport_id: transportRecord.transport_id,}).update({
-                    
-                    
-//                     cost: updatedPostData.transports[index].cost,
-//                     rating: updatedPostData.transports[index].rating,
-//                     review: updatedPostData.transports[index].review,
-//                     });
-//                 } else {
-//                     // later will include creation logic
-//                 }
-//             }   
-//         }
-
-//         if (updatedPostData.places && updatedPostData.places.length>0) {
-           
-//             for (let index=0; index<updatedPostData.places?.length;index++) {
-//                 const placeRecord = await db('places')
-//                     .select('place_id')
-//                     .where({ place_name: updatedPostData.places[index].place_name })
-//                     .first();
-
-//                 if (placeRecord) {
-//                     await db('post_places').where({ post_id,
-//                     place_id: placeRecord.place_id,}).update({
-//                     rating: updatedPostData.places[index].rating,
-//                     review: updatedPostData.places[index].review,
-//                 });
-//                 } else {
-//                     // later will include creation logic
-//                 }
-//             }
-//         }
-
-//         if (updatedPostData.foods && updatedPostData.foods.length>0) {
-//             await db('post_foods').where({ post_id }).del();
-//             const foodRecords = updatedPostData.foods.map(food => ({ post_id, ...food }));
-//             await db('post_foods').insert(foodRecords);
-
-//         }
-
-//         if (updatedPostData.images && updatedPostData.images.length>0) {
-//             await db('post_images').where({ post_id }).del();
-//             const imageRecords = updatedPostData.images.map(img => ({ post_id, ...img }));
-//             await db('post_images').insert(imageRecords);
-//         }
-
-      
-//         return "successfully updated post"
-//     }
-
-//     async deletePost(post_id: number): Promise<string> {
-//         const postDeleted = await db("posts").where({post_id: post_id}).del()
-//         return "successfully deleted the post"
-//     }
-
-//     async getPostsByUserID(user_id: number): Promise<getPost[]> {
-//         // i am not applying pagination rn
-//         const posts: getPost[] = await db("posts").select('*').where({ user_id: user_id}).orderBy('created_at','desc')
+    async getAllPosts(page: number, limit: number): Promise<any[]> {
+        const offset=(page-1)*limit;
+        const posts: any[] = await db('posts').select('*').orderBy('created_at','desc').limit(limit).offset(offset);
         
-//         const enrichedPosts: getPost[] = await Promise.all(
-//             posts.map(async post => {
-//             const [hotels, transports, places, foods, images] = await Promise.all([
-//                 db('post_hotels').where('post_id', post.post_id),
-//                 db('post_transports').where('post_id', post.post_id),
-//                 db('post_places').where('post_id', post.post_id),
-//                 db('post_foods').where('post_id', post.post_id),
-//                 db('post_images').where('post_id', post.post_id),
-//             ]);
+        return posts;
+    }
 
-//             return {
-//                 ...post,
-//                 hotels,
-//                 transports,
-//                 places,
-//                 foods,
-//                 images,
-//             };
-//             })
-//         );
+    async getPostByPostID(post_id: string): Promise<any> {
+        const post: any = await db('posts').select('*').where({post_id: post_id}).first();
+        
+        if(!post) 
+        {
+            throw new AppError("post not found",404);
+        }
 
-//         return enrichedPosts;
-//     }
-// }
+        return post;
+    }
 
+    async updatePost(post_id: string, updatedPostData: UpdatePostInput): Promise<string> {
+        await db('posts').where({ post_id: post_id }).update({
+            title: updatedPostData.title,
+            description: updatedPostData.description,
+            total_cost: updatedPostData.total_cost,
+            duration: updatedPostData.duration,
+            effort: updatedPostData.effort,
+            categories: updatedPostData.categories,
+            updated_at: db.fn.now()});
+        return "updated post table";
+    }
 
-// const postDAO = new PostDAO();
-// export default postDAO;
+    async deletePost(post_id: string): Promise<string> {
+        const postDeleted = await db("posts").where({post_id: post_id}).del();
+        return "successfully deleted the post";
+    }
+
+    async getPostsByUserID(user_id: string): Promise<any[]> {
+       
+        const posts: getPost[] = await db("posts").select('*').where({ user_id: user_id}).orderBy('created_at','desc');
+    
+        return posts;
+    }
+
+    async searchPosts(filters: {
+        transport_type?: string;
+        place_name?: string;
+        restaurant_name?: string;
+        accommodation_type?: string;
+        }): Promise<CreatedPost[]> {
+
+        let query = db('posts').select('posts.*');
+        
+        if (filters.transport_type) {
+            query = query
+            .join('post_transports', 'posts.post_id', 'post_transports.post_id')
+            .join('transports', 'transports.transport_id', 'post_transports.transport_id')
+            .where('transports.transport_type', 'ilike', `%${filters.transport_type}%`);
+        }
+
+        if (filters.place_name) {
+            query = query
+            .join('post_places', 'posts.post_id', 'post_places.post_id')
+            .join('places', 'places.place_id', 'post_places.place_id')
+            .where('places.place_name', 'ilike', `%${filters.place_name}%`);
+        }
+
+        if (filters.restaurant_name) {
+            query = query
+            .join('post_restaurants', 'posts.post_id', 'post_restaurants.post_id')
+            .join('restaurants', 'restaurants.restaurant_id', 'post_restaurants.restaurant_id')
+            .where('restaurants.restaurant_name', 'ilike', `%${filters.restaurant_name}%`);
+        }
+
+        if (filters.accommodation_type) {
+            query = query
+            .join('post_accommodations', 'posts.post_id', 'post_accommodations.post_id')
+            .join('accommodations', 'accommodations.accommodation_id', 'post_accommodations.accommodation_id')
+            .where('accommodations.accommodation_type', 'ilike', `%${filters.accommodation_type}%`);
+        }       
+
+        const rawPosts = await query.groupBy('posts.post_id');
+
+        return rawPosts;
+    }
+
+    async togglePostLike(post_id: string, add: boolean): Promise<string> {
+        if(add) 
+        {
+            await db("posts").where({post_id: post_id}).increment('likes_count',1);
+        }
+        else 
+        {
+            await db("posts").where({post_id: post_id}).decrement('likes_count',1);
+        }
+        return "updated like count";
+    }
+}
+
+const postDAO = new PostDAO();
+export default postDAO;

@@ -5,12 +5,13 @@ import { CreatedPost, UpdatePostInput } from '../types/post.type.ts'
 import { PostResponseDTO } from '../DTOs/post.dto.ts'
 import { UserDTO } from '../DTOs/user.dto.ts'
 import * as UserService from '../services/user.service.ts'
+import { HTTP_STATUS } from '../constants/httpStatus.ts'
 
 export const createPost = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try { 
         const post: boolean = await PostService.createPost(req.body)
 
-        res.status(201).send(post)
+        res.status(HTTP_STATUS.CREATED).send(post)
     }
     catch(error)
     {
@@ -25,7 +26,7 @@ export const getAllPosts = async (req: Request, res: Response, next: NextFunctio
         const limit: number = parseInt(req.query.limit as string); 
 
         const posts: PostResponseDTO[] = await PostService.getAllPosts(page, limit) 
-        res.status(200).json(posts)
+        res.status(HTTP_STATUS.OK).json(posts)
     }
     catch (error) 
     {
@@ -39,7 +40,7 @@ export const getPostByPostID = async (req: ExpressRequest, res: Response, next: 
         const post_id: string = (req.params.post_id)
         const post: PostResponseDTO = await PostService.getPostByPostID(post_id)
 
-        res.status(200).json(post)
+        res.status(HTTP_STATUS.OK).json(post)
     }
     catch (error) 
     {
@@ -51,11 +52,10 @@ export const getPostByPostID = async (req: ExpressRequest, res: Response, next: 
 export const updatePost = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
     try {
         const post_id: string = (req.params.post_id)
-        // const user: UserDTO = await UserService.getUserByUsername()
         const updatedPostData: UpdatePostInput = req.body
         const status: string = await PostService.updatePost(post_id, updatedPostData)
 
-        res.status(200).send(status)
+        res.status(HTTP_STATUS.OK).send(status)
     }
     catch (error)
     {
@@ -71,7 +71,7 @@ export const deletePost = async (req: ExpressRequest, res: Response, next: NextF
 
         const status: string = await PostService.deletePost(post_id, user.user_id)
 
-        res.status(204).send(status)
+        res.status(HTTP_STATUS.NO_CONTENT).send(status)
     }
     catch (error) 
     {
@@ -82,14 +82,12 @@ export const deletePost = async (req: ExpressRequest, res: Response, next: NextF
 
 export const getPostsByUserID = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
    try {
-        // at first i will get user_id from user table
         const username: string = req.params.username
         const user: UserDTO = await UserService.getUserByUsername(username)
 
-        // call the post service 
         const posts: PostResponseDTO[] = await PostService.getPostsByUserID(user.user_id)
 
-        res.status(200).json(posts)
+        res.status(HTTP_STATUS.OK).json(posts)
     }
     catch (error) 
     {
@@ -101,7 +99,6 @@ export const getPostsByUserID = async (req: ExpressRequest, res: Response, next:
 
 export const searchPosts = async (req: ExpressRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
-    console.log('in the con')
     const {
       title,
       min_cost,
@@ -122,11 +119,11 @@ export const searchPosts = async (req: ExpressRequest, res: Response, next: Next
       accommodation_type: accommodation_type as string
     };
 
-    const posts = await PostService.searchPosts(filters);
-    res.status(200).json(posts);
+    const posts = await PostService.searchPosts(filters)
+    res.status(HTTP_STATUS.OK).json(posts)
 
   } catch (err) {
-    next(err); 
+    next(err)
   }
 };
 
@@ -139,7 +136,7 @@ export const togglePostLike = async (req: ExpressRequest, res: Response, next: N
         
         const result: string = await PostService.togglePostLike(post_id, user.user_id)
 
-        res.status(200).json(result)
+        res.status(HTTP_STATUS.OK).json(result)
     }
     catch (error) 
     {

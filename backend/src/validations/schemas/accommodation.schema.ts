@@ -1,7 +1,8 @@
 import { z } from 'zod';
+import { AccommodationType } from '../../enums/accommodation.ts';
 
 export const accommodationCreationSchema = z.object({
-    accommodation_type: z.string(),
+    accommodation_type: z.nativeEnum(AccommodationType),
     accommodation_name: z.string().min(1, "Accommodation name is required"),
     latitude: z.number().min(-90).max(90),
     longitude: z.number().min(-180).max(180),
@@ -14,7 +15,7 @@ export const accommodationCreationSchema = z.object({
 
 export const accommodationUpdationSchema = z.object({
     accommodation_id: z.string().optional(),
-    accommodation_type: z.enum(['hotel', 'motel', 'resort', 'villa', 'cottage']).optional(),
+    accommodation_type: z.nativeEnum(AccommodationType).optional(),
     accommodation_name: z.string().min(1, "Accommodation name is required").optional(),
     latitude: z.number().min(-90).max(90).optional(),
     longitude: z.number().min(-180).max(180).optional(),
